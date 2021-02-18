@@ -38,9 +38,15 @@ fun handleResponse(exchange : HttpExchange){
             if(exchange.requestURI.toString() != "/api/hello/"){
                 val url = "http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI;
                 val processedParameters = processMap(splitQuery(URL(url)))
-                response = Gson().toJson(processedParameters).toString() //Parametros como objeto JSON
+                /*
+                * Buscar en la bd el objeto filtrando por los parámetros
+                * */
+                response = Gson().toJson(processedParameters).toString() //Parametros como objeto JSON porque no hay db para devolver
             }
             else{
+                /*
+                * Buscar en la bd sin filtrar
+                * */
                 response = "No parameters were added"
             }
             exchange.sendResponseHeaders(200, response.toByteArray(Charsets.UTF_8).size.toLong())
