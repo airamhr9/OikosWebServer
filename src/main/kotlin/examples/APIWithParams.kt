@@ -1,8 +1,9 @@
+package examples
+/*
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
-import kotlinx.coroutines.*
 import java.net.InetSocketAddress
 import java.net.URL
 import java.net.URLDecoder
@@ -16,11 +17,8 @@ import java.util.LinkedList
 fun main(args: Array<String>){
     val serverPort = args[0].toInt()
     val server = HttpServer.create(InetSocketAddress(serverPort), 0)
-    server.createContext("/api/hello") { //Crea un punto de entrada con url. Por ej: http://127.0.0.1/api/hello
-        exchange: HttpExchange -> GlobalScope.launch { //En vez de ejecutarlo en el hilo princial, lanzamos una corrutina
-            handleResponseAsync(exchange)
-        }
-    }
+    //El manejador es la función anónima. Las funciones anónimas en kotlin van entre {}
+    server.createContext("/api/hello") { exchange: HttpExchange -> handleResponse(exchange) }  //Crea un punto de entrada con url. Por ej: http://127.0.0.1/api/hello
     /*
     *
     * Aquí creamos todos los puntos de acceso con sus manejadores
@@ -33,15 +31,15 @@ fun main(args: Array<String>){
 /**
  * Manejador para el endpoint /api/hello
  * */
-fun handleResponseAsync(exchange : HttpExchange){
+fun handleResponse(exchange : HttpExchange){
     when(exchange.requestMethod){
         "GET" -> {
             lateinit var response : String
-            println(exchange.requestURI.toString())
+            print(exchange.requestURI.toString())
             //Si hay parámetros, procesarlos
             if(exchange.requestURI.toString() != "/api/hello/"){
                 val url = "http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI;
-                val processedParameters = processMap2(splitQuery2(URL(url)))
+                val processedParameters = processMap(splitQuery(URL(url)))
                 /*
                 * Buscar en la bd el objeto filtrando por los parámetros
                 * */
@@ -107,7 +105,7 @@ fun handleResponseAsync(exchange : HttpExchange){
  * @param url La url a procesar
  * @return Un map con el nombre del parámetro y una lista de valores (por si se repite el parámetro en la url)
  */
-fun splitQuery2(url: URL): Map<String, MutableList<String?>> {
+fun splitQuery(url: URL): Map<String, MutableList<String?>> {
     val queryPairs: MutableMap<String, MutableList<String?>> = LinkedHashMap()
     val pairs = url.query.split("&").toTypedArray()
     for (pair in pairs) {
@@ -128,7 +126,7 @@ fun splitQuery2(url: URL): Map<String, MutableList<String?>> {
  * @param queryMap El resultado de splitQuery
  * @return Un map con solo las listas necesarias y valores individuales, listo para convertir en JSON o en objeto
  */
-fun processMap2(queryMap : Map<String, MutableList<String?>>) : MutableMap<String, Any?>{
+fun processMap(queryMap : Map<String, MutableList<String?>>) : MutableMap<String, Any?>{
     val result : MutableMap<String, Any?> = LinkedHashMap()
     val keys = queryMap.keys
     for(key in keys){
@@ -139,5 +137,4 @@ fun processMap2(queryMap : Map<String, MutableList<String?>>) : MutableMap<Strin
     }
     return result
 }
-
-
+*/

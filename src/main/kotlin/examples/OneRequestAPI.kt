@@ -1,3 +1,4 @@
+package examples/*
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import java.net.InetSocketAddress
@@ -18,3 +19,4 @@ fun helloResponse(exchange : HttpExchange){
     outputStream.flush()
     exchange.close()
 }
+*/
