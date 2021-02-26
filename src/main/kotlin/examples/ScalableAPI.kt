@@ -1,4 +1,4 @@
-package examples/*
+package examples
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.sun.net.httpserver.HttpExchange
@@ -141,5 +141,3 @@ fun processMap2(queryMap : Map<String, MutableList<String?>>) : MutableMap<Strin
     return result
 }
 
-
-*/

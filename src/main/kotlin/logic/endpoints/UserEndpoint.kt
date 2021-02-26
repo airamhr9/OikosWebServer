@@ -10,6 +10,8 @@ import objects.persistence.User
 class UserEndpoint(endpoint: String) : EndpointHandler<User>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
+        println("handling exchange")
+        /*
          when(exchange.requestMethod){
                 "GET" -> {
                     TODO("Not yet implemented")
@@ -33,6 +35,12 @@ class UserEndpoint(endpoint: String) : EndpointHandler<User>(endpoint) {
                     exchange.sendResponseHeaders(405, -1)
                 }
             }
+            */
+        var response = "Hello bro"
+        exchange.sendResponseHeaders(200, response.toByteArray(Charsets.UTF_8).size.toLong())
+        val outputStream = exchange.responseBody
+        outputStream.write(response.toByteArray())
+        outputStream.flush()
         exchange.close()
     }
 
