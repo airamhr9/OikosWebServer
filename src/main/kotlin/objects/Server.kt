@@ -1,9 +1,7 @@
 package objects
 
-import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpHandler
 import com.sun.net.httpserver.HttpServer
-import logic.endpoints.UserEndpoint
 import java.net.InetSocketAddress
 
 class Server (port : Int = 8000) {
