@@ -11,16 +11,19 @@ class UserEndpoint(endpoint: String) : EndpointHandler<User>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
         println("handling exchange")
-        /*
+        lateinit var response : String
          when(exchange.requestMethod){
                 "GET" -> {
-                    TODO("Not yet implemented")
+                    response = "GET request"
+                    //TODO("Not yet implemented")
                 }
                 "POST" -> {
-                    TODO("Not yet implemented")
+                    response = "POST request"
+                    //TODO("Not yet implemented")
                 }
                 "PUT" -> {
-                    TODO("Not yet implemented")
+                    response = "PUT request"
+                    //TODO("Not yet implemented")
                 }
                 "OPTIONS" -> {
                     /**
@@ -29,14 +32,14 @@ class UserEndpoint(endpoint: String) : EndpointHandler<User>(endpoint) {
                      * Por ejemplo:
                      * Para este endpoint devolvería "GET" "POST" Y "PUT", con los parámetros necesarios de cada uno
                      */
+                    response = "OPTIONS request"
                 }
                 else -> {
                     //405 Método no soportado
                     exchange.sendResponseHeaders(405, -1)
+                    response = "Method not supported"
                 }
             }
-            */
-        var response = "Hello bro"
         exchange.sendResponseHeaders(200, response.toByteArray(Charsets.UTF_8).size.toLong())
         val outputStream = exchange.responseBody
         outputStream.write(response.toByteArray())

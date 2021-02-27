@@ -3,6 +3,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.sun.net.httpserver.HttpExchange
 import logic.endpoints.UserEndpoint
+import objects.persistence.Inmueble
 import java.net.URL
 import javax.xml.bind.JAXBElement
 
@@ -18,7 +19,7 @@ fun main(args: Array<String>){
             exchange: HttpExchange -> UserEndpoint("/api/user").handleExchange(exchange)
     }
 
-
     server.start()
 }
+
 
