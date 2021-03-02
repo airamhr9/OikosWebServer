@@ -1,6 +1,7 @@
 package logic.endpoints
 
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
@@ -16,10 +17,13 @@ class UserEndpoint(endpoint: String) : EndpointHandler<User>(endpoint) {
                 "GET" -> {
                     response = "GET request"
                     //TODO("Not yet implemented")
+                    val parameters : Map<String, Any?> = RequestParser.getQueryParameters(exchange.requestURI)
+                    val argumentList = parameters.keys
                 }
                 "POST" -> {
                     response = "POST request"
                     //TODO("Not yet implemented")
+                    //val objectToPost: JsonObject = exchange.requestBody
                 }
                 "PUT" -> {
                     response = "PUT request"
