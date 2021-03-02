@@ -5,7 +5,7 @@ import objects.JsonConvertible
 import objects.SearchableById
 import java.util.*
 
-class User(override val id : Int, private var name : String, private var mail : String) : SearchableById, JsonConvertible {
+class User(override val id : Int,  private var name : String, private var mail : String) : SearchableById, JsonConvertible {
     private val token = UUID.randomUUID()
 
     override fun toJson(): JsonObject {
