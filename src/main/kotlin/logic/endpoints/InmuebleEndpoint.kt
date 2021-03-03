@@ -44,23 +44,23 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         exchange.close()
     }
 
-    override fun getIndividualById(objectId: Int): User {
+    override fun getIndividualById(objectId: Int): Inmueble {
         TODO("Not yet implemented")
     }
 
-    override fun getDefaultList(): List<User> {
+    override fun getDefaultList(): List<Inmueble> {
         TODO("Not yet implemented")
     }
 
-    override fun getListByIds(idList: List<Int>): List<User> {
+    override fun getListByIds(idList: List<Int>): List<Inmueble> {
         TODO("Not yet implemented")
     }
 
-    override fun postIndividual(newObject: User): User {
+    override fun postIndividual(newObject : Inmueble): Inmueble {
         TODO("Not yet implemented")
     }
 
-    override fun put(modifiedObject: User): User {
+    override fun put(modifiedObject: Inmueble): Inmueble {
         TODO("Not yet implemented")
     }
 
