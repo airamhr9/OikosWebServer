@@ -3,7 +3,6 @@ package logic.endpoints
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import objects.persistence.Inmueble
-import objects.persistence.User
 
 class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
 

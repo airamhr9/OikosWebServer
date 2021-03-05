@@ -1,14 +1,12 @@
 package logic.endpoints
 
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
-import objects.persistence.User
+import objects.persistence.Usuario
 
 
-class UserEndpoint(endpoint: String) : EndpointHandler<User>(endpoint) {
+class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
         println("handling exchange")
@@ -51,23 +49,23 @@ class UserEndpoint(endpoint: String) : EndpointHandler<User>(endpoint) {
         exchange.close()
     }
 
-    override fun getIndividualById(objectId: Int): User {
+    override fun getIndividualById(objectId: Int): Usuario {
         TODO("Not yet implemented")
     }
 
-    override fun getDefaultList(): List<User> {
+    override fun getDefaultList(): List<Usuario> {
         TODO("Not yet implemented")
     }
 
-    override fun getListByIds(idList: List<Int>): List<User> {
+    override fun getListByIds(idList: List<Int>): List<Usuario> {
         TODO("Not yet implemented")
     }
 
-    override fun postIndividual(newObject: User): User {
+    override fun postIndividual(newObject: Usuario): Usuario {
         TODO("Not yet implemented")
     }
 
-    override fun put(modifiedObject: User): User {
+    override fun put(modifiedObject: Usuario): Usuario {
         TODO("Not yet implemented")
     }
 
