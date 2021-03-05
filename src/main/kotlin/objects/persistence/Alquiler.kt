@@ -12,7 +12,7 @@ class Alquiler(override val id : Int, private var fecha_disponible : Date, priva
         TODO("Not yet implemented")
     }
 
-    override fun fromJson(): JsonObject {
+    override fun fromJson(jsonObject: JsonObject): Alquiler {
         TODO("Not yet implemented")
     }
 }

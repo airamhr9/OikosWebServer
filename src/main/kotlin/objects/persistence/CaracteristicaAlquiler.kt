@@ -13,7 +13,7 @@ class CaracteristicaAlquiler(override val id : Int, private var inmueble : Int, 
         TODO("Not yet implemented")
     }
 
-    override fun fromJson(): JsonObject {
+    override fun fromJson(jsonObject: JsonObject): CaracteristicaAlquiler {
         TODO("Not yet implemented")
     }
 }

@@ -12,7 +12,7 @@ class Direccion(override val id : Int, private var calle : String, private var n
         TODO("Not yet implemented")
     }
 
-    override fun fromJson(): JsonObject {
+    override fun fromJson(jsonObject: JsonObject): Direccion {
         TODO("Not yet implemented")
     }
 }

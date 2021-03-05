@@ -12,7 +12,7 @@ class User(override val id : Int,  private var name : String, private var mail :
         TODO("Not yet implemented")
     }
 
-    override fun fromJson(): JsonObject {
+    override fun fromJson(jsonObject: JsonObject): User {
         TODO("Not yet implemented")
     }
 

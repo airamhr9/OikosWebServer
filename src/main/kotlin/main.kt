@@ -20,7 +20,7 @@ fun main(args: Array<String>){
     server.addEndpoint("/api/inmueble/") {
             exchange: HttpExchange -> GlobalScope.launch {
         InmuebleEndpoint("/api/inmueble").handleExchange(exchange)
-    }
+        }
     }
 
     server.start()

@@ -13,7 +13,7 @@ class Preferencia(override val id : Int, private var superficie_min : Int, priva
         TODO("Not yet implemented")
     }
 
-    override fun fromJson(): JsonObject {
+    override fun fromJson(jsonObject: JsonObject): Preferencia {
         TODO("Not yet implemented")
     }
 }

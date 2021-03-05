@@ -11,7 +11,7 @@ class ResponseBuilder {
             val responseJson = JsonObject()
             val maxElements = if (limit > elementsToSend.size) elementsToSend.size else limit
 
-            responseJson.addProperty("count", maxElements)
+            responseJson.addProperty("limit", maxElements)
             val elementsInJson = JsonArray()
 
             for(element in elementsToSend){
