@@ -14,18 +14,28 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
          when(exchange.requestMethod){
                 "GET" -> {
                     response = "GET request"
-                    //TODO("Not yet implemented")
                     val parameters : Map<String, Any?> = RequestParser.getQueryParameters(exchange.requestURI)
-                    val argumentList = parameters.keys
+
+                    for(llave:Map.Entry<String, Any?> in parameters){
+                        if(llave.key=="id"){
+                            getIndividualById(llave.value.toString().toInt())
+                        }
+                        else{
+                            if(llave.key=="?limit"){
+                                getDefaultList(llave.value.toString().toInt())
+                            }
+                        }
+                    }
                 }
                 "POST" -> {
                     response = "POST request"
-                    //TODO("Not yet implemented")
-                    //val objectToPost: JsonObject = exchange.requestBody
+                    val objectToPost = exchange.requestBody
+                    //postIndividual(Usuario.fromJson(objectToPost))
                 }
                 "PUT" -> {
                     response = "PUT request"
-                    //TODO("Not yet implemented")
+                    val objectToPut = exchange.requestBody
+                    //put(Usuario.fromJson(objectToPut))
                 }
                 "OPTIONS" -> {
                     /**
@@ -53,7 +63,7 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
         TODO("Not yet implemented")
     }
 
-    override fun getDefaultList(): List<Usuario> {
+    override fun getDefaultList(num:Int): List<Usuario> {
         TODO("Not yet implemented")
     }
 
