@@ -40,7 +40,7 @@ class Inmueble(override val id: Int,
             val baños = jsonObject.get("baños").asInt
             val garaje = jsonObject.get("garaje").asBoolean
             val propietario = Usuario.fromJson(jsonObject.get("propietario").asJsonObject)
-            val descripcion = jsonObject.get("descripcion").asString
+            val descripcion = jsonObject.get("descripcion").asString.toString()
             return Inmueble(id, disponible, superficie, precio, habitaciones, baños, garaje, propietario, descripcion)
         }
     }

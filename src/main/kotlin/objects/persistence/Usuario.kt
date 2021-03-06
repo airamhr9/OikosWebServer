@@ -24,8 +24,8 @@ class Usuario(
     companion object {
         fun fromJson(jsonObject: JsonObject): Usuario {
             val id = jsonObject.get("id").asInt
-            val nombre = jsonObject.get("nombre").asString
-            val mail = jsonObject.get("mail").asString
+            val nombre = jsonObject.get("nombre").asString.toString()
+            val mail = jsonObject.get("mail").asString.toString()
             return Usuario(id, nombre, mail)
         }
     }
