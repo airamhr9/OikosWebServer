@@ -22,7 +22,7 @@ class Direccion(override val id: Int,
         result.addProperty("puerta", this.puerta)
         result.addProperty("codigo_postal", this.codigo_postal)
         result.addProperty("ciudad", this.ciudad)
-        result.addProperty("inmueble", this.inmueble.toJson())
+        result.add("inmueble", this.inmueble.toJson())
         return result
     }
 
