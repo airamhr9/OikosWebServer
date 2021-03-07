@@ -58,11 +58,11 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     }
 
     override fun getIndividualById(objectId: Int): Inmueble {
-        TODO("Not yet implemented")
+        return inmuebleById(objectId)
     }
 
     override fun getDefaultList(num:Int): List<Inmueble> {
-        TODO("Not yet implemented")
+        return listaDeInmuebles(num)
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {
