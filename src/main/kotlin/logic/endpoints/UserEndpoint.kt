@@ -16,16 +16,6 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
                     response = "GET request"
                     val parameters : Map<String, Any?> = RequestParser.getQueryParameters(exchange.requestURI)
 
-                    for(llave:Map.Entry<String, Any?> in parameters){
-                        if(llave.key=="id"){
-                            getIndividualById(llave.value.toString().toInt())
-                        }
-                        else{
-                            if(llave.key=="?limit"){
-                                getDefaultList(llave.value.toString().toInt())
-                            }
-                        }
-                    }
                 }
                 "POST" -> {
                     response = "POST request"

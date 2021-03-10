@@ -12,23 +12,39 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         when(exchange.requestMethod){
             "GET" -> {
                 response = "GET request"
-                val parameters : Map<String, Any?> = RequestParser.getQueryParameters(exchange.requestURI)
+                val map : Map<String, Any?> = RequestParser.getQueryParameters(exchange.requestURI)
+                val limit : Int
+                if("limit" in map){ limit = map["limit"].toString().toInt() } else {limit = 20}
 
-                for(llave:Map.Entry<String, Any?> in parameters){
-                    if(llave.key=="id"){
-                        getIndividualById(llave.value.toString().toInt())
-                    }
-                    else{
-                        if(llave.key=="?limit"){
-                            getDefaultList(llave.value.toString().toInt())
-                        }
-                    }
+
+                if("id" in map){
+                    getIndividualById(map["id"].toString().toInt())
                 }
+                else if("x" in map){
+                    val x= map["x"].toString().toDouble()
+                    val y= map["y"].toString().toDouble()
+
+                }
+
+                else{
+                    getDefaultList(limit)
+                }
+
             }
             "POST" -> {
                 response = "POST request"
                 val objectToPost = exchange.requestBody
-                //postIndividual(Inmueble.fromJson(objectToPost))
+               /* val reader = BufferedReader(objectToPost.reader())
+                var content: String
+                try {
+                    content = reader.readText()
+                } finally {
+                    reader.close()
+                }
+
+                postIndividual(Inmueble.fromJson(content))
+
+                */
             }
             "PUT" -> {
                 response = "PUT request"
@@ -58,11 +74,11 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     }
 
     override fun getIndividualById(objectId: Int): Inmueble {
-        return inmuebleById(objectId)
+        TODO("Not yet implemented")
     }
 
     override fun getDefaultList(num:Int): List<Inmueble> {
-        return listaDeInmuebles(num)
+        TODO("Not yet implemented")
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {
