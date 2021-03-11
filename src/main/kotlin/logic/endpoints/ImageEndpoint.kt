@@ -1,16 +1,10 @@
 package logic.endpoints
 
 import com.sun.net.httpserver.HttpExchange
-import jdk.internal.net.http.common.HttpHeadersBuilder
 import logic.EndpointHandler
-import logic.RequestParser
-import logic.ResponseBuilder
 import objects.persistence.Inmueble
-import persistence.DatabaseConnection
 import java.io.File
 import java.lang.Exception
-import java.lang.IndexOutOfBoundsException
-import java.net.http.HttpHeaders
 import java.nio.file.Files
 
 class ImageEndpoint(endpoint: String, val folderName : String) : EndpointHandler<Inmueble>(endpoint) {
