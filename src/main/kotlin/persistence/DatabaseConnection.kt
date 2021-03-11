@@ -36,7 +36,8 @@ class DatabaseConnection {
             val usuario = Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email"))
 
             val inmueble = Inmueble(sql.getInt("id"), sql.getBoolean("disponible"), sql.getInt("superficie"),
-                sql.getDouble("precio"), sql.getInt("habitaciones"), sql.getInt("baños"),
+                sql.getDouble("precio"), sql.getString("direccion"), sql.getDouble("latitud"),
+                sql.getDouble("longitud"),  sql.getInt("habitaciones"), sql.getInt("baños"),
                 sql.getBoolean("garaje"), usuario, sql.getString("descripcion"))
             list.add(inmueble)
         }
@@ -55,7 +56,8 @@ class DatabaseConnection {
             val usuario = Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email"))
 
             val inmueble = Inmueble(sql.getInt("id"), sql.getBoolean("disponible"), sql.getInt("superficie"),
-                sql.getDouble("precio"), sql.getInt("habitaciones"), sql.getInt("baños"),
+                sql.getDouble("precio"), sql.getString("direccion"), sql.getDouble("latitud"),
+                sql.getDouble("longitud"),  sql.getInt("habitaciones"), sql.getInt("baños"),
                 sql.getBoolean("garaje"), usuario, sql.getString("descripcion"))
             list.add(inmueble)
         }
@@ -70,11 +72,10 @@ class DatabaseConnection {
         val sqlUsuario = stmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
 
         val usuario = Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email"))
-        val inmueble = Inmueble(
-            sql.getInt("id"), sql.getBoolean("disponible"), sql.getInt("superficie"),
-            sql.getDouble("precio"), sql.getInt("habitaciones"), sql.getInt("baños"),
-            sql.getBoolean("garaje"), usuario, sql.getString("descripcion")
-        )
+        val inmueble = Inmueble(sql.getInt("id"), sql.getBoolean("disponible"), sql.getInt("superficie"),
+            sql.getDouble("precio"), sql.getString("direccion"), sql.getDouble("latitud"),
+            sql.getDouble("longitud"),  sql.getInt("habitaciones"), sql.getInt("baños"),
+            sql.getBoolean("garaje"), usuario, sql.getString("descripcion"))
         sql.close()
         stmt.close()
         return inmueble
