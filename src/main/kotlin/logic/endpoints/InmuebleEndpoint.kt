@@ -3,6 +3,7 @@ package logic.endpoints
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
+import logic.ResponseBuilder
 import objects.persistence.Inmueble
 import persistence.DatabaseConnection
 
@@ -20,7 +21,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 }
 
                 if("id" in map){
-                    response = getIndividualById(map["id"].toString().toInt()).toJson().toString()
+                    response = ResponseBuilder.createObjectResponse(getIndividualById(map["id"].toString().toInt()))
                 }
                 else if("x" in map){
                     val x = map["x"].toString().toDouble()
