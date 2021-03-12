@@ -7,8 +7,7 @@ import java.io.File
 import java.lang.Exception
 import java.nio.file.Files
 
-class ImageEndpoint(endpoint: String, val folderName : String) : EndpointHandler<Inmueble>(endpoint) {
-
+class ImageEndpoint(endpoint: String, private val folderName : String) : EndpointHandler<Inmueble>(endpoint) {
     //http://ip:9000/api/image/nombre_de_archivo.jpg
     override fun handleExchange(exchange: HttpExchange) {
         lateinit var response : String
@@ -34,9 +33,6 @@ class ImageEndpoint(endpoint: String, val folderName : String) : EndpointHandler
             }
             "POST" -> {
                 response = "POST request"
-            }
-            "PUT" -> {
-                response = "PUT request"
             }
             "OPTIONS" -> {
                 response = "OPTIONS request"
