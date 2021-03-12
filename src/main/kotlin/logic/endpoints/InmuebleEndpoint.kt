@@ -11,7 +11,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
         lateinit var response : String
-        when(exchange.requestMethod){
+        when(exchange.requestMethod) {
             "GET" -> {
                 val map : Map<String, Any?> = RequestParser.getQueryParameters(exchange.requestURI)
                 val limit : Int = if("limit" in map){
@@ -19,18 +19,17 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 } else {
                     20
                 }
-
                 if("id" in map){
                     response = ResponseBuilder.createObjectResponse(getIndividualById(map["id"].toString().toInt()))
                 }
                 else if("x" in map){
                     val x = map["x"].toString().toDouble()
                     val y = map["y"].toString().toDouble()
+                    response = ResponseBuilder.createListResponse(getListWithCoordinates(limit, x, y), limit)
                 }
                 else{
-                    getDefaultList(limit)
+                    response = ResponseBuilder.createListResponse(getDefaultList(limit), limit)
                 }
-
             }
             "POST" -> {
                 response = "POST request"
@@ -75,11 +74,17 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     }
 
     override fun getIndividualById(objectId: Int): Inmueble {
-        TODO("Not yet implemented")
+        val dbConnection = DatabaseConnection()
+        return dbConnection.inmuebleById(objectId)
     }
 
     override fun getDefaultList(num:Int): List<Inmueble> {
         TODO("Not yet implemented")
+    }
+
+    fun getListWithCoordinates(num:Int, x:Double, y:Double): List<Inmueble> {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.listaDeInmueblesPorCordenadas(num, x, y)
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {
