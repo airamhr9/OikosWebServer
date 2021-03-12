@@ -4,8 +4,7 @@ import objects.persistence.Usuario
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet
-
-
+import kotlin.system.exitProcess
 
 
 class DatabaseConnection {
@@ -20,34 +19,25 @@ class DatabaseConnection {
         } catch (e : Exception) {
             e.printStackTrace();
             System.err.println(e.javaClass.name+": "+e.message);
-            System.exit(0);
+            exitProcess(0);
         }
-        System.out.println("Opened database successfully");
+        println("Opened database successfully");
     }
     //TODO METODOS DE CREACION DE OBJETOS EN CADA TABLA
 
-    fun createExampleTable(){
-        val stmt = c.createStatement()
-        val sql = "CREATE TABLE COMPANY " +
-                "(ID INT PRIMARY KEY     NOT NULL," +
-                " NAME           TEXT    NOT NULL, " +
-                " AGE            INT     NOT NULL, " +
-                " ADDRESS        CHAR(50), " +
-                " SALARY         REAL)"
-        stmt.executeUpdate(sql)
-        stmt.close()
-    }
+    //companion object{}
 
     fun listaDeInmuebles(num:Int): List<Inmueble>{
         val stmt = c.createStatement()
-        val sql =stmt.executeQuery( "SELECT * FROM inmueble FETCH FIRST " + num.toString() +" ROWS ONLY;")
+        val sql =stmt.executeQuery("SELECT * FROM inmueble FETCH FIRST $num ROWS ONLY;")
         val list : MutableList<Inmueble> =  mutableListOf()
         while ( sql.next() ) {
             val sqlUsuario = stmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
             val usuario = Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email"))
 
             val inmueble = Inmueble(sql.getInt("id"), sql.getBoolean("disponible"), sql.getInt("superficie"),
-                sql.getDouble("precio"), sql.getInt("habitaciones"), sql.getInt("baños"),
+                sql.getDouble("precio"), sql.getString("direccion"), sql.getDouble("latitud"),
+                sql.getDouble("longitud"),  sql.getInt("habitaciones"), sql.getInt("baños"),
                 sql.getBoolean("garaje"), usuario, sql.getString("descripcion"))
             list.add(inmueble)
         }
@@ -66,7 +56,8 @@ class DatabaseConnection {
             val usuario = Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email"))
 
             val inmueble = Inmueble(sql.getInt("id"), sql.getBoolean("disponible"), sql.getInt("superficie"),
-                sql.getDouble("precio"), sql.getInt("habitaciones"), sql.getInt("baños"),
+                sql.getDouble("precio"), sql.getString("direccion"), sql.getDouble("latitud"),
+                sql.getDouble("longitud"),  sql.getInt("habitaciones"), sql.getInt("baños"),
                 sql.getBoolean("garaje"), usuario, sql.getString("descripcion"))
             list.add(inmueble)
         }
@@ -76,17 +67,15 @@ class DatabaseConnection {
     }
 
     fun inmuebleById(num:Int): Inmueble {
-
         val stmt = c.createStatement()
-        val sql = stmt.executeQuery("SELECT * FROM inmueble WHERE id=" + num.toString() + ";")
+        val sql = stmt.executeQuery("SELECT * FROM inmueble WHERE id=$num;")
         val sqlUsuario = stmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
 
         val usuario = Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email"))
-        val inmueble = Inmueble(
-            sql.getInt("id"), sql.getBoolean("disponible"), sql.getInt("superficie"),
-            sql.getDouble("precio"), sql.getInt("habitaciones"), sql.getInt("baños"),
-            sql.getBoolean("garaje"), usuario, sql.getString("descripcion")
-        )
+        val inmueble = Inmueble(sql.getInt("id"), sql.getBoolean("disponible"), sql.getInt("superficie"),
+            sql.getDouble("precio"), sql.getString("direccion"), sql.getDouble("latitud"),
+            sql.getDouble("longitud"),  sql.getInt("habitaciones"), sql.getInt("baños"),
+            sql.getBoolean("garaje"), usuario, sql.getString("descripcion"))
         sql.close()
         stmt.close()
         return inmueble

@@ -7,7 +7,7 @@ import objects.JsonConvertible
 
 class ResponseBuilder {
     companion object{
-        fun <T : JsonConvertible> createListResponse(elementsToSend : List<T>, limit : Int = 20) : JsonObject{
+        fun <T : JsonConvertible> createListResponse(elementsToSend : List<T>, limit : Int) : String{
             val responseJson = JsonObject()
             val maxElements = if (limit > elementsToSend.size) elementsToSend.size else limit
 
@@ -19,11 +19,11 @@ class ResponseBuilder {
             }
             responseJson.add("results", elementsInJson)
 
-            return responseJson
+            return responseJson.toString()
         }
 
-        fun <T : JsonConvertible> createObjectResponse(elementToSend : T) : JsonObject {
-            return elementToSend.toJson()
+        fun <T : JsonConvertible> createObjectResponse(elementToSend : T) : String {
+            return elementToSend.toJson().toString()
         }
     }
 }

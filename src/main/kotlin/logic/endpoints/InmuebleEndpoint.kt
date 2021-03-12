@@ -3,7 +3,9 @@ package logic.endpoints
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
+import logic.ResponseBuilder
 import objects.persistence.Inmueble
+import persistence.DatabaseConnection
 
 class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
 
@@ -11,21 +13,20 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         lateinit var response : String
         when(exchange.requestMethod){
             "GET" -> {
-                response = "GET request"
                 val map : Map<String, Any?> = RequestParser.getQueryParameters(exchange.requestURI)
-                val limit : Int
-                if("limit" in map){ limit = map["limit"].toString().toInt() } else {limit = 20}
-
+                val limit : Int = if("limit" in map){
+                    map["limit"].toString().toInt()
+                } else {
+                    20
+                }
 
                 if("id" in map){
-                    getIndividualById(map["id"].toString().toInt())
+                    response = ResponseBuilder.createObjectResponse(getIndividualById(map["id"].toString().toInt()))
                 }
                 else if("x" in map){
-                    val x= map["x"].toString().toDouble()
-                    val y= map["y"].toString().toDouble()
-
+                    val x = map["x"].toString().toDouble()
+                    val y = map["y"].toString().toDouble()
                 }
-
                 else{
                     getDefaultList(limit)
                 }
