@@ -23,25 +23,29 @@ class Inmueble(override val id: Int,
                private var imagenes: Array<String>,
 ) : SearchableById, JsonConvertible {
 
-    override fun toJson(): JsonObject {
+    private fun generarJsonBasico(): JsonObject {
         val result = JsonObject()
-
         result.addProperty("id", this.id)
         result.addProperty("disponible", this.disponible)
         result.addProperty("tipo", this.tipo.value)
-        result.addProperty("superficie", this.superficie)
         result.addProperty("precio", this.precio)
+        result.addProperty("direccion", this.direccion)
+        result.addProperty("ciudad", this.ciudad)
+        result.addProperty("latitud", this.latitud)
+        result.addProperty("longitud", this.longitud)
+        return result
+    }
+
+    override fun toJson(): JsonObject {
+        val result = generarJsonBasico()
+
+        result.addProperty("superficie", this.superficie)
         result.addProperty("habitaciones", this.habitaciones)
         result.addProperty("baños", this.baños)
         result.addProperty("garaje", this.garaje)
         result.add("propietario", this.propietario.toJson())
         result.addProperty("descripcion", this.descripcion)
-        result.addProperty("direccion", this.direccion)
-        result.addProperty("ciudad", this.ciudad)
-        result.addProperty("latitud", this.latitud)
-        result.addProperty("longitud", this.longitud)
 
-        val urlImagen = "http://${InetAddress.getLocalHost()}/api/imagen"
         val listaUrlImagenes = JsonArray()
         for (imagen:String in imagenes) {
             listaUrlImagenes.add(urlImagen + imagen)
@@ -51,7 +55,16 @@ class Inmueble(override val id: Int,
         return result
     }
 
+    fun toJsonReducido(): JsonObject {
+        val result = generarJsonBasico()
+        result.addProperty("numImagenes", this.imagenes.size)
+        result.addProperty("imagen", urlImagen + imagenes[0])
+        return result
+    }
+
     companion object {
+        private val urlImagen = "http://${InetAddress.getLocalHost()}/api/imagen"
+
         fun fromJson(jsonObject: JsonObject): Inmueble {
             val id = jsonObject.get("id").asInt
             val disponible = jsonObject.get("disponible").asBoolean

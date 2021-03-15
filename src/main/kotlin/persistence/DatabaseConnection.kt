@@ -1,5 +1,6 @@
 package persistence
 import objects.persistence.Inmueble
+import objects.persistence.TipoInmueble
 import objects.persistence.Usuario
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,10 +29,12 @@ class DatabaseConnection {
     //companion object{}
 
     fun sqlInmueble(sql:ResultSet,usuario:Usuario): Inmueble{
-        return Inmueble(sql.getInt("id"), sql.getBoolean("disponible"), sql.getInt("superficie"),
-            sql.getDouble("precio"), sql.getString("direccion"), sql.getDouble("latitud"),
-            sql.getDouble("longitud"),  sql.getInt("habitaciones"), sql.getInt("baños"),
-            sql.getBoolean("garaje"), usuario, sql.getString("descripcion"))
+        return Inmueble(sql.getInt("id"), sql.getBoolean("disponible"),
+            TipoInmueble.fromString(sql.getString("tipo")), sql.getInt("superficie"),
+            sql.getDouble("precio"), sql.getInt("habitaciones"), sql.getInt("baños"),
+            sql.getBoolean("garaje"), usuario, sql.getString("descripcion"),
+            sql.getString("direccion"), sql.getString("ciudad"), sql.getDouble("latitud"),
+            sql.getDouble("longitud"), /* Imagenes */ )
     }
     fun sqlUser(sqlUsuario: ResultSet):Usuario{
         return Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email"))
