@@ -30,6 +30,9 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                     val y = map["y"].toString().toDouble()
                     response = ResponseBuilder.createListResponse(getListWithCoordinates(limit, x, y), limit)
                 }
+                else if("precio" in map){
+                    //response = ResponseBuilder.createListResponse(getListWithFilters(),limit)
+                }
                 else{
                     response = ResponseBuilder.createListResponse(getDefaultList(limit), limit)
                 }
@@ -88,6 +91,10 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     fun getListWithCoordinates(num:Int, x:Double, y:Double): List<Inmueble> {
         val dbConnection = DatabaseConnection()
         return dbConnection.listaDeInmueblesPorCordenadas(num, x, y)
+    }
+    fun getListWithFilters(num:Int,precio: Double,habitaciones: Int,baños: Int,garaje: Boolean,direccion: String): List<Inmueble> {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.listaDeInmueblesPorFiltrado(num, precio, habitaciones,baños,garaje,direccion)
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {
