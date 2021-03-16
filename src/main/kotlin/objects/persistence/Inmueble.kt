@@ -16,6 +16,7 @@ class Inmueble(override val id: Int,
                private var garaje: Boolean,
                private var propietario: Usuario,
                private var descripcion: String?,
+                private var tipo : String
                // private var imagenes: Array<String>,
 ) : SearchableById, JsonConvertible {
 
@@ -34,6 +35,7 @@ class Inmueble(override val id: Int,
         result.addProperty("garaje", this.garaje)
         result.add("propietario", this.propietario.toJson())
         result.addProperty("descripcion", this.descripcion)
+        result.addProperty("tipo", this.tipo)
         // Falta añadir las imagenes
         return result
     }
@@ -52,8 +54,9 @@ class Inmueble(override val id: Int,
             val garaje = jsonObject.get("garaje").asBoolean
             val propietario = Usuario.fromJson(jsonObject.get("propietario").asJsonObject)
             val descripcion = jsonObject.get("descripcion").asString.toString()
+            val tipo = jsonObject.get("tipo").asString.toString()
             return Inmueble(id, disponible, superficie, precio, direccion, latitud, longitud,
-                habitaciones, baños, garaje, propietario, descripcion)
+                habitaciones, baños, garaje, propietario, descripcion, tipo)
         }
     }
 }

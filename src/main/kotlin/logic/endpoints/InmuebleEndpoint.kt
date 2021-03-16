@@ -5,7 +5,9 @@ import logic.EndpointHandler
 import logic.RequestParser
 import logic.ResponseBuilder
 import objects.persistence.Inmueble
+import objects.persistence.Usuario
 import persistence.DatabaseConnection
+import java.net.URL
 
 class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
 
@@ -13,7 +15,8 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         lateinit var response : String
         when(exchange.requestMethod) {
             "GET" -> {
-                val map : Map<String, Any?> = RequestParser.getQueryParameters(exchange.requestURI)
+                val map : Map<String, Any?> = RequestParser.getQueryParameters(URL("http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
+                println(map.entries.toString())
                 val limit : Int = if("limit" in map){
                     map["limit"].toString().toInt()
                 } else {

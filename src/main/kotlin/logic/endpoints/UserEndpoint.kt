@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
 import objects.persistence.Usuario
+import java.net.URL
 
 
 class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
@@ -14,7 +15,7 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
          when(exchange.requestMethod){
                 "GET" -> {
                     response = "GET request"
-                    val parameters : Map<String, Any?> = RequestParser.getQueryParameters(exchange.requestURI)
+                    val parameters : Map<String, Any?> = RequestParser.getQueryParameters(URL("http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
 
                 }
                 "POST" -> {

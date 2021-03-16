@@ -39,6 +39,7 @@ fun handleResponse(exchange : HttpExchange){
             if(exchange.requestURI.toString() != "/api/hello/"){
                 val url = "http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI;
                 val processedParameters = processMap(splitQuery(URL(url)))
+                println(processedParameters.keys)
                 /*
                 * Buscar en la bd el objeto filtrando por los parámetros
                 * */

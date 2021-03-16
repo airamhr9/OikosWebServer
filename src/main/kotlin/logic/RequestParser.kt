@@ -1,6 +1,7 @@
 package logic
 
 import java.net.URI
+import java.net.URL
 import java.net.URLDecoder
 import java.util.*
 import kotlin.collections.LinkedHashMap
@@ -8,15 +9,15 @@ import kotlin.collections.LinkedHashMap
 class RequestParser {
     companion object{
 
-        fun getQueryParameters(request: URI) : Map<String, Any?>{
+        fun getQueryParameters(request: URL) : Map<String, Any?>{
             val initialScan = initialQueryScan(request)
-            return removeUselessLists(initialScan)
+            return processMap(initialScan)
         }
 
         //Devuelve una lista por si hay parámetros repetidos en la url
-        private fun initialQueryScan(request : URI): Map<String, MutableList<String?>> {
+        private fun initialQueryScan(url: URL): Map<String, MutableList<String?>> {
             val queryPairs: MutableMap<String, MutableList<String?>> = LinkedHashMap()
-            val pairs = request.toString().split("&").toTypedArray()
+            val pairs = url.query.split("&").toTypedArray()
             for (pair in pairs) {
                 val idx = pair.indexOf("=")
                 val key = if (idx > 0) URLDecoder.decode(pair.substring(0, idx), "UTF-8") else pair
@@ -29,17 +30,20 @@ class RequestParser {
             return queryPairs
         }
 
-        private fun removeUselessLists(initialScan : Map<String, MutableList<String?>>) : Map<String, Any?>{
+
+
+        fun processMap(queryMap : Map<String, MutableList<String?>>) : MutableMap<String, Any?>{
             val result : MutableMap<String, Any?> = LinkedHashMap()
-            val keys = initialScan.keys
+            val keys = queryMap.keys
             for(key in keys){
-                if (initialScan[key]?.size == 1)
-                    result[key] = initialScan[key]?.first()
+                if (queryMap[key]?.size == 1)
+                    result[key] = queryMap[key]?.first()
                 else
-                    result[key] = initialScan[key]
+                    result[key] = queryMap[key]
             }
             return result
         }
+
 
     }
 }

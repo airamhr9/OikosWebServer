@@ -1,7 +1,9 @@
 import objects.Server
 import com.sun.net.httpserver.HttpExchange
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import logic.endpoints.ImageEndpoint
 import logic.endpoints.InmuebleEndpoint
 import logic.endpoints.UserEndpoint
@@ -30,6 +32,19 @@ fun main(args: Array<String>){
     server.addEndpoint("/api/inmueble/") {
         exchange: HttpExchange -> GlobalScope.launch {
             InmuebleEndpoint("/api/inmueble").handleExchange(exchange)
+        }
+    }
+
+    server.addEndpoint("/api/hello/") {
+            exchange: HttpExchange -> GlobalScope.launch {
+            val response = "Hello bro test ok"
+            withContext(Dispatchers.IO){
+                exchange.sendResponseHeaders(200, response.toByteArray(Charsets.UTF_8).size.toLong())
+                val outputStream = exchange.responseBody
+                outputStream.write(response.toByteArray())
+                outputStream.flush()
+                exchange.close()
+            }
         }
     }
 
