@@ -32,20 +32,21 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                     val y = map["y"].toString().toDouble()
                     response = ResponseBuilder.createListResponse(getListWithCoordinates(limit, x, y), limit)
                 }
-                else if("filtrada" in map){
-                    //Sin terminar
-                    val precioMin = if("precioMin" in map) map["precioMin"].toString().toDouble() else 0.0
-                    val  precioMax = map["precioMax"].toString().toDouble()
-                    val  supMin = map["supMin"].toString().toInt()
-                    val  supMax = map["supMax"].toString().toInt()
-                    val  habitaciones = map["habitaciones"].toString().toInt()
-                    val  baños = map["baños"].toString().toInt()
-                    val  garaje = map["garaje"].toString().toBoolean()
-                    val  ciudad = map["ciudad"].toString()
-                    val  tipo = map["tipo"].toString()
+                else if("filtrada" in map) {
+                    val precioMin = if ("precioMin" in map) map["precioMin"].toString().toDouble() else 0.0
+                    val precioMax = if ("precioMax" in map) map["precioMax"].toString().toDouble() else null
+                    val supMin = if ("supMin" in map) map["supMin"].toString().toInt() else 0
+                    val supMax = if ("supMax" in map) map["supMax"].toString().toInt() else null
+                    val habitaciones = if ("habitaciones" in map) map["habitaciones"].toString().toInt() else 0
+                    val baños = if ("baños" in map) map["baños"].toString().toInt() else 0
+                    val garaje = if ("garaje" in map) map["garaje"].toString().toBoolean() else null
+                    val ciudad = if ("ciudad" in map) map["ciudad"].toString() else null
+                    val tipo = if ("tipo" in map) map["tipo"].toString() else null
 
                     response = ResponseBuilder.createListResponse(
-                        getListWithFilters(limit, precioMin,precioMax,supMin,supMax,habitaciones,baños,garaje,ciudad,tipo),limit)
+                        getListWithFilters(limit, precioMin, precioMax, supMin, supMax, habitaciones, baños,
+                                            garaje, ciudad, tipo),
+                        limit)
                 }
                 else{
                     response = ResponseBuilder.createListResponse(getDefaultList(limit), limit)
@@ -99,9 +100,11 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         val dbConnection = DatabaseConnection()
         return dbConnection.listaDeInmueblesPorCordenadas(num, x, y)
     }
-    fun getListWithFilters(num:Int ,precioMin:Double?,precioMax:Double?,supMin:Int?,supMan:Int?,habitaciones: Int?,baños: Int?,garaje: Boolean?,ciudad: String?,tipo:String?): List<Inmueble> {
+    fun getListWithFilters(num: Int , precioMin: Double, precioMax: Double?, supMin: Int, supMan: Int?,
+                           habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?): List<Inmueble> {
         val dbConnection = DatabaseConnection()
-        return dbConnection.listaDeInmueblesPorFiltrado(num, precioMin,precioMax,supMin,supMan, habitaciones,baños,garaje,ciudad,tipo)
+        return dbConnection.listaDeInmueblesPorFiltrado(num, precioMin, precioMax, supMin, supMan, habitaciones, baños,
+            garaje, ciudad, tipo)
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {

@@ -50,30 +50,31 @@ class DatabaseConnection {
         return nombresImagenes;
     }
 
-    fun listaDeInmueblesPorFiltrado(num:Int,precioMin: Double?, precioMax: Double?, supMin: Int?, supMax: Int?, habitaciones: Int?,baños: Int?,garaje: Boolean?,ciudad: String?,tipo:String?): List<Inmueble>{
+    fun listaDeInmueblesPorFiltrado(num:Int, precioMin: Double, precioMax: Double?, supMin: Int, supMax: Int?,
+                                    habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?): List<Inmueble>{
         val stmt = c.createStatement()
         val list : MutableList<Inmueble> =  mutableListOf()
         var query = "SELECT * FROM inmueble WHERE "
-        if (precioMin != null) query += "precio >= $precioMin AND "
+        query += "precio >= $precioMin AND "
         if (precioMax != null) query += "precio <= $precioMax AND "
-        if (supMin != null) query += "superficie >= $supMin AND "
+        query += "superficie >= $supMin AND "
         if (supMax != null) query += "superficie <= $supMax AND "
-        if (habitaciones != null) query += "habitaciones >= $habitaciones AND "
-        if (baños != null) query += "baños >= $baños AND "
+        query += "habitaciones >= $habitaciones AND "
+        query += "baños >= $baños AND "
         if (garaje != null) query += "garaje = $garaje AND "
         if (ciudad != null) query += "ciudad = $ciudad AND "
         if (tipo != null) query += "tipo = $tipo AND "
         query.substring(0, query.length - 4) // Quitar el ultimo AND
         query += "FETCH FIRST $num ROWS ONLY;"
+        val sql = stmt.executeQuery(query)
 
-        val sql =stmt.executeQuery(query)
         /*val sql =stmt.executeQuery("SELECT * FROM inmueble " +
                 "WHERE baños = "+ baños +" AND garaje = "+ garaje +" AND habitaciones = "+habitaciones+" AND disponible = true AND " +
                 "( precio >= "+precioMin +" AND precio <= "+precioMax +") AND " +
                 "( superficie >= "+supMin +" AND superficie <= "+supMax +") AND tipo = "+tipo+ " AND direccion = "+ciudad
                 + " FETCH FIRST $num ROWS ONLY;")
-
          */
+
         while ( sql.next() ) {
             val userStmt = c.createStatement()
             val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
