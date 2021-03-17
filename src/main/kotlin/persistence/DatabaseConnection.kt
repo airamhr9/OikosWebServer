@@ -28,16 +28,26 @@ class DatabaseConnection {
 
     //companion object{}
 
-    fun sqlInmueble(sql:ResultSet,usuario:Usuario): Inmueble{
+    fun sqlInmueble(sql:ResultSet,usuario:Usuario, imagenes: List<String>): Inmueble{
         return Inmueble(sql.getInt("id"), sql.getBoolean("disponible"),
             TipoInmueble.fromString(sql.getString("tipo")), sql.getInt("superficie"),
             sql.getDouble("precio"), sql.getInt("habitaciones"), sql.getInt("baños"),
             sql.getBoolean("garaje"), usuario, sql.getString("descripcion"),
             sql.getString("direccion"), sql.getString("ciudad"), sql.getDouble("latitud"),
-            sql.getDouble("longitud"), /* Imagenes */ )
+            sql.getDouble("longitud"), imagenes.toTypedArray())
     }
     fun sqlUser(sqlUsuario: ResultSet):Usuario{
         return Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email"))
+    }
+
+    fun sqlImagenes(idInmueble: Int): List<String> {
+        val stmt2 = c.createStatement()
+        val sql2 = stmt2.executeQuery("SELECT * FROM imagen WHERE inmueble = $idInmueble")
+        val nombresImagenes = mutableListOf<String>()
+        while ( sql2.next() ) {
+            nombresImagenes.add(sql2.getString("ruta"))
+        }
+        return nombresImagenes;
     }
 
     fun listaDeInmueblesPorFiltrado(num:Int,precio: Double,habitaciones: Int,baños: Int,garaje: Boolean,direccion: String): List<Inmueble>{
@@ -51,7 +61,8 @@ class DatabaseConnection {
         while ( sql.next() ) {
             val sqlUsuario = stmt.executeQuery("SELECT * FROM usuario WHERE id = " + sql.getInt("propietario").toString() + ";")
             val usuario = sqlUser(sqlUsuario)
-            val inmueble = sqlInmueble(sql,usuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmueble(sql,usuario, imagenes)
             list.add(inmueble)
         }
         sql.close()
@@ -69,7 +80,8 @@ class DatabaseConnection {
         while ( sql.next() ) {
             val sqlUsuario = stmt.executeQuery("SELECT * FROM usuario WHERE id = " + sql.getInt("propietario").toString() + ";")
             val usuario = sqlUser(sqlUsuario)
-            val inmueble = sqlInmueble(sql,usuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmueble(sql,usuario, imagenes)
             list.add(inmueble)
         }
         sql.close()
@@ -82,7 +94,8 @@ class DatabaseConnection {
         val sql = stmt.executeQuery("SELECT * FROM inmueble WHERE id=$num;")
         val sqlUsuario = stmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
         val usuario = sqlUser(sqlUsuario)
-        val inmueble = sqlInmueble(sql,usuario)
+        val imagenes = sqlImagenes(sql.getInt("id"))
+        val inmueble = sqlInmueble(sql,usuario, imagenes)
 
         sql.close()
         stmt.close()
