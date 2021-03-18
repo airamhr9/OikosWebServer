@@ -113,6 +113,7 @@ class DatabaseConnection {
     fun inmuebleById(num:Int): Inmueble {
         val stmt = c.createStatement()
         val sql = stmt.executeQuery("SELECT * FROM inmueble WHERE id=$num;")
+        sql.next()
         val userStmt = c.createStatement()
         val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
         sqlUsuario.next()
