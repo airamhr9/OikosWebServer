@@ -63,7 +63,7 @@ class Inmueble(override val id: Int,
     }
 
     companion object {
-        private val urlImagen = "http://${InetAddress.getLocalHost()}/api/imagen"
+        private val urlImagen = "http://${InetAddress.getLocalHost().hostAddress}:9000/api/imagen/"
 
         fun fromJson(jsonObject: JsonObject): Inmueble {
             val id = jsonObject.get("id").asInt
