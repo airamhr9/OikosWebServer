@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logic.endpoints.ImageEndpoint
 import logic.endpoints.InmuebleEndpoint
+import logic.endpoints.PreferenciasEndpoint
 import logic.endpoints.UserEndpoint
 import persistence.DatabaseConnection
 import java.io.File
@@ -32,6 +33,12 @@ fun main(args: Array<String>){
     server.addEndpoint("/api/inmueble/") {
         exchange: HttpExchange -> GlobalScope.launch {
             InmuebleEndpoint("/api/inmueble").handleExchange(exchange)
+        }
+    }
+
+    server.addEndpoint("/api/preferencias/") {
+            exchange: HttpExchange -> GlobalScope.launch {
+                PreferenciasEndpoint("/api/preferencias").handleExchange(exchange)
         }
     }
 
