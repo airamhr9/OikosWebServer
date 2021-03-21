@@ -22,7 +22,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 val limit : Int = if("limit" in map){
                     map["limit"].toString().toInt()
                 } else {
-                    20
+                    100
                 }
                 if("id" in map){
                     response = ResponseBuilder.createObjectResponse(getIndividualById(map["id"].toString().toInt()))
