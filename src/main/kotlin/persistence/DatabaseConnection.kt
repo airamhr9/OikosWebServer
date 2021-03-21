@@ -111,6 +111,25 @@ class DatabaseConnection {
         return list
     }
 
+    fun listaDeInmueblesPorDefecto(num:Int): List<Inmueble>{
+        val stmt = c.createStatement()
+        val list : MutableList<Inmueble> =  mutableListOf()
+
+        val sql =stmt.executeQuery("SELECT * FROM inmueble FETCH FIRST $num ROWS ONLY;")
+        while ( sql.next() ) {
+            val userStmt = c.createStatement()
+            val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
+            sqlUsuario.next()
+            val usuario = sqlUser(sqlUsuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmueble(sql,usuario, imagenes)
+            list.add(inmueble)
+        }
+        sql.close()
+        stmt.close()
+        return list
+    }
+
     fun inmuebleById(num:Int): Inmueble {
         val stmt = c.createStatement()
         val sql = stmt.executeQuery("SELECT * FROM inmueble WHERE id=$num;")

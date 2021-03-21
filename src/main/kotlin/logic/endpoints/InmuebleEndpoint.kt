@@ -93,7 +93,8 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     }
 
     override fun getDefaultList(num:Int): List<Inmueble> {
-        TODO("Not yet implemented")
+        val dbConnection = DatabaseConnection()
+        return dbConnection.listaDeInmueblesPorDefecto(num)
     }
 
     fun getListWithCoordinates(num:Int, x:Double, y:Double): List<Inmueble> {
