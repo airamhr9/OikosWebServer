@@ -99,7 +99,7 @@ class DatabaseConnection {
         val list : MutableList<Inmueble> =  mutableListOf()
 
         val sql =stmt.executeQuery( "SELECT * FROM inmueble WHERE " +
-                "( latitud >= "+x+" - 10 AND latitud <= "+x+" + 10 ) AND ( longitud >= "+y+" - 10 AND longitud <= "+y+" + 10 ) AND disponible = true " +
+                "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
                 "FETCH FIRST " + num.toString() +" ROWS ONLY;")
         while ( sql.next() ) {
             val userStmt = c.createStatement()
