@@ -37,8 +37,8 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                     val precioMax = if ("precioMax" in map) map["precioMax"].toString().toDouble() else null
                     val supMin = if ("supMin" in map) map["supMin"].toString().toInt() else 0
                     val supMax = if ("supMax" in map) map["supMax"].toString().toInt() else null
-                    val habitaciones = if ("habitaciones" in map) map["habitaciones"].toString().toInt() else 0
-                    val baños = if ("baños" in map) map["baños"].toString().toInt() else 0
+                    val habitaciones = if ("habitaciones" in map) map["habitaciones"].toString().toInt() else -1
+                    val baños = if ("baños" in map) map["baños"].toString().toInt() else -1
                     val garaje = if ("garaje" in map) map["garaje"].toString().toBoolean() else null
                     val ciudad = if ("ciudad" in map) map["ciudad"].toString() else null
                     val tipo = if ("tipo" in map) map["tipo"].toString() else null

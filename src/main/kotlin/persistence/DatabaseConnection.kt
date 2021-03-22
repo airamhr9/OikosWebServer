@@ -60,13 +60,17 @@ class DatabaseConnection {
         if (precioMax != null) query += "precio <= $precioMax AND "
         query += "superficie >= $supMin AND "
         if (supMax != null) query += "superficie <= $supMax AND "
-        query += "habitaciones >= $habitaciones AND "
-        query += "baños >= $baños AND "
-        if (garaje != null) query += "garaje = $garaje AND "
-        if (ciudad != null) query += "ciudad = $ciudad AND "
-        if (tipo != null) query += "tipo = $tipo AND "
-        query.substring(0, query.length - 4) // Quitar el ultimo AND
+        if(habitaciones >= 0)
+        query += "habitaciones = $habitaciones AND "
+        if(baños >= 0)
+        query += "baños = $baños AND "
+        if (garaje == true) query += "garaje = true AND "
+        if (ciudad != null) query += "lower(ciudad) = lower(\'$ciudad\') AND "
+        if (tipo != null) query += "tipo = \'$tipo\' AND "
+        query = query.substring(0, query.length - 4) // Quitar el ultimo AND
         query += "FETCH FIRST $num ROWS ONLY;"
+
+        println(query)
         val sql = stmt.executeQuery(query)
 
         /*val sql =stmt.executeQuery("SELECT * FROM inmueble " +
