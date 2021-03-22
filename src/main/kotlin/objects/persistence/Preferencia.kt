@@ -14,6 +14,7 @@ class Preferencia(override val id: Int,
                   private var garaje: Boolean,
                   private var ciudad: String,
                   private var usuario: Usuario,
+                  private var tipo : String
 ) : SearchableById, JsonConvertible {
 
     override fun toJson(): JsonObject {
@@ -28,6 +29,7 @@ class Preferencia(override val id: Int,
         result.addProperty("garaje", this.garaje)
         result.addProperty("ciudad", this.ciudad)
         result.add("usuario", this.usuario.toJson())
+        result.addProperty("tipo", this.tipo)
         return result
     }
 
@@ -43,7 +45,8 @@ class Preferencia(override val id: Int,
             val garaje = jsonObject.get("garaje").asBoolean
             val ciudad = jsonObject.get("ciudad").asString.toString()
             val usuario = Usuario.fromJson(jsonObject.get("usuario").asJsonObject)
-            return Preferencia(id, superficie_min, superficie_max, precio_min, precio_max, habitaciones,baños, garaje, ciudad, usuario)
+            val tipo = jsonObject.get("tipo").asString
+            return Preferencia(id, superficie_min, superficie_max, precio_min, precio_max, habitaciones,baños, garaje, ciudad, usuario, tipo)
         }
     }
 }

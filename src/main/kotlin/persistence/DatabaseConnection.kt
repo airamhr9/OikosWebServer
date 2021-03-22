@@ -160,7 +160,7 @@ class DatabaseConnection {
         val usuario = sqlUser(sqlUsuario)
         val preferencia = Preferencia(sql.getInt("id"), sql.getInt("superficie_min"),sql.getInt("superficie_max"),
             sql.getDouble("precio_min"),sql.getDouble("precio_max"), sql.getInt("habitaciones"),
-            sql.getInt("baños"), sql.getBoolean("garaje"),sql.getString("ciudad"),usuario)
+            sql.getInt("baños"), sql.getBoolean("garaje"),sql.getString("ciudad"),usuario, sql.getString("tipo"))
 
         sql.close()
         stmt.close()
