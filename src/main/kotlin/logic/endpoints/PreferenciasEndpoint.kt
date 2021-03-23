@@ -37,7 +37,11 @@ class PreferenciasEndpoint(endpoint: String) : EndpointHandler<Preferencia>(endp
             }
             "PUT" -> {
                 response = "PUT request"
-                val objectToPut = exchange.requestBody
+                val objectToPost = exchange.requestBody
+                val reader = BufferedReader(objectToPost.reader())
+
+                val preferencia  = Preferencia.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                put(preferencia)
             }
             "OPTIONS" -> {
                 /**
@@ -80,7 +84,8 @@ class PreferenciasEndpoint(endpoint: String) : EndpointHandler<Preferencia>(endp
     }
 
     override fun put(modifiedObject: Preferencia): Preferencia {
-        TODO("Not yet implemented")
+        val dbConnection = DatabaseConnection()
+        return dbConnection.actualizarPreferencias(modifiedObject)
     }
 
     override fun responseToJson(): String {

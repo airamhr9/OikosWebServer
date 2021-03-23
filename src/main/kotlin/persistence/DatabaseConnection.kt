@@ -169,7 +169,6 @@ class DatabaseConnection {
 
     fun crearPreferencias(p:Preferencia): Preferencia {
         val stmt = c.createStatement()
-        val pJson = p.toJson()
         val sql = "INSERT INTO preferencia (id, superficie_min, superficie_max, precio_min, precio_max, habitaciones, baños, garaje, ciudad, tipo)" +
                 "VALUES (${p.id}, ${p.superficie_min}, ${p.superficie_max}, ${p.precio_min},${p.superficie_max},${p.habitaciones}," +
                 " ${p.baños},${p.garaje},'${p.ciudad}', '${p.tipo}');"
@@ -180,4 +179,14 @@ class DatabaseConnection {
         return p
     }
 
+    fun actualizarPreferencias(p:Preferencia): Preferencia {
+        var stmt = c.createStatement()
+        val sql = "DELETE from preferencia where id = ${p.id};"
+        stmt.executeUpdate(sql)
+
+        val pre  = crearPreferencias(p)
+        c.commit();
+        stmt.close()
+        return pre
+    }
 }
