@@ -50,10 +50,10 @@ class DatabaseConnection {
     }
 
     fun listaDeInmueblesPorFiltrado(num:Int, precioMin: Double, precioMax: Double?, supMin: Int, supMax: Int?,
-                                    habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?): List<Inmueble>{
+                                    habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?, modelo:ModeloInmueble,numComp:Int?): List<Inmueble>{
         val stmt = c.createStatement()
         val list : MutableList<Inmueble> =  mutableListOf()
-        var query = "SELECT * FROM inmueble WHERE "
+        var query = "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE "
         query += "precio >= $precioMin AND "
         if (precioMax != null) query += "precio <= $precioMax AND "
         query += "superficie >= $supMin AND "
