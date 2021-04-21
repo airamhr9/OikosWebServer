@@ -1,8 +1,5 @@
 package persistence
-import objects.persistence.Inmueble
-import objects.persistence.Preferencia
-import objects.persistence.TipoInmueble
-import objects.persistence.Usuario
+import objects.persistence.*
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet
@@ -197,5 +194,95 @@ class DatabaseConnection {
 
         c.commit();
         stmt.close()
+    }
+
+    fun getPisoById(id: Int): Piso {
+        val statement = c.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN piso WHERE id=$id;")
+        resultSet.next()
+        val piso = getInmuebleFromResultSet(resultSet, ModeloInmueble.Piso) as Piso
+        resultSet.close()
+        statement.close()
+        return piso
+    }
+
+    fun getLocalById(id: Int): Local {
+        val statement = c.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN local WHERE id=$id;")
+        resultSet.next()
+        val local = getInmuebleFromResultSet(resultSet, ModeloInmueble.Local) as Local
+        resultSet.close()
+        statement.close()
+        return local
+    }
+
+    fun getGarajeById(id: Int): Garaje {
+        val statement = c.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN garaje WHERE id=$id;")
+        resultSet.next()
+        val garaje = getInmuebleFromResultSet(resultSet, ModeloInmueble.Garjaje) as Garaje
+        resultSet.close()
+        statement.close()
+        return garaje
+    }
+
+    fun getHabitacionById(id: Int): Habitacion {
+        val statement = c.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN habitacion WHERE id=$id;")
+        resultSet.next()
+        val habitacion = getInmuebleFromResultSet(resultSet, ModeloInmueble.Habitacion) as Habitacion
+        resultSet.close()
+        statement.close()
+        return habitacion
+    }
+
+    private fun getInmuebleFromResultSet(resultSet: ResultSet, modelo: ModeloInmueble): InmuebleSprint2 {
+        val id = resultSet.getInt("id");
+        val disponible = resultSet.getBoolean("disponible")
+        val tipo = TipoInmueble.fromString(resultSet.getString("tipo"))
+        val superficie = resultSet.getInt("superficie")
+        val precio = resultSet.getDouble("precio")
+
+        // REFACTORIZAR
+        // val propietario = getUsuarioById(resultSet.getInt("propietario"))
+        val userStmt = c.createStatement()
+        val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id="
+                + resultSet.getInt("propietario").toString() + ";")
+        sqlUsuario.next()
+        val propietario = sqlUser(sqlUsuario)
+
+        val descripcion = resultSet.getString("descripcion")
+        val direccion = resultSet.getString("direccion")
+        val ciudad = resultSet.getString("ciudad")
+        val latitud = resultSet.getDouble("latitud")
+        val longitud = resultSet.getDouble("longitud")
+        val imagenes = sqlImagenes(resultSet.getInt("id"))
+
+        when (modelo) {
+            ModeloInmueble.Piso -> {
+                val habitaciones = resultSet.getInt("habitaciones")
+                val baños = resultSet.getInt("baños")
+                val garaje = resultSet.getBoolean("garaje")
+                return Piso(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
+                    ciudad, latitud, longitud, imagenes.toTypedArray(), habitaciones, baños, garaje)
+            }
+            ModeloInmueble.Local -> {
+                val baños = resultSet.getInt("baños")
+                return Local(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
+                    ciudad, latitud, longitud, imagenes.toTypedArray(), baños)
+            }
+            ModeloInmueble.Garjaje -> {
+                return Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
+                    ciudad, latitud, longitud, imagenes.toTypedArray())
+            }
+            ModeloInmueble.Habitacion -> {
+                val habitaciones = resultSet.getInt("habitaciones")
+                val baños = resultSet.getInt("baños")
+                val garaje = resultSet.getBoolean("garaje")
+                val numCompañeros = resultSet.getInt("numCompañeros")
+                return Habitacion(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
+                    ciudad, latitud, longitud, imagenes.toTypedArray(), habitaciones, baños, garaje, numCompañeros)
+            }
+        }
     }
 }
