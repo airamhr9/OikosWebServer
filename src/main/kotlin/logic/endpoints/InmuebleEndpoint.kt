@@ -65,6 +65,12 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 val objectToPut = exchange.requestBody
                 //put(Inmueble.fromJson(objectToPut))
             }
+            "DELETE" -> {
+                response = "DELETE request"
+                val url = exchange.requestURI.toString()
+                val id=url.substring(14).toInt();
+                borrarInmueble(id)
+            }
             "OPTIONS" -> {
                 /**
                  * Endpoint que devuelve un objeto que define los
@@ -106,6 +112,10 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         val dbConnection = DatabaseConnection()
         return dbConnection.listaDeInmueblesPorFiltrado(num, precioMin, precioMax, supMin, supMan, habitaciones, baños,
             garaje, ciudad, tipo)
+    }
+    fun borrarInmueble(id:Int){
+        val dbConnection = DatabaseConnection()
+        return dbConnection.borrarIn(id)
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {

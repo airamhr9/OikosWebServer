@@ -190,4 +190,12 @@ class DatabaseConnection {
         stmt.close()
         return pre
     }
+    fun borrarIn(id:Int){
+        var stmt = c.createStatement()
+        val sql = "DELETE from inmueble where id = ${id};"
+        stmt.executeUpdate(sql)
+
+        c.commit();
+        stmt.close()
+    }
 }
