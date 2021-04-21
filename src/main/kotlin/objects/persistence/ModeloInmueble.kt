@@ -1,8 +1,8 @@
 package objects.persistence
 
-enum class ModeloInmueble {
-    Piso,
-    Local,
-    Garjaje,
-    Habitacion
+enum class ModeloInmueble(val value:String) {
+    Piso("piso"),
+    Local("local"),
+    Garjaje("garaje"),
+    Habitacion("habitacion")
 }
