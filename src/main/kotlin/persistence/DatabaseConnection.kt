@@ -15,8 +15,9 @@ class DatabaseConnection {
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
-                //.getConnection("jdbc:postgresql://localhost:5432/testdb",
-                .getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos",
+                //.getConnection("jdbc:postgresql://localhost:5432/testdb",  // ¿Jaime?
+                //.getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
+                .getConnection("jdbc:postgresql://localhost:5432/oikos", // Hector
                     "postgres", "mysecretpassword");
         } catch (e : Exception) {
             e.printStackTrace();
