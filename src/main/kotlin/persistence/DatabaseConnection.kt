@@ -65,6 +65,7 @@ class DatabaseConnection {
         if (garaje == true) query += "garaje = true AND "
         if (ciudad != null) query += "lower(ciudad) = lower(\'$ciudad\') AND "
         if (tipo != null) query += "tipo = \'$tipo\' AND "
+        if (numComp != null) query += "numCompañeros = \'$numComp\' AND "
         query = query.substring(0, query.length - 4) // Quitar el ultimo AND
         query += "FETCH FIRST $num ROWS ONLY;"
 

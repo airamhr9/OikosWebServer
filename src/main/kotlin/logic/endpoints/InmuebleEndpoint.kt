@@ -24,7 +24,14 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                     100
                 }
                 if("id" in map){
-                    response = ResponseBuilder.createObjectResponse(getIndividualById(map["id"].toString().toInt()))
+                    if(map["modelo"]=="garaje"){
+                        response = ResponseBuilder.createObjectResponse(getGarajeById(map["id"].toString().toInt()))}
+                    else if(map["modelo"]=="habitacion"){
+                        response = ResponseBuilder.createObjectResponse(getHabitacionById(map["id"].toString().toInt()))}
+                    else if(map["modelo"]=="local"){
+                        response = ResponseBuilder.createObjectResponse(getLocalById(map["id"].toString().toInt()))}
+                    else if(map["modelo"]=="piso"){
+                        response = ResponseBuilder.createObjectResponse(getPisoById(map["id"].toString().toInt()))}
                 }
                 else if("coordenada" in map){
                     val x = map["x"].toString().toDouble()
@@ -45,8 +52,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                     val numComp = if ("numCompañeros" in map) map["numCompañeros"].toString().toInt() else null
                     response = ResponseBuilder.createListResponse(
                         getListWithFilters(limit, precioMin, precioMax, supMin, supMax, habitaciones, baños,
-                                            garaje, ciudad, tipo, ModeloInmueble.fromString(modelo),numComp),
-                        limit)
+                                            garaje, ciudad, tipo, ModeloInmueble.fromString(modelo),numComp), limit)
                 }
                 else{
                     response = ResponseBuilder.createListResponse(getDefaultList(limit), limit)
@@ -58,16 +64,19 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 val reader = BufferedReader(objectToPost.reader())
                 print(JsonParser.parseReader(reader).asJsonObject)
 
-                if(false){val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                val url = exchange.requestURI.toString()
+                val modelo=url.substring(14)
+
+                if(modelo=="local"){val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     postLocal(local)
                 }
-                else if(false){val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                else if(modelo=="habitacion"){val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     postHabitacion(habitacion)
                 }
-                else if(false){val garaje = Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                else if(modelo=="garaje"){val garaje = Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     postGaraje(garaje)
                 }
-                else if(true){val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                else if(modelo=="piso"){val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     postPiso(piso)
                 }
                 //val inmueble = Inmueble.fromJson(JsonParser.parseReader(reader).asJsonObject)
@@ -109,6 +118,22 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     override fun getIndividualById(objectId: Int): Inmueble {
         val dbConnection = DatabaseConnection()
         return dbConnection.inmuebleById(objectId)
+    }
+    fun getLocalById(objectId: Int): Local {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.getLocalById(objectId)
+    }
+    fun getGarajeById(objectId: Int): Garaje {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.getGarajeById(objectId)
+    }
+    fun getPisoById(objectId: Int): Piso {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.getPisoById(objectId)
+    }
+    fun getHabitacionById(objectId: Int): Habitacion {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.getHabitacionById(objectId)
     }
 
     override fun getDefaultList(num:Int): List<Inmueble> {
