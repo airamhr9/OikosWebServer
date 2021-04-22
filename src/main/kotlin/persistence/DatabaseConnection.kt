@@ -286,4 +286,12 @@ class DatabaseConnection {
             }
         }
     }
+    /*fun crearInmueble(i :Inmueble): Inmueble {
+        val stmt = c.createStatement()
+        val sql = "INSERT INTO inmueble (id, superficie_min, superficie_max, precio_min, precio_max, habitaciones, baños, garaje, ciudad, tipo)" +
+                "VALUES (${p.id}, ${p.superficie_min}, ${p.superficie_max}, ${p.precio_min},${p.superficie_max},${p.habitaciones}," +
+                " ${p.baños},${p.garaje},'${p.ciudad}', '${p.tipo}');"
+        stmt.executeUpdate(sql);
+        return p
+    }*/
 }
