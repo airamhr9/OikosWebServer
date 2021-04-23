@@ -30,8 +30,11 @@ abstract class InmuebleSprint2(override val id: Int,
         result.addProperty("ciudad", ciudad)
         result.addProperty("latitud", latitud)
         result.addProperty("longitud", longitud)
+        introducirModeloEnJsonObject(result, "modelo")
         return result
     }
+
+    protected abstract fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String)
 
     override fun toJson(): JsonObject {
         val result = generarJsonBasico()
