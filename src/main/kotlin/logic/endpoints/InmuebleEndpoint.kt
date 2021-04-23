@@ -5,8 +5,7 @@ import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
 import logic.ResponseBuilder
-import objects.persistence.Inmueble
-import objects.persistence.Usuario
+import objects.persistence.*
 import persistence.DatabaseConnection
 import java.io.BufferedReader
 import java.net.URL
@@ -25,7 +24,14 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                     100
                 }
                 if("id" in map){
-                    response = ResponseBuilder.createObjectResponse(getIndividualById(map["id"].toString().toInt()))
+                    if(map["modelo"]=="garaje"){
+                        response = ResponseBuilder.createObjectResponse(getGarajeById(map["id"].toString().toInt()))}
+                    else if(map["modelo"]=="habitacion"){
+                        response = ResponseBuilder.createObjectResponse(getHabitacionById(map["id"].toString().toInt()))}
+                    else if(map["modelo"]=="local"){
+                        response = ResponseBuilder.createObjectResponse(getLocalById(map["id"].toString().toInt()))}
+                    else if(map["modelo"]=="piso"){
+                        response = ResponseBuilder.createObjectResponse(getPisoById(map["id"].toString().toInt()))}
                 }
                 else if("coordenada" in map){
                     val x = map["x"].toString().toDouble()
@@ -33,6 +39,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                     response = ResponseBuilder.createListResponse(getListWithCoordinates(limit, x, y), limit)
                 }
                 else if("filtrada" in map) {
+                    val modelo =  map["modelo"].toString()
                     val precioMin = if ("precioMin" in map) map["precioMin"].toString().toDouble() else 0.0
                     val precioMax = if ("precioMax" in map) map["precioMax"].toString().toDouble() else null
                     val supMin = if ("supMin" in map) map["supMin"].toString().toInt() else 0
@@ -42,11 +49,10 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                     val garaje = if ("garaje" in map) map["garaje"].toString().toBoolean() else null
                     val ciudad = if ("ciudad" in map) map["ciudad"].toString() else null
                     val tipo = if ("tipo" in map) map["tipo"].toString() else null
-
+                    val numComp = if ("numCompañeros" in map) map["numCompañeros"].toString().toInt() else null
                     response = ResponseBuilder.createListResponse(
                         getListWithFilters(limit, precioMin, precioMax, supMin, supMax, habitaciones, baños,
-                                            garaje, ciudad, tipo),
-                        limit)
+                                            garaje, ciudad, tipo, ModeloInmueble.fromString(modelo),numComp), limit)
                 }
                 else{
                     response = ResponseBuilder.createListResponse(getDefaultList(limit), limit)
@@ -56,14 +62,36 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 response = "POST request"
                 val objectToPost = exchange.requestBody
                 val reader = BufferedReader(objectToPost.reader())
+                print(JsonParser.parseReader(reader).asJsonObject)
 
-                val inmueble = Inmueble.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                postIndividual(inmueble)
+                val url = exchange.requestURI.toString()
+                val modelo=url.substring(14)
+
+                if(modelo=="local"){val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    postLocal(local)
+                }
+                else if(modelo=="habitacion"){val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    postHabitacion(habitacion)
+                }
+                else if(modelo=="garaje"){val garaje = Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    postGaraje(garaje)
+                }
+                else if(modelo=="piso"){val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    postPiso(piso)
+                }
+                //val inmueble = Inmueble.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                //postIndividual(inmueble)
             }
             "PUT" -> {
                 response = "PUT request"
                 val objectToPut = exchange.requestBody
                 //put(Inmueble.fromJson(objectToPut))
+            }
+            "DELETE" -> {
+                response = "DELETE request"
+                val url = exchange.requestURI.toString()
+                val id=url.substring(14).toInt();
+                borrarInmueble(id)
             }
             "OPTIONS" -> {
                 /**
@@ -91,6 +119,22 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         val dbConnection = DatabaseConnection()
         return dbConnection.inmuebleById(objectId)
     }
+    fun getLocalById(objectId: Int): Local {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.getLocalById(objectId)
+    }
+    fun getGarajeById(objectId: Int): Garaje {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.getGarajeById(objectId)
+    }
+    fun getPisoById(objectId: Int): Piso {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.getPisoById(objectId)
+    }
+    fun getHabitacionById(objectId: Int): Habitacion {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.getHabitacionById(objectId)
+    }
 
     override fun getDefaultList(num:Int): List<Inmueble> {
         val dbConnection = DatabaseConnection()
@@ -102,10 +146,28 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         return dbConnection.listaDeInmueblesPorCordenadas(num, x, y)
     }
     fun getListWithFilters(num: Int , precioMin: Double, precioMax: Double?, supMin: Int, supMan: Int?,
-                           habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?): List<Inmueble> {
+                           habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?,modelo:
+                           ModeloInmueble,numComp:Int?): List<InmuebleSprint2> {
         val dbConnection = DatabaseConnection()
         return dbConnection.listaDeInmueblesPorFiltrado(num, precioMin, precioMax, supMin, supMan, habitaciones, baños,
-            garaje, ciudad, tipo)
+            garaje, ciudad, tipo,modelo,numComp)
+    }
+    fun borrarInmueble(id:Int){
+        val dbConnection = DatabaseConnection()
+        return dbConnection.borrarIn(id)
+    }
+
+    fun postLocal(newObject: Local) :Local{
+        TODO("Not yet implemented")
+    }
+    fun postHabitacion(newObject:Habitacion) :Habitacion{
+        TODO("Not yet implemented")
+    }
+    fun postGaraje(newObject: Garaje) :Garaje{
+        TODO("Not yet implemented")
+    }
+    fun postPiso(newObject: Piso) :Piso{
+        TODO("Not yet implemented")
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {

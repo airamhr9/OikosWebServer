@@ -1,8 +1,5 @@
 package persistence
-import objects.persistence.Inmueble
-import objects.persistence.Preferencia
-import objects.persistence.TipoInmueble
-import objects.persistence.Usuario
+import objects.persistence.*
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet
@@ -15,8 +12,10 @@ class DatabaseConnection {
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
-                //.getConnection("jdbc:postgresql://localhost:5432/testdb",
-                .getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos",
+                //.getConnection("jdbc:postgresql://localhost:5432/testdb",  // ¿Jaime?
+                //.getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
+                //.getConnection("jdbc:postgresql://localhost:5432/oikos", // Hector
+                .getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
                     "postgres", "mysecretpassword");
         } catch (e : Exception) {
             e.printStackTrace();
@@ -37,6 +36,50 @@ class DatabaseConnection {
             sql.getString("direccion"), sql.getString("ciudad"), sql.getDouble("latitud"),
             sql.getDouble("longitud"), imagenes.toTypedArray())
     }
+
+    fun sqlInmuebleSprint2(sql:ResultSet,usuario:Usuario, imagenes: List<String>, modelo: ModeloInmueble): InmuebleSprint2{
+        return when (modelo) {
+            ModeloInmueble.Piso -> sqlPiso(sql, usuario, imagenes)
+            ModeloInmueble.Local -> sqlLocal(sql, usuario, imagenes)
+            ModeloInmueble.Garjaje -> sqlGaraje(sql, usuario, imagenes)
+            ModeloInmueble.Habitacion -> sqlHabitacion(sql, usuario, imagenes)
+        }
+    }
+
+    fun sqlPiso(sql:ResultSet,usuario:Usuario, imagenes: List<String>): Piso {
+        return Piso(sql.getInt("id"), sql.getBoolean("disponible"),
+            TipoInmueble.fromString(sql.getString("tipo")), sql.getInt("superficie"),
+            sql.getDouble("precio"), usuario, sql.getString("descripcion"),
+            sql.getString("direccion"), sql.getString("ciudad"), sql.getDouble("latitud"),
+            sql.getDouble("longitud"), imagenes.toTypedArray(), sql.getInt("habitaciones"),
+            sql.getInt("baños"), sql.getBoolean("garaje"))
+    }
+
+    fun sqlLocal(sql:ResultSet,usuario:Usuario, imagenes: List<String>): Local {
+        return Local(sql.getInt("id"), sql.getBoolean("disponible"),
+            TipoInmueble.fromString(sql.getString("tipo")), sql.getInt("superficie"),
+            sql.getDouble("precio"), usuario, sql.getString("descripcion"),
+            sql.getString("direccion"), sql.getString("ciudad"), sql.getDouble("latitud"),
+            sql.getDouble("longitud"), imagenes.toTypedArray(), sql.getInt("baños"))
+    }
+
+    fun sqlGaraje(sql:ResultSet,usuario:Usuario, imagenes: List<String>): Garaje {
+        return Garaje(sql.getInt("id"), sql.getBoolean("disponible"),
+            TipoInmueble.fromString(sql.getString("tipo")), sql.getInt("superficie"),
+            sql.getDouble("precio"), usuario, sql.getString("descripcion"),
+            sql.getString("direccion"), sql.getString("ciudad"), sql.getDouble("latitud"),
+            sql.getDouble("longitud"), imagenes.toTypedArray())
+    }
+
+    fun sqlHabitacion(sql:ResultSet,usuario:Usuario, imagenes: List<String>): Habitacion {
+        return Habitacion(sql.getInt("id"), sql.getBoolean("disponible"),
+            TipoInmueble.fromString(sql.getString("tipo")), sql.getInt("superficie"),
+            sql.getDouble("precio"), usuario, sql.getString("descripcion"),
+            sql.getString("direccion"), sql.getString("ciudad"), sql.getDouble("latitud"),
+            sql.getDouble("longitud"), imagenes.toTypedArray(), sql.getInt("habitaciones"),
+            sql.getInt("baños"), sql.getBoolean("garaje"), sql.getInt("numCompañeros"))
+    }
+
     fun sqlUser(sqlUsuario: ResultSet):Usuario{
         return Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email"))
     }
@@ -52,10 +95,12 @@ class DatabaseConnection {
     }
 
     fun listaDeInmueblesPorFiltrado(num:Int, precioMin: Double, precioMax: Double?, supMin: Int, supMax: Int?,
-                                    habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?): List<Inmueble>{
+                                    habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?,
+                                    modelo:ModeloInmueble,numComp:Int?): List<InmuebleSprint2>{
         val stmt = c.createStatement()
-        val list : MutableList<Inmueble> =  mutableListOf()
-        var query = "SELECT * FROM inmueble WHERE "
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
+        var query = if (modelo == ModeloInmueble.Habitacion) "SELECT * FROM inmueble NATURAL JOIN piso NATURAL JOIN habitacion WHERE "
+                    else "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE "
         query += "precio >= $precioMin AND "
         if (precioMax != null) query += "precio <= $precioMax AND "
         query += "superficie >= $supMin AND "
@@ -67,6 +112,7 @@ class DatabaseConnection {
         if (garaje == true) query += "garaje = true AND "
         if (ciudad != null) query += "lower(ciudad) = lower(\'$ciudad\') AND "
         if (tipo != null) query += "tipo = \'$tipo\' AND "
+        if (numComp != null) query += "numCompañeros >= \'$numComp\' AND "
         query = query.substring(0, query.length - 4) // Quitar el ultimo AND
         query += "FETCH FIRST $num ROWS ONLY;"
 
@@ -86,7 +132,7 @@ class DatabaseConnection {
             sqlUsuario.next()
             val usuario = sqlUser(sqlUsuario)
             val imagenes = sqlImagenes(sql.getInt("id"))
-            val inmueble = sqlInmueble(sql,usuario, imagenes)
+            val inmueble = sqlInmuebleSprint2(sql,usuario, imagenes, modelo)
             list.add(inmueble)
         }
         sql.close()
@@ -189,4 +235,110 @@ class DatabaseConnection {
         stmt.close()
         return pre
     }
+    fun borrarIn(id:Int){
+        var stmt = c.createStatement()
+        val sql = "DELETE from inmueble where id = ${id};"
+        stmt.executeUpdate(sql)
+
+        c.commit();
+        stmt.close()
+    }
+
+    fun getPisoById(id: Int): Piso {
+        val statement = c.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN piso WHERE id=$id;")
+        resultSet.next()
+        val piso = getInmuebleFromResultSet(resultSet, ModeloInmueble.Piso) as Piso
+        resultSet.close()
+        statement.close()
+        return piso
+    }
+
+    fun getLocalById(id: Int): Local {
+        val statement = c.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN local WHERE id=$id;")
+        resultSet.next()
+        val local = getInmuebleFromResultSet(resultSet, ModeloInmueble.Local) as Local
+        resultSet.close()
+        statement.close()
+        return local
+    }
+
+    fun getGarajeById(id: Int): Garaje {
+        val statement = c.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN garaje WHERE id=$id;")
+        resultSet.next()
+        val garaje = getInmuebleFromResultSet(resultSet, ModeloInmueble.Garjaje) as Garaje
+        resultSet.close()
+        statement.close()
+        return garaje
+    }
+
+    fun getHabitacionById(id: Int): Habitacion {
+        val statement = c.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN habitacion WHERE id=$id;")
+        resultSet.next()
+        val habitacion = getInmuebleFromResultSet(resultSet, ModeloInmueble.Habitacion) as Habitacion
+        resultSet.close()
+        statement.close()
+        return habitacion
+    }
+
+    private fun getInmuebleFromResultSet(resultSet: ResultSet, modelo: ModeloInmueble): InmuebleSprint2 {
+        val id = resultSet.getInt("id");
+        val disponible = resultSet.getBoolean("disponible")
+        val tipo = TipoInmueble.fromString(resultSet.getString("tipo"))
+        val superficie = resultSet.getInt("superficie")
+        val precio = resultSet.getDouble("precio")
+
+        // REFACTORIZAR
+        // val propietario = getUsuarioById(resultSet.getInt("propietario"))
+        val userStmt = c.createStatement()
+        val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id="
+                + resultSet.getInt("propietario").toString() + ";")
+        sqlUsuario.next()
+        val propietario = sqlUser(sqlUsuario)
+
+        val descripcion = resultSet.getString("descripcion")
+        val direccion = resultSet.getString("direccion")
+        val ciudad = resultSet.getString("ciudad")
+        val latitud = resultSet.getDouble("latitud")
+        val longitud = resultSet.getDouble("longitud")
+        val imagenes = sqlImagenes(resultSet.getInt("id"))
+
+        when (modelo) {
+            ModeloInmueble.Piso -> {
+                val habitaciones = resultSet.getInt("habitaciones")
+                val baños = resultSet.getInt("baños")
+                val garaje = resultSet.getBoolean("garaje")
+                return Piso(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
+                    ciudad, latitud, longitud, imagenes.toTypedArray(), habitaciones, baños, garaje)
+            }
+            ModeloInmueble.Local -> {
+                val baños = resultSet.getInt("baños")
+                return Local(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
+                    ciudad, latitud, longitud, imagenes.toTypedArray(), baños)
+            }
+            ModeloInmueble.Garjaje -> {
+                return Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
+                    ciudad, latitud, longitud, imagenes.toTypedArray())
+            }
+            ModeloInmueble.Habitacion -> {
+                val habitaciones = resultSet.getInt("habitaciones")
+                val baños = resultSet.getInt("baños")
+                val garaje = resultSet.getBoolean("garaje")
+                val numCompañeros = resultSet.getInt("numCompañeros")
+                return Habitacion(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
+                    ciudad, latitud, longitud, imagenes.toTypedArray(), habitaciones, baños, garaje, numCompañeros)
+            }
+        }
+    }
+    /*fun crearInmueble(i :Inmueble): Inmueble {
+        val stmt = c.createStatement()
+        val sql = "INSERT INTO inmueble (id, superficie_min, superficie_max, precio_min, precio_max, habitaciones, baños, garaje, ciudad, tipo)" +
+                "VALUES (${p.id}, ${p.superficie_min}, ${p.superficie_max}, ${p.precio_min},${p.superficie_max},${p.habitaciones}," +
+                " ${p.baños},${p.garaje},'${p.ciudad}', '${p.tipo}');"
+        stmt.executeUpdate(sql);
+        return p
+    }*/
 }
