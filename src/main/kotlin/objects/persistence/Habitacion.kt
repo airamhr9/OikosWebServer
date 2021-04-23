@@ -21,6 +21,10 @@ class Habitacion(id: Int,
 ) : Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
             direccion, ciudad, latitud, longitud, imagenes, habitaciones, baños, garaje) {
 
+    override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
+        jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Habitacion.value)
+    }
+
     override fun toJson(): JsonObject {
         val result = super.toJson()
         result.addProperty("numCompañeros", numCompañeros)

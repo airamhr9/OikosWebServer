@@ -20,6 +20,10 @@ open class Piso(id: Int,
 ) : InmuebleSprint2(id, disponible, tipo, superficie, precio, propietario, descripcion,
             direccion, ciudad, latitud, longitud, imagenes) {
 
+    override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
+        jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Piso.value)
+    }
+
     override fun toJson(): JsonObject {
         val result = super.toJson()
         result.addProperty("habitaciones", habitaciones)

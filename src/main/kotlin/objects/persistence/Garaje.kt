@@ -17,6 +17,10 @@ class Garaje(id: Int,
 ) : InmuebleSprint2(id, disponible, tipo, superficie, precio, propietario, descripcion,
             direccion, ciudad, latitud, longitud, imagenes) {
 
+    override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
+        jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Garjaje.value)
+    }
+
     companion object {
         fun fromJson(jsonObject: JsonObject): Garaje {
             val id = jsonObject.get("id").asInt
