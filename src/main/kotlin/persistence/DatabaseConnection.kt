@@ -236,7 +236,8 @@ class DatabaseConnection {
         val stmt = c.createStatement()
         val list : MutableList<InmuebleSprint2> =  mutableListOf()
         val modelo = ModeloInmueble.Habitacion
-        val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
+        val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${ModeloInmueble.Piso.value} "
+                + "NATURAL JOIN ${modelo.value} WHERE " +
                 "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
                 "FETCH FIRST " + num.toString() +" ROWS ONLY;")
         while ( sql.next() ) {
