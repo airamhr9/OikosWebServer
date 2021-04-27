@@ -60,6 +60,6 @@ abstract class InmuebleSprint2(override val id: Int,
     }
 
     companion object {
-        val urlImagen = "http://${InetAddress.getLocalHost().hostAddress}:9000/api/imagen/"
+        private val urlImagen = "http://${InetAddress.getLocalHost().hostAddress}:9000/api/imagen/"
     }
 }

@@ -140,9 +140,9 @@ class DatabaseConnection {
         return list
     }
 
-    fun listaDeInmueblesPorCordenadas(num:Int,x:Double,y:Double): List<Inmueble>{
+    /*fun listaDeInmueblesPorCordenadas(num:Int, x:Double, y:Double): List<InmuebleSprint2> {
         val stmt = c.createStatement()
-        val list : MutableList<Inmueble> =  mutableListOf()
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
 
         val sql =stmt.executeQuery( "SELECT * FROM inmueble WHERE " +
                 "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
@@ -153,7 +153,99 @@ class DatabaseConnection {
             sqlUsuario.next()
             val usuario = sqlUser(sqlUsuario)
             val imagenes = sqlImagenes(sql.getInt("id"))
-            val inmueble = sqlInmueble(sql,usuario, imagenes)
+            val inmueble = sqlInmuebleSprint2(sql, usuario, imagenes, )
+            list.add(inmueble)
+        }
+        sql.close()
+        stmt.close()
+        return list
+    }*/
+
+    fun listaDeInmueblesPorCordenadas(num:Int, x:Double, y:Double): List<InmuebleSprint2> {
+        val result = listaDePisosPorCordenadas(num, x, y)
+        result.addAll(listaDeLocalesPorCordenadas(num, x, y))
+        result.addAll(listaDeGarajesPorCordenadas(num, x, y))
+        result.addAll(listaDeHabitacionesPorCordenadas(num, x, y))
+        return result
+    }
+
+    private fun listaDePisosPorCordenadas(num:Int, x:Double, y:Double): MutableList<InmuebleSprint2> {
+        val stmt = c.createStatement()
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
+        val modelo = ModeloInmueble.Piso
+        val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
+                "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
+                "FETCH FIRST " + num.toString() +" ROWS ONLY;")
+        while ( sql.next() ) {
+            val userStmt = c.createStatement()
+            val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
+            sqlUsuario.next()
+            val usuario = sqlUser(sqlUsuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmuebleSprint2(sql, usuario, imagenes, modelo)
+            list.add(inmueble)
+        }
+        sql.close()
+        stmt.close()
+        return list
+    }
+
+    private fun listaDeLocalesPorCordenadas(num:Int, x:Double, y:Double): MutableList<InmuebleSprint2> {
+        val stmt = c.createStatement()
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
+        val modelo = ModeloInmueble.Local
+        val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
+                "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
+                "FETCH FIRST " + num.toString() +" ROWS ONLY;")
+        while ( sql.next() ) {
+            val userStmt = c.createStatement()
+            val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
+            sqlUsuario.next()
+            val usuario = sqlUser(sqlUsuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmuebleSprint2(sql, usuario, imagenes, modelo)
+            list.add(inmueble)
+        }
+        sql.close()
+        stmt.close()
+        return list
+    }
+
+    private fun listaDeGarajesPorCordenadas(num:Int, x:Double, y:Double): MutableList<InmuebleSprint2> {
+        val stmt = c.createStatement()
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
+        val modelo = ModeloInmueble.Garjaje
+        val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
+                "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
+                "FETCH FIRST " + num.toString() +" ROWS ONLY;")
+        while ( sql.next() ) {
+            val userStmt = c.createStatement()
+            val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
+            sqlUsuario.next()
+            val usuario = sqlUser(sqlUsuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmuebleSprint2(sql, usuario, imagenes, modelo)
+            list.add(inmueble)
+        }
+        sql.close()
+        stmt.close()
+        return list
+    }
+
+    private fun listaDeHabitacionesPorCordenadas(num:Int, x:Double, y:Double): MutableList<InmuebleSprint2> {
+        val stmt = c.createStatement()
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
+        val modelo = ModeloInmueble.Habitacion
+        val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
+                "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
+                "FETCH FIRST " + num.toString() +" ROWS ONLY;")
+        while ( sql.next() ) {
+            val userStmt = c.createStatement()
+            val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
+            sqlUsuario.next()
+            val usuario = sqlUser(sqlUsuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmuebleSprint2(sql, usuario, imagenes, modelo)
             list.add(inmueble)
         }
         sql.close()
@@ -215,7 +307,7 @@ class DatabaseConnection {
 
     fun crearPreferencias(p:Preferencia): Preferencia {
         val stmt = c.createStatement()
-        val sql = "INSERT INTO preferencia (id, superficie_min, superficie_max, precio_min, precio_max, habitaciones, baños, garaje, ciudad, tipo)" +
+        val sql = "INSERT INTO preferencia (id, superficie_min, superficie_max, precio_min, precio_max, habitaciones, baños, garaje, ciudad, tipo) " +
                 "VALUES (${p.id}, ${p.superficie_min}, ${p.superficie_max}, ${p.precio_min},${p.superficie_max},${p.habitaciones}," +
                 " ${p.baños},${p.garaje},'${p.ciudad}', '${p.tipo}');"
         stmt.executeUpdate(sql);
@@ -333,12 +425,81 @@ class DatabaseConnection {
             }
         }
     }
-    /*fun crearInmueble(i :Inmueble): Inmueble {
+
+    fun insertarImagen(inmueble:InmuebleSprint2) {
         val stmt = c.createStatement()
-        val sql = "INSERT INTO inmueble (id, superficie_min, superficie_max, precio_min, precio_max, habitaciones, baños, garaje, ciudad, tipo)" +
-                "VALUES (${p.id}, ${p.superficie_min}, ${p.superficie_max}, ${p.precio_min},${p.superficie_max},${p.habitaciones}," +
-                " ${p.baños},${p.garaje},'${p.ciudad}', '${p.tipo}');"
+        for (imagen:String in inmueble.imagenes) {
+            val sql = "INSERT INTO imagen (inmueble, ruta) " +
+                    "VALUES (${inmueble.id}, ${imagen});"
+            stmt.executeUpdate(sql)
+        }
+        c.commit()
+        stmt.close()
+    }
+
+    fun crearLocal(l:Local){
+        val stmt = c.createStatement()
+        val id= nuevoId()
+        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
+                "VALUES (${id}, ${l.disponible}, ${l.tipo}, ${l.superficie},${l.precio},${l.descripcion}," +
+                " ${l.direccion},${l.ciudad},'${l.latitud}', '${l.longitud}');"
+        insertarImagen(l)
+        val sql1="INSERT INTO local (id, baños) VALUES (${id}, ${l.baños});"
         stmt.executeUpdate(sql);
-        return p
-    }*/
+        stmt.executeUpdate(sql1);
+        c.commit();
+        stmt.close()
+    }
+    fun crearPiso(p:Piso){
+        val stmt = c.createStatement()
+        val id= nuevoId()
+        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
+                "VALUES (${id}, ${p.disponible}, ${p.tipo}, ${p.superficie},${p.precio},${p.descripcion}," +
+                " ${p.direccion},${p.ciudad},'${p.latitud}', '${p.longitud}');"
+        val sql1="INSERT INTO piso (id, habitacion, baños, garaje) VALUES (${id}, ${p.habitaciones}, ${p.baños}, ${p.garaje});"
+        insertarImagen(p)
+        stmt.executeUpdate(sql);
+        stmt.executeUpdate(sql1);
+        c.commit();
+        stmt.close()
+    }
+    fun crearHabitacion(h:Habitacion){
+        val stmt = c.createStatement()
+        val id= nuevoId()
+        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
+                "VALUES (${id}, ${h.disponible}, ${h.tipo}, ${h.superficie},${h.precio},${h.descripcion}," +
+                " ${h.direccion},${h.ciudad},'${h.latitud}', '${h.longitud}');"
+        val sql1="INSERT INTO piso (id, habitacion, baños, garaje) VALUES (${id}, ${h.habitaciones}, ${h.baños}, ${h.garaje});"
+        val sql2="INSERT INTO habitacion (id, numCompañeros) VALUES (${id}, ${h.numCompañeros});"
+        insertarImagen(h)
+        stmt.executeUpdate(sql);
+        stmt.executeUpdate(sql1);
+        stmt.executeUpdate(sql2);
+        c.commit();
+        stmt.close()
+    }
+    fun crearGaraje(g:Garaje){
+        val stmt = c.createStatement()
+        val id= nuevoId()
+        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
+                "VALUES (${id}, ${g.disponible}, ${g.tipo}, ${g.superficie},${g.precio},${g.descripcion}," +
+                " ${g.direccion},${g.ciudad},'${g.latitud}', '${g.longitud}');"
+        insertarImagen(g)
+        val sql1="INSERT INTO garaje (id, baños) VALUES (${id});"
+        stmt.executeUpdate(sql);
+        stmt.executeUpdate(sql1);
+        c.commit();
+        stmt.close()
+    }
+
+    fun nuevoId():Int {
+        val statement = c.createStatement()
+        val sql = statement.executeQuery("SELECT max(id) FROM inmueble;")
+        sql.next()
+        var res = sql.getInt(1)
+        sql.close()
+        statement.close()
+        res++
+        return  res
+    }
 }
