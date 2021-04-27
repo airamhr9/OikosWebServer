@@ -141,7 +141,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         return dbConnection.listaDeInmueblesPorDefecto(num)
     }
 
-    fun getListWithCoordinates(num:Int, x:Double, y:Double): List<Inmueble> {
+    fun getListWithCoordinates(num:Int, x:Double, y:Double): List<InmuebleSprint2> {
         val dbConnection = DatabaseConnection()
         return dbConnection.listaDeInmueblesPorCordenadas(num, x, y)
     }

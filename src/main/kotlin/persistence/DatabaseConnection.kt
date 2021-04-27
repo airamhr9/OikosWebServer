@@ -140,9 +140,9 @@ class DatabaseConnection {
         return list
     }
 
-    fun listaDeInmueblesPorCordenadas(num:Int,x:Double,y:Double): List<Inmueble>{
+    /*fun listaDeInmueblesPorCordenadas(num:Int, x:Double, y:Double): List<InmuebleSprint2> {
         val stmt = c.createStatement()
-        val list : MutableList<Inmueble> =  mutableListOf()
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
 
         val sql =stmt.executeQuery( "SELECT * FROM inmueble WHERE " +
                 "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
@@ -153,7 +153,99 @@ class DatabaseConnection {
             sqlUsuario.next()
             val usuario = sqlUser(sqlUsuario)
             val imagenes = sqlImagenes(sql.getInt("id"))
-            val inmueble = sqlInmueble(sql,usuario, imagenes)
+            val inmueble = sqlInmuebleSprint2(sql, usuario, imagenes, )
+            list.add(inmueble)
+        }
+        sql.close()
+        stmt.close()
+        return list
+    }*/
+
+    fun listaDeInmueblesPorCordenadas(num:Int, x:Double, y:Double): List<InmuebleSprint2> {
+        val result = listaDePisosPorCordenadas(num, x, y)
+        result.addAll(listaDeLocalesPorCordenadas(num, x, y))
+        result.addAll(listaDeGarajesPorCordenadas(num, x, y))
+        result.addAll(listaDeHabitacionesPorCordenadas(num, x, y))
+        return result
+    }
+
+    private fun listaDePisosPorCordenadas(num:Int, x:Double, y:Double): MutableList<InmuebleSprint2> {
+        val stmt = c.createStatement()
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
+        val modelo = ModeloInmueble.Piso
+        val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
+                "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
+                "FETCH FIRST " + num.toString() +" ROWS ONLY;")
+        while ( sql.next() ) {
+            val userStmt = c.createStatement()
+            val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
+            sqlUsuario.next()
+            val usuario = sqlUser(sqlUsuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmuebleSprint2(sql, usuario, imagenes, modelo)
+            list.add(inmueble)
+        }
+        sql.close()
+        stmt.close()
+        return list
+    }
+
+    private fun listaDeLocalesPorCordenadas(num:Int, x:Double, y:Double): MutableList<InmuebleSprint2> {
+        val stmt = c.createStatement()
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
+        val modelo = ModeloInmueble.Local
+        val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
+                "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
+                "FETCH FIRST " + num.toString() +" ROWS ONLY;")
+        while ( sql.next() ) {
+            val userStmt = c.createStatement()
+            val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
+            sqlUsuario.next()
+            val usuario = sqlUser(sqlUsuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmuebleSprint2(sql, usuario, imagenes, modelo)
+            list.add(inmueble)
+        }
+        sql.close()
+        stmt.close()
+        return list
+    }
+
+    private fun listaDeGarajesPorCordenadas(num:Int, x:Double, y:Double): MutableList<InmuebleSprint2> {
+        val stmt = c.createStatement()
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
+        val modelo = ModeloInmueble.Garjaje
+        val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
+                "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
+                "FETCH FIRST " + num.toString() +" ROWS ONLY;")
+        while ( sql.next() ) {
+            val userStmt = c.createStatement()
+            val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
+            sqlUsuario.next()
+            val usuario = sqlUser(sqlUsuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmuebleSprint2(sql, usuario, imagenes, modelo)
+            list.add(inmueble)
+        }
+        sql.close()
+        stmt.close()
+        return list
+    }
+
+    private fun listaDeHabitacionesPorCordenadas(num:Int, x:Double, y:Double): MutableList<InmuebleSprint2> {
+        val stmt = c.createStatement()
+        val list : MutableList<InmuebleSprint2> =  mutableListOf()
+        val modelo = ModeloInmueble.Habitacion
+        val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
+                "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
+                "FETCH FIRST " + num.toString() +" ROWS ONLY;")
+        while ( sql.next() ) {
+            val userStmt = c.createStatement()
+            val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("propietario").toString() + ";")
+            sqlUsuario.next()
+            val usuario = sqlUser(sqlUsuario)
+            val imagenes = sqlImagenes(sql.getInt("id"))
+            val inmueble = sqlInmuebleSprint2(sql, usuario, imagenes, modelo)
             list.add(inmueble)
         }
         sql.close()
