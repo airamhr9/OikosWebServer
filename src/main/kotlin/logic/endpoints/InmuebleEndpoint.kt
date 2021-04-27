@@ -156,17 +156,21 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         return dbConnection.borrarIn(id)
     }
 
-    fun postLocal(newObject: Local) :Local{
-        TODO("Not yet implemented")
+    fun postLocal(newObject: Local){
+        val dbConnection = DatabaseConnection()
+        return dbConnection.crearLocal(newObject)
     }
-    fun postHabitacion(newObject:Habitacion) :Habitacion{
-        TODO("Not yet implemented")
+    fun postHabitacion(newObject:Habitacion){
+        val dbConnection = DatabaseConnection()
+        return dbConnection.crearHabitacion(newObject)
     }
-    fun postGaraje(newObject: Garaje) :Garaje{
-        TODO("Not yet implemented")
+    fun postGaraje(newObject: Garaje){
+        val dbConnection = DatabaseConnection()
+        return dbConnection.crearGaraje(newObject)
     }
-    fun postPiso(newObject: Piso) :Piso{
-        TODO("Not yet implemented")
+    fun postPiso(newObject: Piso){
+        val dbConnection = DatabaseConnection()
+        return dbConnection.crearPiso(newObject)
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {
