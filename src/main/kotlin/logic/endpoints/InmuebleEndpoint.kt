@@ -146,7 +146,8 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         return dbConnection.listaDeInmueblesPorCordenadas(num, x, y)
     }
     fun getListWithFilters(num: Int , precioMin: Double, precioMax: Double?, supMin: Int, supMan: Int?,
-                           habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?,modelo: ModeloInmueble,numComp:Int?): List<Inmueble> {
+                           habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?,modelo:
+                           ModeloInmueble,numComp:Int?): List<InmuebleSprint2> {
         val dbConnection = DatabaseConnection()
         return dbConnection.listaDeInmueblesPorFiltrado(num, precioMin, precioMax, supMin, supMan, habitaciones, baños,
             garaje, ciudad, tipo,modelo,numComp)

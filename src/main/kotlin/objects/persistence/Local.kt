@@ -18,6 +18,10 @@ class Local(id: Int,
 ) : InmuebleSprint2(id, disponible, tipo, superficie, precio, propietario, descripcion,
             direccion, ciudad, latitud, longitud, imagenes) {
 
+    override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
+        jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Local.value)
+    }
+
     override fun toJson(): JsonObject {
         val result = super.toJson()
         result.addProperty("baños", baños)
