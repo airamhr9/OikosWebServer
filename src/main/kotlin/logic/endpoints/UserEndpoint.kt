@@ -1,9 +1,14 @@
 package logic.endpoints
 
+import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
+import logic.ResponseBuilder
+import objects.persistence.Preferencia
 import objects.persistence.Usuario
+import persistence.DatabaseConnection
+import java.io.BufferedReader
 import java.net.URL
 
 
@@ -15,13 +20,29 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
          when(exchange.requestMethod){
                 "GET" -> {
                     response = "GET request"
-                    val parameters : Map<String, Any?> = RequestParser.getQueryParameters(URL("http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
+                    val map : Map<String, Any?> = RequestParser.getQueryParameters(URL("http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
 
+                    if("nombre" in map){
+                        if(existeUsuario(map["nombre"].toString(), map["contraseña"].toString())){
+                            response = "Usuario encontrado"
+                        }else{
+                            exchange.sendResponseHeaders(305, -1)
+                            response = "Usuario no encontrado"
+                        }
+                    }
                 }
                 "POST" -> {
                     response = "POST request"
                     val objectToPost = exchange.requestBody
-                    //postIndividual(Usuario.fromJson(objectToPost))
+                    val reader = BufferedReader(objectToPost.reader())
+                    val usuario  = Usuario.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    if(!emailRepetido(usuario)){
+                        postUsuario(usuario)
+                    }else{
+                        exchange.sendResponseHeaders(305, -1)
+                        response = "Email repetido"
+                    }
+
                 }
                 "PUT" -> {
                     response = "PUT request"
@@ -62,8 +83,20 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
         TODO("Not yet implemented")
     }
 
-    override fun postIndividual(newObject: Usuario): Usuario {
+    override fun postIndividual(newObject: Usuario):Usuario {
         TODO("Not yet implemented")
+    }
+    fun postUsuario(newObject: Usuario) {
+        val dbConnection = DatabaseConnection()
+        dbConnection.crearUsuario(newObject)
+    }
+    fun emailRepetido(newObject: Usuario):Boolean{
+        val dbConnection = DatabaseConnection()
+        return dbConnection.revisarEmail(newObject)
+    }
+    fun existeUsuario(nombre:String, contraseña:String):Boolean{
+        val dbConnection = DatabaseConnection()
+        return dbConnection.comprobarUsuario(nombre,contraseña)
     }
 
     override fun put(modifiedObject: Usuario): Usuario {

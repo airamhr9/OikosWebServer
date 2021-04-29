@@ -81,7 +81,8 @@ class DatabaseConnection {
     }
 
     fun sqlUser(sqlUsuario: ResultSet):Usuario{
-        return Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email"))
+        return Usuario(sqlUsuario.getInt("id"), sqlUsuario.getString("nombre"), sqlUsuario.getString("email")
+            ,sqlUsuario.getString("contraseña"),sqlUsuario.getString("imagen"))
     }
 
     fun sqlImagenes(idInmueble: Int): List<String> {
@@ -540,4 +541,38 @@ class DatabaseConnection {
         res++
         return  res
     }
+
+    fun crearUsuario(u:Usuario){
+        val stmt = c.createStatement()
+        val sql = "INSERT INTO usuario (id, nombre, email, contraseña, imagen) " +
+                "VALUES (${u.id}, ${u.nombre}, ${u.mail},${u.contraseña},${u.imagen});"
+        stmt.executeUpdate(sql);
+        c.commit();
+        stmt.close()
+    }
+    fun revisarEmail(u:Usuario): Boolean{
+        var b=false;
+        val statement = c.createStatement()
+        val sql = statement.executeQuery("SELECT email FROM usuario WHERE email = ${u.mail};")
+        sql.next()
+        var res = sql.getString(1)
+        b = (u.mail==res)
+        sql.close()
+        statement.close()
+
+        return b
+    }
+    fun comprobarUsuario(nombre:String,contraseña:String):Boolean{
+        var b=false;
+        val statement = c.createStatement()
+        val sql = statement.executeQuery("SELECT nombre FROM usuario WHERE nombre = ${nombre} AND contraseña = ${contraseña};")
+        sql.next()
+        var res = sql.getString(1)
+        b = (res==nombre)
+        sql.close()
+        statement.close()
+
+        return b
+    }
+
 }
