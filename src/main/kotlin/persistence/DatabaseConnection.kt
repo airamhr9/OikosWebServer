@@ -574,4 +574,19 @@ class DatabaseConnection {
         return b
     }
 
+    fun getUsuarioById(id: Int): Usuario {
+        val statement = c.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM usuario WHERE id=$id;")
+        resultSet.next()
+        val id = resultSet.getInt("id")
+        val nombre = resultSet.getString("nombre")
+        val email = resultSet.getString("email")
+        val contraseña = resultSet.getString("contraseña")
+        val imagen = resultSet.getString("imagen")
+        val usuario = Usuario(id, nombre, email, contraseña, imagen)
+        resultSet.close()
+        statement.close()
+        return usuario
+    }
+
 }
