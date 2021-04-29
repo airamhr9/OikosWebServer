@@ -13,10 +13,12 @@ class DatabaseConnection {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
                 //.getConnection("jdbc:postgresql://localhost:5432/testdb",  // ¿Jaime?
-                //.getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
+                .getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
                 //.getConnection("jdbc:postgresql://localhost:5432/oikos", // Hector
-                .getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
+                //.getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
                     "postgres", "mysecretpassword");
+
+            c.autoCommit = false;
         } catch (e : Exception) {
             e.printStackTrace();
             System.err.println(e.javaClass.name+": "+e.message);
@@ -319,15 +321,12 @@ class DatabaseConnection {
         return p
     }
 
-    fun actualizarPreferencias(p:Preferencia): Preferencia {
+    fun actualizarPreferencias(p: Preferencia): Preferencia {
         var stmt = c.createStatement()
         val sql = "DELETE from preferencia where id = ${p.id};"
         stmt.executeUpdate(sql)
 
-        val pre  = crearPreferencias(p)
-        c.commit();
-        stmt.close()
-        return pre
+        return crearPreferencias(p)
     }
     fun borrarIn(id:Int){
         var stmt = c.createStatement()

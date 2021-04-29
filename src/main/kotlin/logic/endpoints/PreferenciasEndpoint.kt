@@ -10,13 +10,16 @@ import objects.persistence.Preferencia
 import persistence.DatabaseConnection
 import java.io.BufferedReader
 import java.net.URL
+import java.net.URLDecoder
+import java.net.URLDecoder.decode
+import java.nio.charset.Charset
 
 
 class PreferenciasEndpoint(endpoint: String) : EndpointHandler<Preferencia>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
         println("handling exchange")
-        lateinit var response : String
+        var response : String = ""
         when(exchange.requestMethod){
             "GET" -> {
                 response = "GET request"
@@ -30,17 +33,25 @@ class PreferenciasEndpoint(endpoint: String) : EndpointHandler<Preferencia>(endp
             "POST" -> {
                 response = "POST request"
                 val objectToPost = exchange.requestBody
-                val reader = BufferedReader(objectToPost.reader())
+                val reader = BufferedReader(objectToPost.reader(Charsets.UTF_8))
+                var string : String = reader.readLines().toString()
+                string = URLDecoder.decode(string, "UTF-8");
+                string = string.substring(7, string.length - 1)
 
-                val preferencia  = Preferencia.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                postIndividual(preferencia)
+
+               val preferencia  = Preferencia.fromJson(JsonParser.parseString(string).asJsonObject)
+               postIndividual(preferencia)
             }
             "PUT" -> {
                 response = "PUT request"
                 val objectToPost = exchange.requestBody
                 val reader = BufferedReader(objectToPost.reader())
+                var string : String = reader.readLines().toString()
+                string = URLDecoder.decode(string, "UTF-8");
+                string = string.substring(7, string.length - 1)
 
-                val preferencia  = Preferencia.fromJson(JsonParser.parseReader(reader).asJsonObject)
+
+                val preferencia  = Preferencia.fromJson(JsonParser.parseString(string).asJsonObject)
                 put(preferencia)
             }
             "OPTIONS" -> {

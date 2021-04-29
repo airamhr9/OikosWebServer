@@ -1,16 +1,23 @@
 package logic.endpoints
 
+import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
+import logic.RequestParser
 import objects.persistence.Inmueble
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStream
 import java.lang.Exception
+import java.net.URL
 import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 class ImageEndpoint(endpoint: String, private val folderName : String) : EndpointHandler<Inmueble>(endpoint) {
     //http://ip:9000/api/image/nombre_de_archivo.jpg
     override fun handleExchange(exchange: HttpExchange) {
         lateinit var response : String
+        println("Hi")
         when(exchange.requestMethod){
             "GET" -> {
                 val stringUri = exchange.requestURI.toString()
@@ -32,7 +39,11 @@ class ImageEndpoint(endpoint: String, private val folderName : String) : Endpoin
                 }
             }
             "POST" -> {
-                response = "POST request"
+                val params : Map<String, Any?> = RequestParser.getQueryParameters(URL("http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
+                val images = exchange.requestBody
+                val file = File(folderName, params["name"].toString())
+                Files.copy(images, file.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                response = "OK"
             }
             "OPTIONS" -> {
                 response = "OPTIONS request"

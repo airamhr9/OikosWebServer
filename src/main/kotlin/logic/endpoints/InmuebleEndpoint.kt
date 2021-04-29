@@ -65,17 +65,19 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 val url = exchange.requestURI.toString()
                 val modelo=url.substring(14)
 
-                if(modelo=="local"){val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                when(modelo){
+                    "local" -> {val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     postLocal(local)
-                }
-                else if(modelo=="habitacion"){val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                    postHabitacion(habitacion)
-                }
-                else if(modelo=="garaje"){val garaje = Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                    postGaraje(garaje)
-                }
-                else if(modelo=="piso"){val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                    postPiso(piso)
+                    }
+                    "habitacion" -> {val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                        postHabitacion(habitacion)
+                    }
+                    "garaje" -> {val garaje = Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                        postGaraje(garaje)
+                    }
+                    "piso" -> {val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                        postPiso(piso)
+                    }
                 }
             }
             "PUT" -> {
