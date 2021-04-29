@@ -496,7 +496,7 @@ class DatabaseConnection {
         val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud, propietario) " +
                 "VALUES (${g.id}, ${g.disponible}, '${g.tipo}', ${g.superficie},${g.precio},'${g.descripcion}'," +
                 " '${g.direccion}','${g.ciudad}',${g.latitud}, ${g.longitud}, ${g.propietario.id});"
-        val sql1="INSERT INTO garaje (id, baños) VALUES (${g.id});"
+        val sql1="INSERT INTO garaje (id) VALUES (${g.id});"
         stmt.executeUpdate(sql);
         stmt.executeUpdate(sql1);
         c.commit();
