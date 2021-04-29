@@ -431,7 +431,7 @@ class DatabaseConnection {
         val stmt = c.createStatement()
         for (imagen:String in inmueble.imagenes) {
             val sql = "INSERT INTO imagen (inmueble, ruta) " +
-                    "VALUES (${inmueble.id}, ${imagen});"
+                    "VALUES (${inmueble.id}, '${imagen}');"
             stmt.executeUpdate(sql)
         }
         c.commit()
@@ -446,9 +446,9 @@ class DatabaseConnection {
         } else{
             l.id
         };
-        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
+        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud, propietario) " +
                 "VALUES (${id}, ${l.disponible}, ${l.tipo}, ${l.superficie},${l.precio},${l.descripcion}," +
-                " ${l.direccion},${l.ciudad},'${l.latitud}', '${l.longitud}');"
+                " ${l.direccion},${l.ciudad},'${l.latitud}', '${l.longitud}', ${l.propietario.id});"
         val sql1="INSERT INTO local (id, baños) VALUES (${id}, ${l.baños});"
         insertarImagen(l)
         stmt.executeUpdate(sql);
@@ -458,15 +458,14 @@ class DatabaseConnection {
     }
     fun crearPiso(p:Piso){
         val stmt = c.createStatement()
-        val id:Int;
-        id = if (p.id==-1){
+        val id : Int = if (p.id==-1){
             nuevoId()
         } else{
             p.id
         };
-        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
+        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud, propietario) " +
                 "VALUES (${id}, ${p.disponible}, ${p.tipo}, ${p.superficie},${p.precio},${p.descripcion}," +
-                " ${p.direccion},${p.ciudad},'${p.latitud}', '${p.longitud}');"
+                " ${p.direccion},${p.ciudad},'${p.latitud}', '${p.longitud}', ${p.propietario.id});"
         val sql1="INSERT INTO piso (id, habitacion, baños, garaje) VALUES (${id}, ${p.habitaciones}, ${p.baños}, ${p.garaje});"
         insertarImagen(p)
         stmt.executeUpdate(sql);
@@ -482,9 +481,9 @@ class DatabaseConnection {
         } else{
             h.id
         };
-        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
+        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud, propietario) " +
                 "VALUES (${id}, ${h.disponible}, ${h.tipo}, ${h.superficie},${h.precio},${h.descripcion}," +
-                " ${h.direccion},${h.ciudad},'${h.latitud}', '${h.longitud}');"
+                " ${h.direccion},${h.ciudad},'${h.latitud}', '${h.longitud}', ${h.propietario.id});"
         val sql1="INSERT INTO piso (id, habitacion, baños, garaje) VALUES (${id}, ${h.habitaciones}, ${h.baños}, ${h.garaje});"
         val sql2="INSERT INTO habitacion (id, numCompañeros) VALUES (${id}, ${h.numCompañeros});"
         insertarImagen(h)
@@ -502,9 +501,9 @@ class DatabaseConnection {
         } else{
             g.id
         };
-        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
+        val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud, propietario) " +
                 "VALUES (${id}, ${g.disponible}, ${g.tipo}, ${g.superficie},${g.precio},${g.descripcion}," +
-                " ${g.direccion},${g.ciudad},'${g.latitud}', '${g.longitud}');"
+                " ${g.direccion},${g.ciudad},'${g.latitud}', '${g.longitud}', ${g.propietario.id});"
         insertarImagen(g)
         val sql1="INSERT INTO garaje (id, baños) VALUES (${id});"
         stmt.executeUpdate(sql);

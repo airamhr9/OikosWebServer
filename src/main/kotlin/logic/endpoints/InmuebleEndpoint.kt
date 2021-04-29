@@ -14,6 +14,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
         lateinit var response : String
+        println("IN INMUEBLE ENDPOINT")
         when(exchange.requestMethod) {
             "GET" -> {
                 val map : Map<String, Any?> = RequestParser.getQueryParameters(URL("http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
@@ -59,15 +60,17 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 }
             }
             "POST" -> {
+                println("IN POST")
                 response = "POST request"
                 val objectToPost = exchange.requestBody
                 val reader = BufferedReader(objectToPost.reader())
                 val url = exchange.requestURI.toString()
-                val modelo=url.substring(14)
+                val modelo=url.substring(22)
+                println("MODELO " + modelo)
 
                 when(modelo){
                     "local" -> {val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                    postLocal(local)
+                        postLocal(local)
                     }
                     "habitacion" -> {val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
                         postHabitacion(habitacion)
@@ -77,7 +80,9 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                     }
                     "piso" -> {val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
                         postPiso(piso)
+                        println("post piso endpoint")
                     }
+                    else -> println("No es modelo")
                 }
             }
             "PUT" -> {
@@ -183,6 +188,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         return dbConnection.crearGaraje(newObject)
     }
     fun postPiso(newObject: Piso){
+        println("Posteando piso")
         val dbConnection = DatabaseConnection()
         return dbConnection.crearPiso(newObject)
     }

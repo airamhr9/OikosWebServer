@@ -1,6 +1,7 @@
 package objects.persistence
 
 import com.google.gson.JsonObject
+import persistence.DatabaseConnection
 
 class Garaje(id: Int,
              disponible: Boolean,
@@ -28,7 +29,8 @@ class Garaje(id: Int,
             val tipo = TipoInmueble.fromString(jsonObject.get("tipo").asString)
             val superficie = jsonObject.get("superficie").asInt
             val precio = jsonObject.get("precio").asDouble
-            val propietario = Usuario.fromJson(jsonObject.getAsJsonObject("propietario"))
+            val connection = DatabaseConnection()
+            val propietario = connection.getUsuarioById(jsonObject.getAsJsonObject("propietario").get("id").asInt)
             val descripcion = jsonObject.get("descripcion").asString.toString()
             val direccion = jsonObject.get("direccion").asString
             val ciudad = jsonObject.get("ciudad").asString
