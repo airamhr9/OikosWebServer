@@ -48,9 +48,8 @@ open class Piso(id: Int,
             val latitud = jsonObject.get("latitud").asDouble
             val longitud = jsonObject.get("longitud").asDouble
 
-            /* val listaUrlImagenes = jsonObject.getAsJsonArray("imagenes")
-            val imagenes:Array<String> = listaUrlImagenes.map { it.asString.split("/")[4] }.toTypedArray() */
-            val imagenes = arrayOf("")
+            val listaUrlImagenes = jsonObject.getAsJsonArray("imagenes")
+            val imagenes  = listaUrlImagenes.map { it.asString }.toTypedArray()
 
             val habitaciones = jsonObject.get("habitaciones").asInt
             val baños = jsonObject.get("baños").asInt

@@ -6,7 +6,7 @@ import objects.JsonConvertible
 import objects.SearchableById
 import java.net.InetAddress
 
-abstract class InmuebleSprint2(override val id: Int,
+abstract class InmuebleSprint2(override var id: Int,
                       var disponible: Boolean,
                       var tipo: TipoInmueble,
                       var superficie: Int,

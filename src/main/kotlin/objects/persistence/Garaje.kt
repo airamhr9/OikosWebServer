@@ -37,9 +37,8 @@ class Garaje(id: Int,
             val latitud = jsonObject.get("latitud").asDouble
             val longitud = jsonObject.get("longitud").asDouble
 
-            /* val listaUrlImagenes = jsonObject.getAsJsonArray("imagenes")
-            val imagenes:Array<String> = listaUrlImagenes.map { it.asString.split("/")[4] }.toTypedArray() */
-            val imagenes = arrayOf("")
+            val listaUrlImagenes = jsonObject.getAsJsonArray("imagenes")
+            val imagenes  = listaUrlImagenes.map { it.asString }.toTypedArray()
 
             return Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion,
                 direccion, ciudad, latitud, longitud, imagenes)
