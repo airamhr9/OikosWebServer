@@ -440,12 +440,17 @@ class DatabaseConnection {
 
     fun crearLocal(l:Local){
         val stmt = c.createStatement()
-        val id= nuevoId()
+        val id:Int;
+        id = if (l.id==-1){
+            nuevoId()
+        } else{
+            l.id
+        };
         val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
                 "VALUES (${id}, ${l.disponible}, ${l.tipo}, ${l.superficie},${l.precio},${l.descripcion}," +
                 " ${l.direccion},${l.ciudad},'${l.latitud}', '${l.longitud}');"
-        insertarImagen(l)
         val sql1="INSERT INTO local (id, baños) VALUES (${id}, ${l.baños});"
+        insertarImagen(l)
         stmt.executeUpdate(sql);
         stmt.executeUpdate(sql1);
         c.commit();
@@ -453,7 +458,12 @@ class DatabaseConnection {
     }
     fun crearPiso(p:Piso){
         val stmt = c.createStatement()
-        val id= nuevoId()
+        val id:Int;
+        id = if (p.id==-1){
+            nuevoId()
+        } else{
+            p.id
+        };
         val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
                 "VALUES (${id}, ${p.disponible}, ${p.tipo}, ${p.superficie},${p.precio},${p.descripcion}," +
                 " ${p.direccion},${p.ciudad},'${p.latitud}', '${p.longitud}');"
@@ -466,7 +476,12 @@ class DatabaseConnection {
     }
     fun crearHabitacion(h:Habitacion){
         val stmt = c.createStatement()
-        val id= nuevoId()
+        val id:Int;
+        id = if (h.id==-1){
+            nuevoId()
+        } else{
+            h.id
+        };
         val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
                 "VALUES (${id}, ${h.disponible}, ${h.tipo}, ${h.superficie},${h.precio},${h.descripcion}," +
                 " ${h.direccion},${h.ciudad},'${h.latitud}', '${h.longitud}');"
@@ -481,7 +496,12 @@ class DatabaseConnection {
     }
     fun crearGaraje(g:Garaje){
         val stmt = c.createStatement()
-        val id= nuevoId()
+        val id:Int;
+        id = if (g.id==-1){
+            nuevoId()
+        } else{
+            g.id
+        };
         val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad, latitud, longitud) " +
                 "VALUES (${id}, ${g.disponible}, ${g.tipo}, ${g.superficie},${g.precio},${g.descripcion}," +
                 " ${g.direccion},${g.ciudad},'${g.latitud}', '${g.longitud}');"
@@ -491,6 +511,23 @@ class DatabaseConnection {
         stmt.executeUpdate(sql1);
         c.commit();
         stmt.close()
+    }
+
+    fun actualizarLocal(l:Local){
+        borrarIn(l.id)
+        crearLocal(l)
+    }
+    fun actualizarHabitacion(h:Habitacion){
+        borrarIn(h.id)
+        crearHabitacion(h)
+    }
+    fun actualizarGaraje(g:Garaje){
+        borrarIn(g.id)
+        crearGaraje(g)
+    }
+    fun actualizarPiso(p:Piso){
+        borrarIn(p.id)
+        crearPiso(p)
     }
 
     fun nuevoId():Int {

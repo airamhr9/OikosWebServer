@@ -62,8 +62,6 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 response = "POST request"
                 val objectToPost = exchange.requestBody
                 val reader = BufferedReader(objectToPost.reader())
-                print(JsonParser.parseReader(reader).asJsonObject)
-
                 val url = exchange.requestURI.toString()
                 val modelo=url.substring(14)
 
@@ -79,13 +77,26 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 else if(modelo=="piso"){val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     postPiso(piso)
                 }
-                //val inmueble = Inmueble.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                //postIndividual(inmueble)
             }
             "PUT" -> {
                 response = "PUT request"
                 val objectToPut = exchange.requestBody
-                //put(Inmueble.fromJson(objectToPut))
+                val reader = BufferedReader(objectToPut.reader())
+                val url = exchange.requestURI.toString()
+                val modelo=url.substring(14)
+
+                if(modelo=="local"){val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    putLocal(local)
+                }
+                else if(modelo=="habitacion"){val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    putHabitacion(habitacion)
+                }
+                else if(modelo=="garaje"){val garaje = Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    putGaraje(garaje)
+                }
+                else if(modelo=="piso"){val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    putPiso(piso)
+                }
             }
             "DELETE" -> {
                 response = "DELETE request"
@@ -172,6 +183,22 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     fun postPiso(newObject: Piso){
         val dbConnection = DatabaseConnection()
         return dbConnection.crearPiso(newObject)
+    }
+    fun putLocal(newObject: Local){
+        val dbConnection = DatabaseConnection()
+        return dbConnection.actualizarLocal(newObject)
+    }
+    fun putHabitacion(newObject:Habitacion){
+        val dbConnection = DatabaseConnection()
+        return dbConnection.actualizarHabitacion(newObject)
+    }
+    fun putGaraje(newObject: Garaje){
+        val dbConnection = DatabaseConnection()
+        return dbConnection.actualizarGaraje(newObject)
+    }
+    fun putPiso(newObject: Piso){
+        val dbConnection = DatabaseConnection()
+        return dbConnection.actualizarPiso(newObject)
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {
