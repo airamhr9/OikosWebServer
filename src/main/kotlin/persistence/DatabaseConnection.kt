@@ -13,9 +13,9 @@ class DatabaseConnection {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
                 //.getConnection("jdbc:postgresql://localhost:5432/testdb",  // ¿Jaime?
-                .getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
+                //.getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
                 //.getConnection("jdbc:postgresql://localhost:5432/oikos", // Hector
-                //.getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
+                .getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
                     "postgres", "mysecretpassword");
 
             c.autoCommit = false;
@@ -578,6 +578,66 @@ class DatabaseConnection {
         resultSet.close()
         statement.close()
         return usuario
+    }
+
+    fun getInmueblesDeUsuario(idUsuario: Int): List<InmuebleSprint2> {
+        val result = getPisosDeUsuario(idUsuario)
+        result.addAll(getLocalesDeUsuario(idUsuario))
+        result.addAll(getGarajesDeUsuario(idUsuario))
+        result.addAll(getHabitacionesDeUsuario(idUsuario))
+        return result
+    }
+
+    private fun getPisosDeUsuario(idUsuario: Int): MutableList<InmuebleSprint2> {
+        val statement = c.createStatement()
+        val result = mutableListOf<InmuebleSprint2>()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN piso "
+                + "WHERE propietario = $idUsuario")
+        while (resultSet.next()) {
+            result.add(getInmuebleFromResultSet(resultSet, ModeloInmueble.Piso))
+        }
+        resultSet.close()
+        statement.close()
+        return result
+    }
+
+    private fun getLocalesDeUsuario(idUsuario: Int): MutableList<InmuebleSprint2> {
+        val statement = c.createStatement()
+        val result = mutableListOf<InmuebleSprint2>()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN local "
+                + "WHERE propietario = $idUsuario")
+        while (resultSet.next()) {
+            result.add(getInmuebleFromResultSet(resultSet, ModeloInmueble.Local))
+        }
+        resultSet.close()
+        statement.close()
+        return result
+    }
+
+    private fun getGarajesDeUsuario(idUsuario: Int): MutableList<InmuebleSprint2> {
+        val statement = c.createStatement()
+        val result = mutableListOf<InmuebleSprint2>()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN garaje "
+                + "WHERE propietario = $idUsuario")
+        while (resultSet.next()) {
+            result.add(getInmuebleFromResultSet(resultSet, ModeloInmueble.Garjaje))
+        }
+        resultSet.close()
+        statement.close()
+        return result
+    }
+
+    private fun getHabitacionesDeUsuario(idUsuario: Int): MutableList<InmuebleSprint2> {
+        val statement = c.createStatement()
+        val result = mutableListOf<InmuebleSprint2>()
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN piso NATURAL JOIN habitacion "
+                + "WHERE propietario = $idUsuario")
+        while (resultSet.next()) {
+            result.add(getInmuebleFromResultSet(resultSet, ModeloInmueble.Habitacion))
+        }
+        resultSet.close()
+        statement.close()
+        return result
     }
 
 }

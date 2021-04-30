@@ -55,7 +55,11 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                         getListWithFilters(limit, precioMin, precioMax, supMin, supMax, habitaciones, baños,
                                             garaje, ciudad, tipo, ModeloInmueble.fromString(modelo),numComp), limit)
                 }
-                else{
+                else if ("propietario" in map) {
+                    val idPropietario = map["propietario"].toString().toInt()
+                    response = ResponseBuilder.createListResponse(getInmueblesDeUsuario(idPropietario), limit)
+                }
+                else {
                     response = ResponseBuilder.createListResponse(getDefaultList(limit), limit)
                 }
             }
@@ -207,6 +211,11 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     fun putPiso(newObject: Piso){
         val dbConnection = DatabaseConnection()
         return dbConnection.actualizarPiso(newObject)
+    }
+
+    fun getInmueblesDeUsuario(idUsuario: Int): List<InmuebleSprint2> {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.getInmueblesDeUsuario(idUsuario)
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {
