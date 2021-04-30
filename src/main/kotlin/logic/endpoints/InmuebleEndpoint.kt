@@ -14,7 +14,6 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
         lateinit var response : String
-        println("IN INMUEBLE ENDPOINT")
         when(exchange.requestMethod) {
             "GET" -> {
                 val map : Map<String, Any?> = RequestParser.getQueryParameters(URL("http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
@@ -94,7 +93,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 val objectToPut = exchange.requestBody
                 val reader = BufferedReader(objectToPut.reader())
                 val url = exchange.requestURI.toString()
-                val modelo=url.substring(14)
+                val modelo=url.substring(22)
 
                 if(modelo=="local"){val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     putLocal(local)
