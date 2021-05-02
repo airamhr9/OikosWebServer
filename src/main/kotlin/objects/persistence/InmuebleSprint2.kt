@@ -67,7 +67,7 @@ abstract class InmuebleSprint2(override var id: Int,
     }
 
     companion object {
-        var serverPort: Int? = null
-        private val urlImagen = "http://${InetAddress.getLocalHost().hostAddress}:$serverPort/api/imagen/"
+        //var serverPort: Int? = null
+        private val urlImagen = "http://${InetAddress.getLocalHost().hostAddress}:9000/api/imagen/"
     }
 }

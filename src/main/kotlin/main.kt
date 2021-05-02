@@ -17,7 +17,7 @@ fun main(args: Array<String>){
     val folderName = args[1]
     val imageFolder = createImageFolder(folderName)
     val server = Server(serverPort)
-    InmuebleSprint2.serverPort = serverPort
+    //InmuebleSprint2.serverPort = serverPort
 
     //http://localhost:9000/api/user/
     server.addEndpoint("/api/user/") {

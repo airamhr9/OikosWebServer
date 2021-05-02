@@ -96,15 +96,19 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 val modelo=url.substring(22)
 
                 if(modelo=="local"){val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    local.imagenes = local.imagenes.map { it.split("/")[5] }.toTypedArray()
                     putLocal(local)
                 }
                 else if(modelo=="habitacion"){val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    habitacion.imagenes = habitacion.imagenes.map { it.split("/")[5] }.toTypedArray()
                     putHabitacion(habitacion)
                 }
                 else if(modelo=="garaje"){val garaje = Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    garaje.imagenes = garaje.imagenes.map { it.split("/")[5] }.toTypedArray()
                     putGaraje(garaje)
                 }
                 else if(modelo=="piso"){val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    piso.imagenes = piso.imagenes.map { it.split("/")[5] }.toTypedArray()
                     putPiso(piso)
                 }
             }
