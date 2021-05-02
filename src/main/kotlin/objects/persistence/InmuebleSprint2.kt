@@ -59,7 +59,15 @@ abstract class InmuebleSprint2(override var id: Int,
         return result
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other is InmuebleSprint2) {
+            return id == other.id
+        }
+        return false
+    }
+
     companion object {
-        private val urlImagen = "http://${InetAddress.getLocalHost().hostAddress}:9000/api/imagen/"
+        var serverPort: Int? = null
+        private val urlImagen = "http://${InetAddress.getLocalHost().hostAddress}:$serverPort/api/imagen/"
     }
 }

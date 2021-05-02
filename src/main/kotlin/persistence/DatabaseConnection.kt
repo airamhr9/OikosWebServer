@@ -13,9 +13,9 @@ class DatabaseConnection {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
                 //.getConnection("jdbc:postgresql://localhost:5432/testdb",  // ¿Jaime?
-                .getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
+                //.getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
                 //.getConnection("jdbc:postgresql://localhost:5432/oikos", // Hector
-                //.getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
+                .getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
                     "postgres", "mysecretpassword");
 
             c.autoCommit = false;
@@ -581,11 +581,15 @@ class DatabaseConnection {
     }
 
     fun getInmueblesDeUsuario(idUsuario: Int): List<InmuebleSprint2> {
-        val result = getPisosDeUsuario(idUsuario)
-        result.addAll(getLocalesDeUsuario(idUsuario))
-        result.addAll(getGarajesDeUsuario(idUsuario))
-        result.addAll(getHabitacionesDeUsuario(idUsuario))
-        return result
+        val inmuebles = getPisosDeUsuario(idUsuario)
+        inmuebles.addAll(getLocalesDeUsuario(idUsuario))
+        inmuebles.addAll(getGarajesDeUsuario(idUsuario))
+        inmuebles.addAll(getHabitacionesDeUsuario(idUsuario))
+        val map = mutableMapOf<Int, InmuebleSprint2>()
+        for (inmueble in inmuebles) {
+            map.put(inmueble.id, inmueble)
+        }
+        return map.values.toList()
     }
 
     private fun getPisosDeUsuario(idUsuario: Int): MutableList<InmuebleSprint2> {

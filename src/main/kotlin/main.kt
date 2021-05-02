@@ -8,6 +8,7 @@ import logic.endpoints.ImageEndpoint
 import logic.endpoints.InmuebleEndpoint
 import logic.endpoints.PreferenciasEndpoint
 import logic.endpoints.UserEndpoint
+import objects.persistence.InmuebleSprint2
 import persistence.DatabaseConnection
 import java.io.File
 
@@ -16,6 +17,7 @@ fun main(args: Array<String>){
     val folderName = args[1]
     val imageFolder = createImageFolder(folderName)
     val server = Server(serverPort)
+    InmuebleSprint2.serverPort = serverPort
 
     //http://localhost:9000/api/user/
     server.addEndpoint("/api/user/") {
