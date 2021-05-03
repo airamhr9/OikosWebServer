@@ -23,8 +23,9 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
                     val map : Map<String, Any?> = RequestParser.getQueryParameters(URL("http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
 
                     if("nombre" in map){
-                        if(existeUsuario(map["nombre"].toString(), map["contraseña"].toString())){
-                            response = "Usuario encontrado"
+                        if(existeUsuario(map["nombre"].toString(), map["contraseña"].toString())==null){
+                            response = ResponseBuilder.createObjectResponse(
+                                existeUsuario(map["nombre"].toString(), map["contraseña"].toString())!!)
                         }else{
                             exchange.sendResponseHeaders(305, -1)
                             response = "Usuario no encontrado"
@@ -94,7 +95,7 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
         val dbConnection = DatabaseConnection()
         return dbConnection.revisarEmail(newObject)
     }
-    fun existeUsuario(nombre:String, contraseña:String):Boolean{
+    fun existeUsuario(nombre:String, contraseña:String):Usuario?{
         val dbConnection = DatabaseConnection()
         return dbConnection.comprobarUsuario(nombre,contraseña)
     }
