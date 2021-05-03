@@ -115,7 +115,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
             "DELETE" -> {
                 response = "DELETE request"
                 val url = exchange.requestURI.toString()
-                val id=url.substring(14).toInt();
+                val id=url.substring(18).toInt();
                 borrarInmueble(id)
             }
             "OPTIONS" -> {
