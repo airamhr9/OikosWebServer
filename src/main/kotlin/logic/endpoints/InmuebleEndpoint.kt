@@ -96,19 +96,39 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 val modelo=url.substring(22)
 
                 if(modelo=="local"){val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                    local.imagenes = local.imagenes.map { it.split("/")[5] }.toTypedArray()
+                    local.imagenes = local.imagenes.map {
+                        val splitted = it.split("/")
+                        if(splitted.size > 1)
+                            splitted[5]
+                        else splitted[0]
+                    }.toTypedArray()
                     putLocal(local)
                 }
                 else if(modelo=="habitacion"){val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                    habitacion.imagenes = habitacion.imagenes.map { it.split("/")[5] }.toTypedArray()
+                    habitacion.imagenes = habitacion.imagenes.map {
+                        val splitted = it.split("/")
+                        if(splitted.size > 1)
+                            splitted[5]
+                        else splitted[0]
+                    }.toTypedArray()
                     putHabitacion(habitacion)
                 }
                 else if(modelo=="garaje"){val garaje = Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                    garaje.imagenes = garaje.imagenes.map { it.split("/")[5] }.toTypedArray()
+                    garaje.imagenes = garaje.imagenes.map {
+                        val splitted = it.split("/")
+                        if(splitted.size > 1)
+                            splitted[5]
+                        else splitted[0]
+                    }.toTypedArray()
                     putGaraje(garaje)
                 }
                 else if(modelo=="piso"){val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
-                    piso.imagenes = piso.imagenes.map { it.split("/")[5] }.toTypedArray()
+                    piso.imagenes = piso.imagenes.map {
+                        val splitted = it.split("/")
+                        if(splitted.size > 1)
+                            splitted[5]
+                        else splitted[0]
+                    }.toTypedArray()
                     putPiso(piso)
                 }
             }
