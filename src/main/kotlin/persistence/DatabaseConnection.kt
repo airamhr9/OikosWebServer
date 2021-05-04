@@ -552,11 +552,16 @@ class DatabaseConnection {
 
         return b
     }
-    fun comprobarUsuario(nombre:String,contraseña:String):Usuario?{
+    fun comprobarUsuario(email:String,contr:String):Usuario?{
+        var user:Usuario?;
         val statement = c.createStatement()
-        val sql = statement.executeQuery("SELECT * FROM usuario WHERE nombre = ${nombre} AND contraseña = ${contraseña};")
+        val sql = statement.executeQuery("SELECT * FROM usuario WHERE email = ${email} AND contraseña = ${contr};")
         sql.next()
-        var user= sqlUser(sql)
+        if(sql.getString("id")==null){
+            user = null
+        }else{
+            user = sqlUser(sql)
+        }
         sql.close()
         statement.close()
 
