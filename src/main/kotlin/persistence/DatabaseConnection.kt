@@ -647,4 +647,42 @@ class DatabaseConnection {
         return result
     }
 
+    fun guardadoById(num:Int): Busqueda {
+        val stmt = c.createStatement()
+        val sql = stmt.executeQuery("SELECT * FROM busqueda WHERE id=$num;")
+        sql.next()
+        val userStmt = c.createStatement()
+        val sqlUsuario = userStmt.executeQuery("SELECT * FROM usuario WHERE id=" + sql.getInt("id").toString() + ";")
+        sqlUsuario.next()
+        val usuario = sqlUser(sqlUsuario)
+        val guardado = Busqueda(sql.getInt("id"), sql.getInt("superficie_min"),sql.getInt("superficie_max"),
+            sql.getDouble("precio_min"),sql.getDouble("precio_max"), sql.getInt("habitaciones"),
+            sql.getInt("baños"), sql.getBoolean("garaje"),sql.getInt("numCompañeros"),
+            sql.getString("ciudad"),usuario, sql.getString("tipo"),sql.getString("modelo"))
+
+        sql.close()
+        stmt.close()
+        return guardado
+    }
+
+    fun crearGuardado(b:Busqueda): Busqueda {
+        val stmt = c.createStatement()
+        val sql = "INSERT INTO guardado (id, superficie_min, superficie_max, precio_min, precio_max, habitaciones, baños, garaje,numCompañeros, ciudad, tipo, modelo) " +
+                "VALUES (${b.id}, ${b.superficie_min}, ${b.superficie_max}, ${b.precio_min},${b.superficie_max},${b.habitaciones},${b.numCompañeros}" +
+                " ${b.baños},${b.garaje},'${b.ciudad}', '${b.tipo}','${b.modelo}');"
+        stmt.executeUpdate(sql);
+
+        c.commit();
+        stmt.close()
+        return b
+    }
+
+    fun actualizarGuardado(b:Busqueda): Busqueda {
+        var stmt = c.createStatement()
+        val sql = "DELETE from busqueda where id = ${b.id};"
+        stmt.executeUpdate(sql)
+
+        return crearGuardado(b)
+    }
+
 }
