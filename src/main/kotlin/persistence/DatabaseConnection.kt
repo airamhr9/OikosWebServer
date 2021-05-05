@@ -545,9 +545,9 @@ class DatabaseConnection {
     fun revisarEmail(u:Usuario): Boolean{
         var b=false;
         val statement = c.createStatement()
-        val sql = statement.executeQuery("SELECT email FROM usuario WHERE email = ${u.mail};")
+        val sql = statement.executeQuery("SELECT email FROM usuario WHERE email = '${u.mail}';")
         sql.next()
-        var res = sql.getString(1)
+        var res = sql.getString(0)
         b = (u.mail==res)
         sql.close()
         statement.close()
@@ -557,7 +557,7 @@ class DatabaseConnection {
     fun comprobarUsuario(email:String,contr:String):Usuario?{
         var user:Usuario?;
         val statement = c.createStatement()
-        val sql = statement.executeQuery("SELECT * FROM usuario WHERE email = ${email} AND contraseña = ${contr};")
+        val sql = statement.executeQuery("SELECT * FROM usuario WHERE email = '${email}' AND contraseña = '${contr}';")
         sql.next()
         if(sql.getString("id")==null){
             user = null

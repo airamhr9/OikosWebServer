@@ -1,6 +1,7 @@
 package logic.endpoints
 
 import com.google.gson.JsonParser
+import com.google.gson.internal.bind.TypeAdapters.URL
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
@@ -33,10 +34,14 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
                     }
                 }
                 "POST" -> {
+                    println("estoy en post")
                     response = "POST request"
                     val objectToPost = exchange.requestBody
+                    println(objectToPost)
                     val reader = BufferedReader(objectToPost.reader())
+                    println(reader)
                     val usuario  = Usuario.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                    println(usuario)
                     if(!emailRepetido(usuario)){
                         postUsuario(usuario)
                     }else{
