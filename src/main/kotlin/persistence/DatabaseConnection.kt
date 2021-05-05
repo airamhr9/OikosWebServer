@@ -559,7 +559,7 @@ class DatabaseConnection {
         val statement = c.createStatement()
         val sql = statement.executeQuery("SELECT * FROM usuario WHERE email = '${email}' AND contraseña = '${contr}';")
         sql.next()
-        if(sql.getString("id")==null){
+        if(sql.getString("nombre")==null){
             user = null
         }else{
             user = sqlUser(sql)
