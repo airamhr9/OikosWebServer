@@ -547,7 +547,7 @@ class DatabaseConnection {
         val statement = c.createStatement()
         val sql = statement.executeQuery("SELECT email FROM usuario WHERE email = '${u.mail}';")
         sql.next()
-        var res = sql.getString(0)
+        var res = sql.getString("email")
         b = (u.mail==res)
         sql.close()
         statement.close()
