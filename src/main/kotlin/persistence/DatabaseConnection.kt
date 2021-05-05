@@ -1,4 +1,6 @@
 package persistence
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
 import objects.persistence.*
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,9 +15,9 @@ class DatabaseConnection {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
                 //.getConnection("jdbc:postgresql://localhost:5432/testdb",  // ¿Jaime?
-                .getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
+                //.getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
                 //.getConnection("jdbc:postgresql://localhost:5432/oikos", // Hector
-                //.getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
+                .getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
                     "postgres", "mysecretpassword");
 
             c.autoCommit = false;
@@ -535,7 +537,7 @@ class DatabaseConnection {
     fun crearUsuario(u:Usuario){
         val stmt = c.createStatement()
         val sql = "INSERT INTO usuario (id, nombre, email, contraseña, imagen) " +
-                "VALUES (${u.id}, ${u.nombre}, ${u.mail},${u.contraseña},${u.imagen});"
+                "VALUES (${u.id}, '${u.nombre}', '${u.mail}','${u.contraseña}','${u.imagen}');"
         stmt.executeUpdate(sql);
         c.commit();
         stmt.close()
@@ -665,24 +667,36 @@ class DatabaseConnection {
         return guardado
     }
 
-    fun crearGuardado(b:Busqueda): Busqueda {
+    fun crearGuardado(busqueda:String,usuario:Int){
         val stmt = c.createStatement()
-        val sql = "INSERT INTO guardado (id, superficie_min, superficie_max, precio_min, precio_max, habitaciones, baños, garaje,numCompañeros, ciudad, tipo, modelo) " +
-                "VALUES (${b.id}, ${b.superficie_min}, ${b.superficie_max}, ${b.precio_min},${b.superficie_max},${b.habitaciones},${b.numCompañeros}" +
-                " ${b.baños},${b.garaje},'${b.ciudad}', '${b.tipo}','${b.modelo}');"
+        val sql = "INSERT INTO guardado (usuario, busqueda) " +
+                "VALUES (${usuario}, '${busqueda}');"
         stmt.executeUpdate(sql);
 
         c.commit();
         stmt.close()
-        return b
     }
 
-    fun actualizarGuardado(b:Busqueda): Busqueda {
+    /*fun actualizarGuardado(b:Busqueda){
         var stmt = c.createStatement()
         val sql = "DELETE from busqueda where id = ${b.id};"
         stmt.executeUpdate(sql)
+    }
 
-        return crearGuardado(b)
+     */
+    fun listaBusqueda(usuario:Int): JsonArray{
+        val stmt = c.createStatement()
+        var list : JsonArray = JsonArray();
+
+        val sql =stmt.executeQuery("SELECT * FROM busqueda WHERE usuario = ${usuario} ;")
+        while ( sql.next() ) {
+            val string = JsonParser.parseString(sql.getString("busqueda"))
+
+            list.add(string)
+        }
+        sql.close()
+        stmt.close()
+        return list
     }
 
 }

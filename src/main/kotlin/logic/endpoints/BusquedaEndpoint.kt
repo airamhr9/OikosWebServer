@@ -1,5 +1,6 @@
 package logic.endpoints
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
@@ -24,7 +25,7 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler<Busqueda>(endpoint) {
                     RequestParser.getQueryParameters(URL("http://" + exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
 
                 if ("id" in map) {
-                    response = ResponseBuilder.createObjectResponse(getIndividualById(map["id"].toString().toInt()))
+                    response = getBusquedatList(map["id"].toString().toInt()).toString()
                 }
 
             }
@@ -34,11 +35,15 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler<Busqueda>(endpoint) {
                 val reader = BufferedReader(objectToPost.reader(Charsets.UTF_8))
                 var string: String = reader.readLines().toString()
                 string = URLDecoder.decode(string, "UTF-8");
-                string = string.substring(7, string.length - 1)
+                //string = string.replace(",,",",\n")
+                val url = exchange.requestURI.toString()
+                var usuario=url.substring(18).toInt()
+                print(string);
+                print(usuario)
+                val busqueda = string
+                postBusqueda(busqueda,usuario)
 
-
-                val guardado = Busqueda.fromJson(JsonParser.parseString(string).asJsonObject)
-                postIndividual(guardado)
+                //response = JsonParser.parseString(string).toString()
             }
             "PUT" -> {
                 response = "PUT request"
@@ -73,6 +78,10 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler<Busqueda>(endpoint) {
         outputStream.flush()
         exchange.close()
     }
+    fun getBusquedatList(usuario: Int): JsonArray {
+        val dbConnection = DatabaseConnection()
+        return dbConnection.listaBusqueda(usuario)
+    }
 
     override fun getIndividualById(objectId: Int): Busqueda {
         val dbConnection = DatabaseConnection()
@@ -88,16 +97,18 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler<Busqueda>(endpoint) {
     }
 
     override fun postIndividual(newObject: Busqueda): Busqueda {
-        val dbConnection = DatabaseConnection()
-        return dbConnection.crearGuardado(newObject)
+        TODO("Not yet implemented")
     }
 
     override fun put(modifiedObject: Busqueda): Busqueda {
-        val dbConnection = DatabaseConnection()
-        return dbConnection.actualizarGuardado(modifiedObject)
+        TODO("Not yet implemented")
     }
 
     override fun responseToJson(): String {
         TODO("Not yet implemented")
+    }
+    fun postBusqueda(busqueda:String, usuario:Int){
+        val dbConnection = DatabaseConnection()
+        dbConnection.crearGuardado(busqueda,usuario)
     }
 }
