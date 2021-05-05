@@ -1,12 +1,10 @@
 package logic.endpoints
 
 import com.google.gson.JsonParser
-import com.google.gson.internal.bind.TypeAdapters.URL
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
 import logic.ResponseBuilder
-import objects.persistence.Preferencia
 import objects.persistence.Usuario
 import persistence.DatabaseConnection
 import java.io.BufferedReader
@@ -18,17 +16,19 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
     override fun handleExchange(exchange: HttpExchange) {
         println("handling exchange")
         lateinit var response : String
+        var codigoRespuesta = 200
          when(exchange.requestMethod){
                 "GET" -> {
                     response = "GET request"
                     val map : Map<String, Any?> = RequestParser.getQueryParameters(URL("http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
 
                     if("mail" in map){
+                        print(map["mail"].toString() + " " + map["contraseña"].toString())
                         if(existeUsuario(map["mail"].toString(), map["contraseña"].toString())!=null){
                             response = ResponseBuilder.createObjectResponse(
                                 existeUsuario(map["mail"].toString(), map["contraseña"].toString())!!)
                         }else{
-                            exchange.sendResponseHeaders(305, -1)
+                            codigoRespuesta = 404
                             response = "Usuario no encontrado"
                         }
                     }
@@ -45,7 +45,7 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
                     if(!emailRepetido(usuario)){
                         postUsuario(usuario)
                     }else{
-                        exchange.sendResponseHeaders(305, -1)
+                        codigoRespuesta = 404
                         response = "Email repetido"
                     }
 
@@ -70,7 +70,7 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
                     response = "Method not supported"
                 }
             }
-        exchange.sendResponseHeaders(200, response.toByteArray(Charsets.UTF_8).size.toLong())
+        exchange.sendResponseHeaders(codigoRespuesta, response.toByteArray(Charsets.UTF_8).size.toLong())
         val outputStream = exchange.responseBody
         outputStream.write(response.toByteArray())
         outputStream.flush()

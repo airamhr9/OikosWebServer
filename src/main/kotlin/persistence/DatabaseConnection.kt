@@ -536,8 +536,8 @@ class DatabaseConnection {
 
     fun crearUsuario(u:Usuario){
         val stmt = c.createStatement()
-        val sql = "INSERT INTO usuario (id, nombre, email, contraseña, imagen) " +
-                "VALUES (${u.id}, '${u.nombre}', '${u.mail}','${u.contraseña}','${u.imagen}');"
+        val sql = "INSERT INTO usuario (nombre, email, contraseña, imagen) " +
+                "VALUES ('${u.nombre}', '${u.mail}','${u.contraseña}','${u.imagen}');"
         stmt.executeUpdate(sql);
         c.commit();
         stmt.close()
@@ -547,8 +547,12 @@ class DatabaseConnection {
         val statement = c.createStatement()
         val sql = statement.executeQuery("SELECT email FROM usuario WHERE email = '${u.mail}';")
         sql.next()
-        var res = sql.getString("email")
-        b = (u.mail==res)
+        var res: String
+        try {
+            res = sql.getString("email")
+            b = (u.mail==res)
+        } catch (e: Exception) {
+        }
         sql.close()
         statement.close()
 
@@ -559,14 +563,13 @@ class DatabaseConnection {
         val statement = c.createStatement()
         val sql = statement.executeQuery("SELECT * FROM usuario WHERE email = '${email}' AND contraseña = '${contr}';")
         sql.next()
-        if(sql.getInt("id")==null){
-            user = null
-        }else{
+        try {
             user = sqlUser(sql)
+        } catch (e: Exception) {
+            user = null
         }
         sql.close()
         statement.close()
-
         return user
     }
 
