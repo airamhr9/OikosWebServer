@@ -15,9 +15,9 @@ class DatabaseConnection {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
                 //.getConnection("jdbc:postgresql://localhost:5432/testdb",  // ¿Jaime?
-                .getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
+                //.getConnection("jdbc:postgresql://172.17.0.2:5432/Oikos", // Airam
                 //.getConnection("jdbc:postgresql://localhost:5432/oikos", // Hector
-                //.getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
+                .getConnection("jdbc:postgresql://localhost:5432/postgres", // Hector Pruebas
                     "postgres", "mysecretpassword");
 
             c.autoCommit = false;
@@ -559,7 +559,7 @@ class DatabaseConnection {
         val statement = c.createStatement()
         val sql = statement.executeQuery("SELECT * FROM usuario WHERE email = '${email}' AND contraseña = '${contr}';")
         sql.next()
-        if(sql.getString("nombre")==null){
+        if(sql.getInt("id")==null){
             user = null
         }else{
             user = sqlUser(sql)

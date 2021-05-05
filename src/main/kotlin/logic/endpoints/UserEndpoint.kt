@@ -24,7 +24,7 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
                     val map : Map<String, Any?> = RequestParser.getQueryParameters(URL("http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
 
                     if("mail" in map){
-                        if(existeUsuario(map["mail"].toString(), map["contraseña"].toString())==null){
+                        if(existeUsuario(map["mail"].toString(), map["contraseña"].toString())!=null){
                             response = ResponseBuilder.createObjectResponse(
                                 existeUsuario(map["mail"].toString(), map["contraseña"].toString())!!)
                         }else{
