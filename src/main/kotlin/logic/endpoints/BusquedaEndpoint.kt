@@ -38,9 +38,8 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler<Busqueda>(endpoint) {
                 //string = string.replace(",,",",\n")
                 val url = exchange.requestURI.toString()
                 var usuario=url.substring(18).toInt()
-                print(string);
-                print(usuario)
-                val busqueda = string
+                val busquedaJson = JsonParser.parseString(string) as JsonArray
+                val busqueda = busquedaJson[0].toString()
                 postBusqueda(busqueda,usuario)
 
                 //response = JsonParser.parseString(string).toString()

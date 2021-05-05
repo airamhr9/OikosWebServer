@@ -98,6 +98,8 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                 if(modelo=="local"){val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     local.imagenes = local.imagenes.map {
                         val splitted = it.split("/")
+                        println("BEFORE SPLIT" + it)
+                        println("SPLITTED" + splitted)
                         if(splitted.size > 1)
                             splitted[5]
                         else splitted[0]
