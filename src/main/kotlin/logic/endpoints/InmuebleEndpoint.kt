@@ -162,10 +162,11 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         exchange.close()
     }
 
-    override fun getIndividualById(objectId: Int): Inmueble {
+    /*override fun getIndividualById(objectId: Int): Inmueble {
         val dbConnection = DatabaseConnection()
         return dbConnection.inmuebleById(objectId)
-    }
+    }*/
+
     fun getLocalById(objectId: Int): Local {
         val dbConnection = DatabaseConnection()
         return dbConnection.getLocalById(objectId)
@@ -183,10 +184,10 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         return dbConnection.getHabitacionById(objectId)
     }
 
-    override fun getDefaultList(num:Int): List<Inmueble> {
+    /*override fun getDefaultList(num:Int): List<Inmueble> {
         val dbConnection = DatabaseConnection()
         return dbConnection.listaDeInmueblesPorDefecto(num)
-    }
+    }*/
 
     fun getListWithCoordinates(num:Int, x:Double, y:Double): List<InmuebleSprint2> {
         val dbConnection = DatabaseConnection()
@@ -201,7 +202,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     }
     fun borrarInmueble(id:Int){
         val dbConnection = DatabaseConnection()
-        return dbConnection.borrarIn(id)
+        return dbConnection.borrarInmuebleById(id)
     }
 
     fun postLocal(newObject: Local){
@@ -241,6 +242,14 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     fun getInmueblesDeUsuario(idUsuario: Int): List<InmuebleSprint2> {
         val dbConnection = DatabaseConnection()
         return dbConnection.getInmueblesDeUsuario(idUsuario)
+    }
+
+    override fun getIndividualById(objectId: Int): Inmueble {
+        TODO("Not yet implemented")
+    }
+
+    override fun getDefaultList(num: Int): List<Inmueble> {
+        TODO("Not yet implemented")
     }
 
     override fun getListByIds(idList: List<Int>): List<Inmueble> {

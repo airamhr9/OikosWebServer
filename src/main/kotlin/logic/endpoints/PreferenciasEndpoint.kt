@@ -15,7 +15,7 @@ import java.net.URLDecoder.decode
 import java.nio.charset.Charset
 
 
-class PreferenciasEndpoint(endpoint: String) : EndpointHandler<Preferencia>(endpoint) {
+/*class PreferenciasEndpoint(endpoint: String) : EndpointHandler<Preferencia>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
         println("handling exchange")
@@ -102,4 +102,4 @@ class PreferenciasEndpoint(endpoint: String) : EndpointHandler<Preferencia>(endp
     override fun responseToJson(): String {
         TODO("Not yet implemented")
     }
-}
+}*/

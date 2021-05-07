@@ -35,15 +35,16 @@ fun main(args: Array<String>){
         }
     }
 
-    server.addEndpoint("/api/preferencias/") {
+    /*server.addEndpoint("/api/preferencias/") {
             exchange: HttpExchange -> GlobalScope.launch {
                 PreferenciasEndpoint("/api/preferencias").handleExchange(exchange)
         }
-    }
+    }*/
+
     server.addEndpoint("/api/busqueda/") {
             exchange: HttpExchange -> GlobalScope.launch {
-        BusquedaEndpoint("/api/busqueda").handleExchange(exchange)
-    }
+            BusquedaEndpoint("/api/busqueda").handleExchange(exchange)
+        }
     }
 
     server.addEndpoint("/api/hello/") {
