@@ -47,6 +47,12 @@ fun main(args: Array<String>){
         }
     }
 
+    server.addEndpoint("/api/favorito/") {
+        exchange: HttpExchange -> GlobalScope.launch {
+            FavoritoEndpoint("/api/favorito").handleExchange(exchange)
+        }
+    }
+
     server.addEndpoint("/api/hello/") {
             exchange: HttpExchange -> GlobalScope.launch {
             val response = "Hello bro test ok"
