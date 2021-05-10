@@ -517,8 +517,11 @@ class DatabaseConnection {
 
     fun storeFavorito(favorito: Favorito) {
         val statement = connection.createStatement()
+        val orden =
+            if(favorito.orden==-1) getOrdenFavorito(favorito.usuario.id)
+            else favorito.orden
         val instruccion = "INSERT INTO favorito (usuario, inmueble, notas, orden)" +
-                "VALUES ${favorito.usuario.id}, ${favorito.inmueble.id}, '${favorito.notas}', ${favorito.orden};"
+                "VALUES (${favorito.usuario.id}, ${favorito.inmueble.id}, '${favorito.notas}', ${orden});"
         statement.execute(instruccion)
         connection.commit()
         statement.close()
@@ -587,6 +590,21 @@ class DatabaseConnection {
         statement.execute(instruccion)
         connection.commit()
         statement.close()
+    }
+    fun modificarFavorito(favorito: Favorito) {
+        eliminarFavorito(favorito)
+        storeFavorito(favorito)
+    }
+
+    private fun getOrdenFavorito(usuario:Int): Int {
+        val statement = connection.createStatement()
+        val resultSet = statement.executeQuery("SELECT max(orden) FROM favorito WHERE usuario = ${usuario};")
+        resultSet.next()
+        var result = resultSet.getInt(1)
+        result++
+        resultSet.close()
+        statement.close()
+        return result
     }
 
 }

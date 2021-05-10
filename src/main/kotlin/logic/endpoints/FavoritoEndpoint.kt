@@ -37,7 +37,11 @@ class FavoritoEndpoint(endpoint: String) : EndpointHandler<Favorito>(endpoint) {
                 postFavorito(favorito)
             }
             "PUT" -> {
-                response = ""
+                response = "PUT request"
+                val objectToPost = exchange.requestBody
+                val reader = BufferedReader(objectToPost.reader())
+                val favorito = Favorito.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                putFavorito(favorito)
             }
             "DELETE" -> {
                 response = "DELETE request"
@@ -81,6 +85,10 @@ class FavoritoEndpoint(endpoint: String) : EndpointHandler<Favorito>(endpoint) {
     private fun deleteFavorito(favorito: Favorito) {
         val dbConnection = DatabaseConnection()
         dbConnection.eliminarFavorito(favorito)
+    }
+    private fun putFavorito(favorito: Favorito) {
+        val dbConnection = DatabaseConnection()
+        dbConnection.modificarFavorito(favorito)
     }
 
 
