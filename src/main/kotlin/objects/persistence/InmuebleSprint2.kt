@@ -20,6 +20,10 @@ abstract class InmuebleSprint2(override var id: Int,
                       var imagenes: Array<String>,
 ) : SearchableById, JsonConvertible {
 
+    var esFavorito = false
+        get() = field
+        set(value) { field = value}
+
     private fun generarJsonBasico(): JsonObject {
         val result = JsonObject()
         result.addProperty("id", id)
@@ -42,11 +46,10 @@ abstract class InmuebleSprint2(override var id: Int,
         result.addProperty("superficie", superficie)
         result.add("propietario", propietario.toJson())
         result.addProperty("descripcion", descripcion)
+        result.addProperty("favorito", esFavorito)
 
         val listaUrlImagenes = JsonArray()
-        for (imagen:String in imagenes) {
-            listaUrlImagenes.add(urlImagen + imagen)
-        }
+        imagenes.forEach { listaUrlImagenes.add(urlImagen + it) }
         result.add("imagenes", listaUrlImagenes)
 
         return result

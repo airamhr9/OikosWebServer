@@ -48,7 +48,7 @@ class DatabaseConnection {
 
     fun listaDeInmueblesPorFiltrado(num:Int, precioMin: Double, precioMax: Double?, supMin: Int, supMax: Int?,
                                     habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?,
-                                    modelo:ModeloInmueble,numComp:Int?): List<InmuebleSprint2>{
+                                    modelo:ModeloInmueble,numComp:Int?, idUsuario: Int): List<InmuebleSprint2>{
         val stmt = connection.createStatement()
         val list : MutableList<InmuebleSprint2> =  mutableListOf()
         var query = if (modelo == ModeloInmueble.Habitacion) "SELECT * FROM inmueble NATURAL JOIN piso NATURAL JOIN habitacion WHERE "
@@ -71,8 +71,12 @@ class DatabaseConnection {
         println(query)
         val sql = stmt.executeQuery(query)
 
+        val inmueblesFavoritosDeUsuario = getFavoritosDeUsuario(idUsuario).map {it.inmueble}
         while ( sql.next() ) {
             val inmueble = getInmuebleFromResultSet(sql, modelo)
+            if (inmueblesFavoritosDeUsuario.contains(inmueble)) {
+                inmueble.esFavorito = true
+            }
             list.add(inmueble)
         }
         sql.close()

@@ -50,9 +50,10 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
                     val ciudad = if ("ciudad" in map) map["ciudad"].toString() else null
                     val tipo = if ("tipo" in map) map["tipo"].toString() else null
                     val numComp = if ("numCompañeros" in map) map["numCompañeros"].toString().toInt() else null
+                    val idUsuario = map["usuario"].toString().toInt()
                     response = ResponseBuilder.createListResponse(
                         getListWithFilters(limit, precioMin, precioMax, supMin, supMax, habitaciones, baños,
-                                            garaje, ciudad, tipo, ModeloInmueble.fromString(modelo),numComp), limit)
+                                            garaje, ciudad, tipo, ModeloInmueble.fromString(modelo),numComp, idUsuario), limit)
                 }
                 else if ("propietario" in map) {
                     val idPropietario = map["propietario"].toString().toInt()
@@ -195,10 +196,10 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     }
     fun getListWithFilters(num: Int , precioMin: Double, precioMax: Double?, supMin: Int, supMan: Int?,
                            habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?,modelo:
-                           ModeloInmueble,numComp:Int?): List<InmuebleSprint2> {
+                           ModeloInmueble,numComp:Int?, idUsuario: Int): List<InmuebleSprint2> {
         val dbConnection = DatabaseConnection()
         return dbConnection.listaDeInmueblesPorFiltrado(num, precioMin, precioMax, supMin, supMan, habitaciones, baños,
-            garaje, ciudad, tipo,modelo,numComp)
+            garaje, ciudad, tipo,modelo,numComp, idUsuario)
     }
     fun borrarInmueble(id:Int){
         val dbConnection = DatabaseConnection()
