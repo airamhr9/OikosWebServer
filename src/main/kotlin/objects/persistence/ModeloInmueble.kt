@@ -3,7 +3,7 @@ package objects.persistence
 enum class ModeloInmueble(val value:String) {
     Piso("piso"),
     Local("local"),
-    Garjaje("garaje"),
+    Garaje("garaje"),
     Habitacion("habitacion");
 
     companion object {

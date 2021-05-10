@@ -19,7 +19,7 @@ class Garaje(id: Int,
             direccion, ciudad, latitud, longitud, imagenes) {
 
     override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
-        jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Garjaje.value)
+        jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Garaje.value)
     }
 
     companion object {

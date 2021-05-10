@@ -123,7 +123,7 @@ class DatabaseConnection {
     private fun listaDeGarajesPorCordenadas(num:Int, x:Double, y:Double): MutableList<InmuebleSprint2> {
         val stmt = connection.createStatement()
         val list : MutableList<InmuebleSprint2> =  mutableListOf()
-        val modelo = ModeloInmueble.Garjaje
+        val modelo = ModeloInmueble.Garaje
         val sql =stmt.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
                 "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
                 "FETCH FIRST " + num.toString() +" ROWS ONLY;")
@@ -185,7 +185,7 @@ class DatabaseConnection {
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN garaje WHERE id=$id;")
         resultSet.next()
-        val garaje = getInmuebleFromResultSet(resultSet, ModeloInmueble.Garjaje) as Garaje
+        val garaje = getInmuebleFromResultSet(resultSet, ModeloInmueble.Garaje) as Garaje
         resultSet.close()
         statement.close()
         return garaje
@@ -228,7 +228,7 @@ class DatabaseConnection {
                 Local(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
                     ciudad, latitud, longitud, imagenes.toTypedArray(), baños)
             }
-            ModeloInmueble.Garjaje -> {
+            ModeloInmueble.Garaje -> {
                 Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
                     ciudad, latitud, longitud, imagenes.toTypedArray())
             }
@@ -449,7 +449,7 @@ class DatabaseConnection {
         val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN garaje "
                 + "WHERE propietario = $idUsuario")
         while (resultSet.next()) {
-            result.add(getInmuebleFromResultSet(resultSet, ModeloInmueble.Garjaje))
+            result.add(getInmuebleFromResultSet(resultSet, ModeloInmueble.Garaje))
         }
         resultSet.close()
         statement.close()
@@ -513,6 +513,80 @@ class DatabaseConnection {
         sql.close()
         stmt.close()
         return list
+    }
+
+    fun storeFavorito(favorito: Favorito) {
+        val statement = connection.createStatement()
+        val instruccion = "INSERT INTO favorito (usuario, inmueble, notas, orden)" +
+                "VALUES ${favorito.usuario.id}, ${favorito.inmueble.id}, '${favorito.notas}', ${favorito.orden};"
+        statement.execute(instruccion)
+        connection.commit()
+        statement.close()
+    }
+
+    private fun getModeloInmuebleById(id: Int): ModeloInmueble {
+        val statement = connection.createStatement()
+        var result: ModeloInmueble
+        try {
+            val resultSet = statement.executeQuery("SELECT * FROM habitacion")
+            resultSet.next()
+            resultSet.getInt("id")
+            resultSet.close()
+            result = ModeloInmueble.Habitacion
+        } catch (e: Exception) {
+            try {
+                val resultSet = statement.executeQuery("SELECT * FROM piso")
+                resultSet.next()
+                resultSet.getInt("id")
+                resultSet.close()
+                result = ModeloInmueble.Piso
+            } catch (e: Exception) {
+                try {
+                    val resultSet = statement.executeQuery("SELECT * FROM local")
+                    resultSet.next()
+                    resultSet.getInt("id")
+                    resultSet.close()
+                    result = ModeloInmueble.Local
+                } catch (e: Exception) {
+                    result = ModeloInmueble.Garaje
+                }
+            }
+        }
+        statement.close()
+        return result
+    }
+
+    fun getInmuebleById(id: Int): InmuebleSprint2 {
+        return when (getModeloInmuebleById(id)) {
+            ModeloInmueble.Piso -> getPisoById(id)
+            ModeloInmueble.Local -> getLocalById(id)
+            ModeloInmueble.Garaje -> getGarajeById(id)
+            ModeloInmueble.Habitacion -> getHabitacionById(id)
+        }
+    }
+
+    fun getFavoritosDeUsuario(idUsuario: Int): List<Favorito> {
+        val statement = connection.createStatement()
+        val query = "SELECT * FROM favorito WHERE usuario = $idUsuario;"
+        val resultSet = statement.executeQuery(query)
+        val favoritos = mutableListOf<Favorito>()
+        while(resultSet.next()) {
+            val usuario = getUsuarioById(idUsuario)
+            val inmueble = getInmuebleById(resultSet.getInt("inmueble"))
+            val notas = resultSet.getString("notas")
+            val orden = resultSet.getInt("orden")
+            val favorito = Favorito(usuario, inmueble, notas, orden)
+            favoritos.add(favorito)
+        }
+        return favoritos
+    }
+
+    fun eliminarFavorito(favorito: Favorito) {
+        val statement = connection.createStatement()
+        val instruccion = "DELETE FROM favorito WHERE usuario = ${favorito.usuario.id} AND inmueble = ${favorito.inmueble.id};"
+        statement.execute(instruccion)
+        connection.commit()
+        statement.close()
     }
 
 }

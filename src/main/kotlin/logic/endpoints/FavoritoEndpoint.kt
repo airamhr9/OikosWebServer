@@ -1,13 +1,15 @@
 package logic.endpoints
 
+import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
 import logic.ResponseBuilder
 import objects.persistence.Favorito
+import persistence.DatabaseConnection
+import java.io.BufferedReader
 import java.net.URL
 
-// Modificar la clase EndpointHandler para que compile
 class FavoritoEndpoint(endpoint: String) : EndpointHandler<Favorito>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
@@ -28,10 +30,21 @@ class FavoritoEndpoint(endpoint: String) : EndpointHandler<Favorito>(endpoint) {
                 response = ResponseBuilder.createListResponse(favoritos, limit)
             }
             "POST" -> {
-                response = ""
+                response = "POST request"
+                val objectToPost = exchange.requestBody
+                val reader = BufferedReader(objectToPost.reader())
+                val favorito = Favorito.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                postFavorito(favorito)
             }
             "PUT" -> {
                 response = ""
+            }
+            "DELETE" -> {
+                response = "DELETE request"
+                val objectToPost = exchange.requestBody
+                val reader = BufferedReader(objectToPost.reader())
+                val favorito = Favorito.fromJson(JsonParser.parseReader(reader).asJsonObject)
+                deleteFavorito(favorito)
             }
             "OPTIONS" -> {
                 /**
@@ -56,8 +69,21 @@ class FavoritoEndpoint(endpoint: String) : EndpointHandler<Favorito>(endpoint) {
     }
 
     private fun getFavoritosdeUsuario(idUsuario: Int): List<Favorito> {
-        TODO("Not yet implemented")
+        val dbConnection = DatabaseConnection()
+        return dbConnection.getFavoritosDeUsuario(idUsuario)
     }
+
+    private fun postFavorito(favorito: Favorito) {
+        val dbConnection = DatabaseConnection()
+        dbConnection.storeFavorito(favorito)
+    }
+
+    private fun deleteFavorito(favorito: Favorito) {
+        val dbConnection = DatabaseConnection()
+        dbConnection.eliminarFavorito(favorito)
+    }
+
+
 
 
     override fun getIndividualById(objectId : Int): Favorito {

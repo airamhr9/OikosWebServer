@@ -3,7 +3,7 @@ package logic
 import com.sun.net.httpserver.HttpExchange
 import objects.SearchableById
 
-abstract class EndpointHandler<T : SearchableById>(val endpoint : String) {
+abstract class EndpointHandler<T>(val endpoint : String) {
 
     abstract fun handleExchange(exchange: HttpExchange)
     abstract fun getIndividualById(objectId : Int) : T

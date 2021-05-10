@@ -29,7 +29,7 @@ class Favorito(
             val inmueble = when (modeloInmueble) {
                 ModeloInmueble.Piso -> Piso.fromJson(inmuebleJsonObject)
                 ModeloInmueble.Local -> Local.fromJson(inmuebleJsonObject)
-                ModeloInmueble.Garjaje -> Garaje.fromJson(inmuebleJsonObject)
+                ModeloInmueble.Garaje -> Garaje.fromJson(inmuebleJsonObject)
                 ModeloInmueble.Habitacion -> Habitacion.fromJson(inmuebleJsonObject)
             }
 
