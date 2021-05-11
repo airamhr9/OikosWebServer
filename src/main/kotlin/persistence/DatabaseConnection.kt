@@ -11,8 +11,8 @@ import kotlin.system.exitProcess
 class DatabaseConnection {
     private val connection: Connection
 
-    private val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
-    //private val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
+    //private val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
+    private val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
 
     // private val databaseURL = "jdbc:postgresql://localhost:5432/oikos" // Hector antiguo
     // private val databaseURL = "jdbc:postgresql://localhost:5432/testdb" // Jaime antiguo
@@ -197,7 +197,7 @@ class DatabaseConnection {
 
     fun getHabitacionById(id: Int): Habitacion {
         val statement = connection.createStatement()
-        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN habitacion WHERE id=$id;")
+        val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN habitacion NATURAL JOIN piso WHERE id=$id;")
         resultSet.next()
         val habitacion = getInmuebleFromResultSet(resultSet, ModeloInmueble.Habitacion) as Habitacion
         resultSet.close()
@@ -563,7 +563,7 @@ class DatabaseConnection {
         return result
     }
 
-    fun getInmuebleById(id: Int): InmuebleSprint2 {
+    private fun getInmuebleById(id: Int): InmuebleSprint2 {
         return when (getModeloInmuebleById(id)) {
             ModeloInmueble.Piso -> getPisoById(id)
             ModeloInmueble.Local -> getLocalById(id)
