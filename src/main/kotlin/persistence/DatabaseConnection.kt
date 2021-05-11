@@ -535,21 +535,21 @@ class DatabaseConnection {
         val statement = connection.createStatement()
         var result: ModeloInmueble
         try {
-            val resultSet = statement.executeQuery("SELECT * FROM habitacion")
+            val resultSet = statement.executeQuery("SELECT * FROM habitacion WHERE id = $id;")
             resultSet.next()
             resultSet.getInt("id")
             resultSet.close()
             result = ModeloInmueble.Habitacion
         } catch (e: Exception) {
             try {
-                val resultSet = statement.executeQuery("SELECT * FROM piso")
+                val resultSet = statement.executeQuery("SELECT * FROM piso WHERE id = $id;")
                 resultSet.next()
                 resultSet.getInt("id")
                 resultSet.close()
                 result = ModeloInmueble.Piso
             } catch (e: Exception) {
                 try {
-                    val resultSet = statement.executeQuery("SELECT * FROM local")
+                    val resultSet = statement.executeQuery("SELECT * FROM local WHERE id = $id;")
                     resultSet.next()
                     resultSet.getInt("id")
                     resultSet.close()
