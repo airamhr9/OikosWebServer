@@ -574,7 +574,7 @@ class DatabaseConnection {
 
     fun getFavoritosDeUsuario(idUsuario: Int): List<Favorito> {
         val statement = connection.createStatement()
-        val query = "SELECT * FROM favorito WHERE usuario = $idUsuario;"
+        val query = "SELECT * FROM favorito WHERE usuario = $idUsuario ORDER BY orden;"
         val resultSet = statement.executeQuery(query)
         val favoritos = mutableListOf<Favorito>()
         while(resultSet.next()) {

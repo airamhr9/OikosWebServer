@@ -21,8 +21,6 @@ abstract class InmuebleSprint2(override var id: Int,
 ) : SearchableById, JsonConvertible {
 
     var esFavorito = false
-        get() = field
-        set(value) { field = value}
 
     private fun generarJsonBasico(): JsonObject {
         val result = JsonObject()

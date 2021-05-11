@@ -17,7 +17,6 @@ class ImageEndpoint(endpoint: String, private val folderName : String) : Endpoin
     //http://ip:9000/api/image/nombre_de_archivo.jpg
     override fun handleExchange(exchange: HttpExchange) {
         lateinit var response : String
-        println("Hi")
         when(exchange.requestMethod){
             "GET" -> {
                 val stringUri = exchange.requestURI.toString()
