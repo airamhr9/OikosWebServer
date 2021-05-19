@@ -16,12 +16,13 @@ class Habitacion(id: Int,
                  longitud: Double,
                  imagenes: Array<String>,
                  fecha: String,
+                 contadorVisitas: Int,
                  habitaciones: Int,
                  baños: Int,
                  garaje: Boolean,
                  var numCompañeros: Int,
 ) : Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
-            direccion, ciudad, latitud, longitud, imagenes, fecha, habitaciones, baños, garaje) {
+            direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas, habitaciones, baños, garaje) {
 
     override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
         jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Habitacion.value)
@@ -48,6 +49,7 @@ class Habitacion(id: Int,
             val latitud = jsonObject.get("latitud").asDouble
             val longitud = jsonObject.get("longitud").asDouble
             val fecha = jsonObject.get("fecha").asString
+            val contadorVisitas = jsonObject.get("contadorVisitas").asInt
 
             val listaUrlImagenes = jsonObject.getAsJsonArray("imagenes")
             val imagenes  = listaUrlImagenes.map { it.asString }.toTypedArray()
@@ -58,7 +60,7 @@ class Habitacion(id: Int,
             val numCompañeros = jsonObject.get("numCompañeros").asInt
 
             return Habitacion(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                direccion, ciudad, latitud, longitud, imagenes, fecha, habitaciones, baños, garaje, numCompañeros)
+                direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas, habitaciones, baños, garaje, numCompañeros)
         }
     }
 }

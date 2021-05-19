@@ -219,6 +219,7 @@ class DatabaseConnection {
         val longitud = resultSet.getDouble("longitud")
         val imagenes = getImagenesDeInmueble(resultSet.getInt("id"))
         val fecha = resultSet.getString("fecha")
+        val contadorVisitas = resultSet.getInt("contadorVisitas")
 
         return when (modelo) {
             ModeloInmueble.Piso -> {
@@ -226,16 +227,16 @@ class DatabaseConnection {
                 val baños = resultSet.getInt("baños")
                 val garaje = resultSet.getBoolean("garaje")
                 Piso(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
-                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, habitaciones, baños, garaje)
+                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, contadorVisitas, habitaciones, baños, garaje)
             }
             ModeloInmueble.Local -> {
                 val baños = resultSet.getInt("baños")
                 Local(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
-                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, baños)
+                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, contadorVisitas, baños)
             }
             ModeloInmueble.Garaje -> {
                 Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
-                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha)
+                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, contadorVisitas)
             }
             ModeloInmueble.Habitacion -> {
                 val habitaciones = resultSet.getInt("habitaciones")
@@ -243,7 +244,8 @@ class DatabaseConnection {
                 val garaje = resultSet.getBoolean("garaje")
                 val numCompañeros = resultSet.getInt("numCompañeros")
                 Habitacion(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
-                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, habitaciones, baños, garaje, numCompañeros)
+                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, contadorVisitas, habitaciones, baños,
+                    garaje, numCompañeros)
             }
         }
     }
@@ -266,9 +268,9 @@ class DatabaseConnection {
             l.id = getNuevoIdDeInmueble()
         }
         val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad," +
-                "latitud, longitud, propietario, fecha) " +
+                "latitud, longitud, propietario, fecha, contadorVisitas) " +
                 "VALUES (${l.id}, ${l.disponible}, '${l.tipo}', ${l.superficie},${l.precio},'${l.descripcion}'," +
-                " '${l.direccion}','${l.ciudad}',${l.latitud}, ${l.longitud}, ${l.propietario.id}, '${l.fecha}');"
+                " '${l.direccion}','${l.ciudad}',${l.latitud}, ${l.longitud}, ${l.propietario.id}, '${l.fecha}', ${l.contadorVisitas});"
         val sql1="INSERT INTO local (id, baños) VALUES (${l.id}, ${l.baños});"
         stmt.executeUpdate(sql)
         stmt.executeUpdate(sql1)
@@ -283,9 +285,9 @@ class DatabaseConnection {
             p.id = getNuevoIdDeInmueble()
         }
         val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad," +
-                "latitud, longitud, propietario, fecha) " +
+                "latitud, longitud, propietario, fecha, contadorVisitas) " +
                 "VALUES (${p.id}, ${p.disponible}, '${p.tipo}', ${p.superficie},${p.precio},'${p.descripcion}'," +
-                " '${p.direccion}','${p.ciudad}',${p.latitud}, ${p.longitud}, ${p.propietario.id}, '${p.fecha}');"
+                " '${p.direccion}','${p.ciudad}',${p.latitud}, ${p.longitud}, ${p.propietario.id}, '${p.fecha}', ${p.contadorVisitas});"
         val sql1="INSERT INTO piso (id, habitaciones, baños, garaje) VALUES (${p.id}, ${p.habitaciones}, ${p.baños}, ${p.garaje});"
         println(sql)
         stmt.executeUpdate(sql)
@@ -301,9 +303,9 @@ class DatabaseConnection {
             h.id = getNuevoIdDeInmueble()
         }
         val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad," +
-                "latitud, longitud, propietario, fecha) " +
+                "latitud, longitud, propietario, fecha, contadorVisitas) " +
                 "VALUES (${h.id}, ${h.disponible}, '${h.tipo}', ${h.superficie},${h.precio},'${h.descripcion}'," +
-                " '${h.direccion}','${h.ciudad}',${h.latitud}, ${h.longitud}, ${h.propietario.id}, '${h.fecha}');"
+                " '${h.direccion}','${h.ciudad}',${h.latitud}, ${h.longitud}, ${h.propietario.id}, '${h.fecha}', ${h.contadorVisitas});"
         val sql1="INSERT INTO piso (id, habitaciones, baños, garaje) VALUES (${h.id}, ${h.habitaciones}, ${h.baños}, ${h.garaje});"
         val sql2="INSERT INTO habitacion (id, numCompañeros) VALUES (${h.id}, ${h.numCompañeros});"
         stmt.executeUpdate(sql)
@@ -320,9 +322,9 @@ class DatabaseConnection {
             g.id = getNuevoIdDeInmueble()
         }
         val sql = "INSERT INTO inmueble (id, disponible, tipo, superficie, precio, descripcion, direccion, ciudad," +
-                "latitud, longitud, propietario, fecha) " +
+                "latitud, longitud, propietario, fecha, contadorVisitas) " +
                 "VALUES (${g.id}, ${g.disponible}, '${g.tipo}', ${g.superficie},${g.precio},'${g.descripcion}'," +
-                " '${g.direccion}','${g.ciudad}',${g.latitud}, ${g.longitud}, ${g.propietario.id}, '${g.fecha}');"
+                " '${g.direccion}','${g.ciudad}',${g.latitud}, ${g.longitud}, ${g.propietario.id}, '${g.fecha}', ${g.contadorVisitas});"
         val sql1="INSERT INTO garaje (id) VALUES (${g.id});"
         stmt.executeUpdate(sql)
         stmt.executeUpdate(sql1)

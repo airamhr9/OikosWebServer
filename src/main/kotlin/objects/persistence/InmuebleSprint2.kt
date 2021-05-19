@@ -5,7 +5,6 @@ import com.google.gson.JsonObject
 import objects.JsonConvertible
 import objects.SearchableById
 import java.net.InetAddress
-import java.util.*
 
 abstract class InmuebleSprint2(
     override var id: Int,
@@ -21,6 +20,7 @@ abstract class InmuebleSprint2(
     var longitud: Double,
     var imagenes: Array<String>,
     var fecha: String,
+    var contadorVisitas: Int,
 ) : SearchableById, JsonConvertible {
 
     var esFavorito = false
@@ -49,6 +49,7 @@ abstract class InmuebleSprint2(
         result.addProperty("descripcion", descripcion)
         result.add("imagenes", getUrlImagenes())
         result.addProperty("fecha", fecha)
+        result.addProperty("ContadorVisitas", contadorVisitas)
         result.addProperty("favorito", esFavorito)
 
         return result

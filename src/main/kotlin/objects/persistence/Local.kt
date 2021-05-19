@@ -16,9 +16,10 @@ class Local(id: Int,
             longitud: Double,
             imagenes: Array<String>,
             fecha: String,
+            contadorVisitas: Int,
             var baños: Int,
 ) : InmuebleSprint2(id, disponible, tipo, superficie, precio, propietario, descripcion,
-            direccion, ciudad, latitud, longitud, imagenes, fecha) {
+            direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas) {
 
     override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
         jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Local.value)
@@ -45,6 +46,7 @@ class Local(id: Int,
             val latitud = jsonObject.get("latitud").asDouble
             val longitud = jsonObject.get("longitud").asDouble
             val fecha = jsonObject.get("fecha").asString
+            val contadorVisitas = jsonObject.get("contadorVisitas").asInt
 
             val listaUrlImagenes = jsonObject.getAsJsonArray("imagenes")
             val imagenes  = listaUrlImagenes.map { it.asString }.toTypedArray()
@@ -52,7 +54,7 @@ class Local(id: Int,
             val baños = jsonObject.get("baños").asInt
 
             return Local(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                direccion, ciudad, latitud, longitud, imagenes, fecha, baños)
+                direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas, baños)
         }
     }
 }

@@ -16,11 +16,12 @@ open class Piso(id: Int,
                 longitud: Double,
                 imagenes: Array<String>,
                 fecha: String,
+                contadorVisitas: Int,
                 var habitaciones: Int,
                 var baños: Int,
                 var garaje: Boolean,
 ) : InmuebleSprint2(id, disponible, tipo, superficie, precio, propietario, descripcion,
-            direccion, ciudad, latitud, longitud, imagenes, fecha) {
+            direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas) {
 
     override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
         jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Piso.value)
@@ -49,6 +50,7 @@ open class Piso(id: Int,
             val latitud = jsonObject.get("latitud").asDouble
             val longitud = jsonObject.get("longitud").asDouble
             val fecha = jsonObject.get("fecha").asString
+            val contadorVisitas = jsonObject.get("contadorVisitas").asInt
 
             val listaUrlImagenes = jsonObject.getAsJsonArray("imagenes")
             val imagenes  = listaUrlImagenes.map { it.asString }.toTypedArray()
@@ -58,7 +60,7 @@ open class Piso(id: Int,
             val garaje = jsonObject.get("garaje").asBoolean
 
             return Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
-                direccion, ciudad, latitud, longitud, imagenes, fecha, habitaciones, baños, garaje)
+                direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas, habitaciones, baños, garaje)
         }
     }
 }
