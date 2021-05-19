@@ -3,7 +3,7 @@ package objects.persistence
 import persistence.DatabaseConnection
 import java.sql.ResultSet
 
-class FabricaInmueble {
+class FabricaInmueble private constructor() {
 
     companion object {
         private val databaseConnection = DatabaseConnection()
