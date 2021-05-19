@@ -5,19 +5,22 @@ import com.google.gson.JsonObject
 import objects.JsonConvertible
 import objects.SearchableById
 import java.net.InetAddress
+import java.util.*
 
-abstract class InmuebleSprint2(override var id: Int,
-                      var disponible: Boolean,
-                      var tipo: TipoInmueble,
-                      var superficie: Int,
-                      var precio: Double,
-                      var propietario: Usuario,
-                      var descripcion: String,
-                      var direccion: String,
-                      var ciudad: String,
-                      var latitud: Double,
-                      var longitud: Double,
-                      var imagenes: Array<String>,
+abstract class InmuebleSprint2(
+    override var id: Int,
+    var disponible: Boolean,
+    var tipo: TipoInmueble,
+    var superficie: Int,
+    var precio: Double,
+    var propietario: Usuario,
+    var descripcion: String,
+    var direccion: String,
+    var ciudad: String,
+    var latitud: Double,
+    var longitud: Double,
+    var imagenes: Array<String>,
+    var fecha: String,
 ) : SearchableById, JsonConvertible {
 
     var esFavorito = false
@@ -44,13 +47,17 @@ abstract class InmuebleSprint2(override var id: Int,
         result.addProperty("superficie", superficie)
         result.add("propietario", propietario.toJson())
         result.addProperty("descripcion", descripcion)
+        result.add("imagenes", getUrlImagenes())
+        result.addProperty("fecha", fecha)
         result.addProperty("favorito", esFavorito)
 
+        return result
+    }
+
+    private fun getUrlImagenes(): JsonArray {
         val listaUrlImagenes = JsonArray()
         imagenes.forEach { listaUrlImagenes.add(urlImagen + it) }
-        result.add("imagenes", listaUrlImagenes)
-
-        return result
+        return listaUrlImagenes
     }
 
     fun toJsonReducido(): JsonObject {
