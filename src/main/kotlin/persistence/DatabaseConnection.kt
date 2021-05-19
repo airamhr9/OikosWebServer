@@ -36,7 +36,7 @@ class DatabaseConnection {
             resultSet.getString("imagen"))
     }
 
-    private fun getImagenesDeInmueble(idInmueble: Int): List<String> {
+    fun getImagenesDeInmueble(idInmueble: Int): List<String> {
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT * FROM imagen WHERE inmueble = $idInmueble")
         val nombresImagenes = mutableListOf<String>()
@@ -73,7 +73,7 @@ class DatabaseConnection {
 
         val inmueblesFavoritosDeUsuario = getFavoritosDeUsuario(idUsuario).map {it.inmueble}
         while ( sql.next() ) {
-            val inmueble = getInmuebleFromResultSet(sql, modelo)
+            val inmueble = FabricaInmueble.crearInmueble(sql, modelo)
             if (inmueblesFavoritosDeUsuario.contains(inmueble)) {
                 inmueble.esFavorito = true
             }
@@ -100,7 +100,7 @@ class DatabaseConnection {
                 "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
                 "FETCH FIRST " + num.toString() +" ROWS ONLY;")
         while ( sql.next() ) {
-            val inmueble = getInmuebleFromResultSet(sql, modelo)
+            val inmueble = FabricaInmueble.crearInmueble(sql, modelo)
             list.add(inmueble)
         }
         sql.close()
@@ -116,7 +116,7 @@ class DatabaseConnection {
                 "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
                 "FETCH FIRST " + num.toString() +" ROWS ONLY;")
         while ( sql.next() ) {
-            val inmueble = getInmuebleFromResultSet(sql, modelo)
+            val inmueble = FabricaInmueble.crearInmueble(sql, modelo)
             list.add(inmueble)
         }
         sql.close()
@@ -132,7 +132,7 @@ class DatabaseConnection {
                 "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
                 "FETCH FIRST " + num.toString() +" ROWS ONLY;")
         while ( sql.next() ) {
-            val inmueble = getInmuebleFromResultSet(sql, modelo)
+            val inmueble = FabricaInmueble.crearInmueble(sql, modelo)
             list.add(inmueble)
         }
         sql.close()
@@ -149,7 +149,7 @@ class DatabaseConnection {
                 "( latitud >= "+x+" - 0.2 AND latitud <= "+x+" + 0.2 ) AND ( longitud >= "+y+" - 0.2 AND longitud <= "+y+" + 0.2 ) AND disponible = true " +
                 "FETCH FIRST " + num.toString() +" ROWS ONLY;")
         while ( sql.next() ) {
-            val inmueble = getInmuebleFromResultSet(sql, modelo)
+            val inmueble = FabricaInmueble.crearInmueble(sql, modelo)
             list.add(inmueble)
         }
         sql.close()
@@ -169,7 +169,7 @@ class DatabaseConnection {
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN piso WHERE id=$id;")
         resultSet.next()
-        val piso = getInmuebleFromResultSet(resultSet, ModeloInmueble.Piso) as Piso
+        val piso = FabricaInmueble.crearInmueble(resultSet, ModeloInmueble.Piso) as Piso
         resultSet.close()
         statement.close()
         return piso
@@ -179,7 +179,7 @@ class DatabaseConnection {
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN local WHERE id=$id;")
         resultSet.next()
-        val local = getInmuebleFromResultSet(resultSet, ModeloInmueble.Local) as Local
+        val local = FabricaInmueble.crearInmueble(resultSet, ModeloInmueble.Local) as Local
         resultSet.close()
         statement.close()
         return local
@@ -189,7 +189,7 @@ class DatabaseConnection {
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN garaje WHERE id=$id;")
         resultSet.next()
-        val garaje = getInmuebleFromResultSet(resultSet, ModeloInmueble.Garaje) as Garaje
+        val garaje = FabricaInmueble.crearInmueble(resultSet, ModeloInmueble.Garaje) as Garaje
         resultSet.close()
         statement.close()
         return garaje
@@ -199,55 +199,10 @@ class DatabaseConnection {
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN habitacion NATURAL JOIN piso WHERE id=$id;")
         resultSet.next()
-        val habitacion = getInmuebleFromResultSet(resultSet, ModeloInmueble.Habitacion) as Habitacion
+        val habitacion = FabricaInmueble.crearInmueble(resultSet, ModeloInmueble.Habitacion) as Habitacion
         resultSet.close()
         statement.close()
         return habitacion
-    }
-
-    private fun getInmuebleFromResultSet(resultSet: ResultSet, modelo: ModeloInmueble): InmuebleSprint2 {
-        val id = resultSet.getInt("id")
-        val disponible = resultSet.getBoolean("disponible")
-        val tipo = TipoInmueble.fromString(resultSet.getString("tipo"))
-        val superficie = resultSet.getInt("superficie")
-        val precio = resultSet.getDouble("precio")
-        val propietario = getUsuarioById(resultSet.getInt("propietario"))
-        val descripcion = resultSet.getString("descripcion")
-        val direccion = resultSet.getString("direccion")
-        val ciudad = resultSet.getString("ciudad")
-        val latitud = resultSet.getDouble("latitud")
-        val longitud = resultSet.getDouble("longitud")
-        val imagenes = getImagenesDeInmueble(resultSet.getInt("id"))
-        val fecha = resultSet.getString("fecha")
-        val contadorVisitas = resultSet.getInt("contadorVisitas")
-
-        return when (modelo) {
-            ModeloInmueble.Piso -> {
-                val habitaciones = resultSet.getInt("habitaciones")
-                val baños = resultSet.getInt("baños")
-                val garaje = resultSet.getBoolean("garaje")
-                Piso(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
-                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, contadorVisitas, habitaciones, baños, garaje)
-            }
-            ModeloInmueble.Local -> {
-                val baños = resultSet.getInt("baños")
-                Local(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
-                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, contadorVisitas, baños)
-            }
-            ModeloInmueble.Garaje -> {
-                Garaje(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
-                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, contadorVisitas)
-            }
-            ModeloInmueble.Habitacion -> {
-                val habitaciones = resultSet.getInt("habitaciones")
-                val baños = resultSet.getInt("baños")
-                val garaje = resultSet.getBoolean("garaje")
-                val numCompañeros = resultSet.getInt("numCompañeros")
-                Habitacion(id, disponible, tipo, superficie, precio, propietario, descripcion, direccion,
-                    ciudad, latitud, longitud, imagenes.toTypedArray(), fecha, contadorVisitas, habitaciones, baños,
-                    garaje, numCompañeros)
-            }
-        }
     }
 
     private fun insertarImagen(inmueble:InmuebleSprint2) {
@@ -434,7 +389,7 @@ class DatabaseConnection {
         val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN piso "
                 + "WHERE propietario = $idUsuario")
         while (resultSet.next()) {
-            result.add(getInmuebleFromResultSet(resultSet, ModeloInmueble.Piso))
+            result.add(FabricaInmueble.crearInmueble(resultSet, ModeloInmueble.Piso))
         }
         resultSet.close()
         statement.close()
@@ -447,7 +402,7 @@ class DatabaseConnection {
         val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN local "
                 + "WHERE propietario = $idUsuario")
         while (resultSet.next()) {
-            result.add(getInmuebleFromResultSet(resultSet, ModeloInmueble.Local))
+            result.add(FabricaInmueble.crearInmueble(resultSet, ModeloInmueble.Local))
         }
         resultSet.close()
         statement.close()
@@ -460,7 +415,7 @@ class DatabaseConnection {
         val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN garaje "
                 + "WHERE propietario = $idUsuario")
         while (resultSet.next()) {
-            result.add(getInmuebleFromResultSet(resultSet, ModeloInmueble.Garaje))
+            result.add(FabricaInmueble.crearInmueble(resultSet, ModeloInmueble.Garaje))
         }
         resultSet.close()
         statement.close()
@@ -473,7 +428,7 @@ class DatabaseConnection {
         val resultSet = statement.executeQuery("SELECT * FROM inmueble NATURAL JOIN piso NATURAL JOIN habitacion "
                 + "WHERE propietario = $idUsuario")
         while (resultSet.next()) {
-            result.add(getInmuebleFromResultSet(resultSet, ModeloInmueble.Habitacion))
+            result.add(FabricaInmueble.crearInmueble(resultSet, ModeloInmueble.Habitacion))
         }
         resultSet.close()
         statement.close()

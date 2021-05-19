@@ -49,7 +49,7 @@ abstract class InmuebleSprint2(
         result.addProperty("descripcion", descripcion)
         result.add("imagenes", getUrlImagenes())
         result.addProperty("fecha", fecha)
-        result.addProperty("ContadorVisitas", contadorVisitas)
+        result.addProperty("contadorVisitas", contadorVisitas)
         result.addProperty("favorito", esFavorito)
 
         return result
