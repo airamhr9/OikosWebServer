@@ -169,19 +169,19 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     }*/
 
     fun getLocalById(objectId: Int): Local {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.getLocalById(objectId)
     }
     fun getGarajeById(objectId: Int): Garaje {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.getGarajeById(objectId)
     }
     fun getPisoById(objectId: Int): Piso {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.getPisoById(objectId)
     }
     fun getHabitacionById(objectId: Int): Habitacion {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.getHabitacionById(objectId)
     }
 
@@ -191,57 +191,57 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
     }*/
 
     fun getListWithCoordinates(num:Int, x:Double, y:Double): List<InmuebleSprint2> {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.listaDeInmueblesPorCordenadas(num, x, y)
     }
     fun getListWithFilters(num: Int , precioMin: Double, precioMax: Double?, supMin: Int, supMan: Int?,
                            habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?,modelo:
                            ModeloInmueble,numComp:Int?, idUsuario: Int): List<InmuebleSprint2> {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.listaDeInmueblesPorFiltrado(num, precioMin, precioMax, supMin, supMan, habitaciones, baños,
             garaje, ciudad, tipo,modelo,numComp, idUsuario)
     }
     fun borrarInmueble(id:Int){
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.borrarInmuebleById(id)
     }
 
     fun postLocal(newObject: Local){
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.crearLocal(newObject)
     }
     fun postHabitacion(newObject:Habitacion){
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.crearHabitacion(newObject)
     }
     fun postGaraje(newObject: Garaje){
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.crearGaraje(newObject)
     }
     fun postPiso(newObject: Piso){
         println("Posteando piso")
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.crearPiso(newObject)
     }
     fun putLocal(newObject: Local){
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.actualizarLocal(newObject)
     }
     fun putHabitacion(newObject:Habitacion){
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.actualizarHabitacion(newObject)
     }
     fun putGaraje(newObject: Garaje){
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.actualizarGaraje(newObject)
     }
     fun putPiso(newObject: Piso){
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.actualizarPiso(newObject)
     }
 
     fun getInmueblesDeUsuario(idUsuario: Int): List<InmuebleSprint2> {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.getInmueblesDeUsuario(idUsuario)
     }
 

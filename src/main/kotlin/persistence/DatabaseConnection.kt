@@ -8,7 +8,7 @@ import java.sql.ResultSet
 import kotlin.system.exitProcess
 
 
-class DatabaseConnection {
+class DatabaseConnection private constructor() {
     private val connection: Connection
 
     private val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
@@ -22,12 +22,24 @@ class DatabaseConnection {
             Class.forName("org.postgresql.Driver")
             connection = DriverManager.getConnection(databaseURL, "postgres", "mysecretpassword")
             connection.autoCommit = false
+            println("Opened database successfully")
         } catch (e: Exception) {
             e.printStackTrace()
             System.err.println(e.javaClass.name + ": " + e.message)
-            exitProcess(0)
+            println("URL de la base de datos: $databaseURL")
+            exitProcess(-1)
         }
-        println("Opened database successfully")
+    }
+
+    companion object {
+        private var databaseConnection: DatabaseConnection? = null
+
+        fun getInstance(): DatabaseConnection {
+            if (databaseConnection == null) {
+                databaseConnection = DatabaseConnection()
+            }
+            return databaseConnection!!
+        }
     }
 
     private fun getUsuarioFromResultSet(resultSet: ResultSet): Usuario {

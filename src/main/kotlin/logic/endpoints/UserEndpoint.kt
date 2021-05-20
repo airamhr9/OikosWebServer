@@ -93,15 +93,15 @@ class UserEndpoint(endpoint: String) : EndpointHandler<Usuario>(endpoint) {
         TODO("Not yet implemented")
     }
     fun postUsuario(newObject: Usuario) {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         dbConnection.crearUsuario(newObject)
     }
     fun emailRepetido(newObject: Usuario):Boolean{
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.revisarEmail(newObject)
     }
     fun existeUsuario(email:String, cont:String):Usuario?{
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.comprobarUsuario(email,cont)
     }
 

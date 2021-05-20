@@ -78,12 +78,12 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler<Busqueda>(endpoint) {
         exchange.close()
     }
     fun getBusquedatList(usuario: Int): JsonArray {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.listaBusqueda(usuario)
     }
 
     override fun getIndividualById(objectId: Int): Busqueda {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.guardadoById(objectId)
     }
 
@@ -107,7 +107,7 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler<Busqueda>(endpoint) {
         TODO("Not yet implemented")
     }
     fun postBusqueda(busqueda:String, usuario:Int){
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         dbConnection.crearGuardado(busqueda,usuario)
     }
 }

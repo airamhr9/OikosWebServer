@@ -6,7 +6,7 @@ import java.sql.ResultSet
 class FabricaInmueble private constructor() {
 
     companion object {
-        private val databaseConnection = DatabaseConnection()
+        private val databaseConnection = DatabaseConnection.getInstance()
 
         fun crearInmueble(resultSet: ResultSet, modelo: ModeloInmueble): InmuebleSprint2 {
             val id = resultSet.getInt("id")

@@ -73,21 +73,21 @@ class FavoritoEndpoint(endpoint: String) : EndpointHandler<Favorito>(endpoint) {
     }
 
     private fun getFavoritosdeUsuario(idUsuario: Int): List<Favorito> {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.getFavoritosDeUsuario(idUsuario)
     }
 
     private fun postFavorito(favorito: Favorito) {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         dbConnection.storeFavorito(favorito)
     }
 
     private fun deleteFavorito(favorito: Favorito) {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         dbConnection.eliminarFavorito(favorito)
     }
     private fun putFavorito(favorito: Favorito) {
-        val dbConnection = DatabaseConnection()
+        val dbConnection = DatabaseConnection.getInstance()
         dbConnection.modificarFavorito(favorito)
     }
 

@@ -38,7 +38,7 @@ class Local(id: Int,
             val tipo = TipoInmueble.fromString(jsonObject.get("tipo").asString)
             val superficie = jsonObject.get("superficie").asInt
             val precio = jsonObject.get("precio").asDouble
-            val connection = DatabaseConnection()
+            val connection = DatabaseConnection.getInstance()
             val propietario = connection.getUsuarioById(jsonObject.getAsJsonObject("propietario").get("id").asInt)
             val descripcion = jsonObject.get("descripcion").asString.toString()
             val direccion = jsonObject.get("direccion").asString
