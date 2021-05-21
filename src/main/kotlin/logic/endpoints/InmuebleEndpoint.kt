@@ -10,7 +10,7 @@ import persistence.DatabaseConnection
 import java.io.BufferedReader
 import java.net.URL
 
-class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
+class InmuebleEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
         lateinit var response : String
@@ -245,23 +245,23 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
         return dbConnection.getInmueblesDeUsuario(idUsuario)
     }
 
-    override fun getIndividualById(objectId: Int): Inmueble {
+    override fun getIndividualById(objectId: Int): InmuebleSprint2 {
         TODO("Not yet implemented")
     }
 
-    override fun getDefaultList(num: Int): List<Inmueble> {
+    override fun getDefaultList(num: Int): List<InmuebleSprint2> {
         TODO("Not yet implemented")
     }
 
-    override fun getListByIds(idList: List<Int>): List<Inmueble> {
+    override fun getListByIds(idList: List<Int>): List<InmuebleSprint2> {
         TODO("Not yet implemented")
     }
 
-    override fun postIndividual(newObject : Inmueble): Inmueble {
+    override fun postIndividual(newObject : InmuebleSprint2): InmuebleSprint2 {
         TODO("Not yet implemented")
     }
 
-    override fun put(modifiedObject: Inmueble): Inmueble {
+    override fun put(modifiedObject: InmuebleSprint2): InmuebleSprint2 {
         TODO("Not yet implemented")
     }
 
