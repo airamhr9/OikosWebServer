@@ -537,7 +537,7 @@ class DatabaseConnection private constructor() {
         return result
     }
 
-    private fun getInmuebleById(id: Int): InmuebleSprint2 {
+    fun getInmuebleById(id: Int): InmuebleSprint2 {
         return when (getModeloInmuebleById(id)) {
             ModeloInmueble.Piso -> getPisoById(id)
             ModeloInmueble.Local -> getLocalById(id)
@@ -583,6 +583,18 @@ class DatabaseConnection private constructor() {
         resultSet.close()
         statement.close()
         return result
+    }
+
+    fun actualizarInmueble(inmueble: InmuebleSprint2) {
+        if (inmueble is Habitacion) {
+            actualizarHabitacion(inmueble)
+        } else if (inmueble is Piso) {
+            actualizarPiso(inmueble)
+        } else if (inmueble is Local) {
+            actualizarLocal(inmueble)
+        } else {
+            actualizarGaraje(inmueble as Garaje)
+        }
     }
 
 }

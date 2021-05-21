@@ -53,6 +53,12 @@ fun main(args: Array<String>){
         }
     }
 
+    server.addEndpoint("/api/visitas") {
+        exchange: HttpExchange -> GlobalScope.launch {
+            VisitasEndpoint("/api/visitas").handleExchange(exchange)
+        }
+    }
+
     server.addEndpoint("/api/hello/") {
             exchange: HttpExchange -> GlobalScope.launch {
             val response = "Hello bro test ok"
