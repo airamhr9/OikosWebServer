@@ -17,7 +17,7 @@ class Garaje(id: Int,
              imagenes: Array<String>,
              fecha: String,
              contadorVisitas: Int,
-) : InmuebleSprint2(id, disponible, tipo, superficie, precio, propietario, descripcion,
+) : Inmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
             direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas) {
 
     override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {

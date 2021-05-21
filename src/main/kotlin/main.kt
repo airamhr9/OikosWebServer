@@ -5,8 +5,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import logic.endpoints.*
-import objects.persistence.InmuebleSprint2
-import persistence.DatabaseConnection
 import java.io.File
 
 fun main(args: Array<String>){

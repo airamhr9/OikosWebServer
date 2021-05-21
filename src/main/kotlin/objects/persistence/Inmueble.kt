@@ -6,7 +6,7 @@ import objects.JsonConvertible
 import objects.SearchableById
 import java.net.InetAddress
 
-abstract class InmuebleSprint2(
+abstract class Inmueble(
     override var id: Int,
     var disponible: Boolean,
     var tipo: TipoInmueble,
@@ -69,7 +69,7 @@ abstract class InmuebleSprint2(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is InmuebleSprint2) {
+        if (other is Inmueble) {
             return id == other.id
         }
         return false

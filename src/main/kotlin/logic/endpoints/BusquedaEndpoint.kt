@@ -5,7 +5,6 @@ import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
-import logic.ResponseBuilder
 import objects.persistence.Busqueda
 import persistence.DatabaseConnection
 import java.io.BufferedReader
@@ -79,12 +78,11 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler<Busqueda>(endpoint) {
     }
     fun getBusquedatList(usuario: Int): JsonArray {
         val dbConnection = DatabaseConnection.getInstance()
-        return dbConnection.listaBusqueda(usuario)
+        return dbConnection.listaDeBusquedasGuardadas(usuario)
     }
 
     override fun getIndividualById(objectId: Int): Busqueda {
-        val dbConnection = DatabaseConnection.getInstance()
-        return dbConnection.guardadoById(objectId)
+        TODO("Not yet implemented")
     }
 
     override fun getDefaultList(num: Int): List<Busqueda> {
@@ -108,6 +106,6 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler<Busqueda>(endpoint) {
     }
     fun postBusqueda(busqueda:String, usuario:Int){
         val dbConnection = DatabaseConnection.getInstance()
-        dbConnection.crearGuardado(busqueda,usuario)
+        dbConnection.crearBusquedaGuardada(busqueda,usuario)
     }
 }

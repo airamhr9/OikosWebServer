@@ -8,7 +8,7 @@ class FabricaInmueble private constructor() {
     companion object {
         private val databaseConnection = DatabaseConnection.getInstance()
 
-        fun crearInmueble(resultSet: ResultSet, modelo: ModeloInmueble): InmuebleSprint2 {
+        fun crearInmueble(resultSet: ResultSet, modelo: ModeloInmueble): Inmueble {
             val id = resultSet.getInt("id")
             val disponible = resultSet.getBoolean("disponible")
             val tipo = TipoInmueble.fromString(resultSet.getString("tipo"))

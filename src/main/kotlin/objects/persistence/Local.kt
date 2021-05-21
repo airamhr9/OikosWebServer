@@ -18,7 +18,7 @@ class Local(id: Int,
             fecha: String,
             contadorVisitas: Int,
             var baños: Int,
-) : InmuebleSprint2(id, disponible, tipo, superficie, precio, propietario, descripcion,
+) : Inmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
             direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas) {
 
     override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {

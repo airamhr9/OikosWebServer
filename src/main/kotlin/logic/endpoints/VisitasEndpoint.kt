@@ -3,11 +3,11 @@ package logic.endpoints
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
-import objects.persistence.InmuebleSprint2
+import objects.persistence.Inmueble
 import persistence.DatabaseConnection
 import java.net.URL
 
-class VisitasEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endpoint) {
+class VisitasEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
         var response = ""
@@ -34,23 +34,23 @@ class VisitasEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endpo
         databaseConnection.actualizarInmueble(inmueble)
     }
 
-    override fun getIndividualById(objectId: Int): InmuebleSprint2 {
+    override fun getIndividualById(objectId: Int): Inmueble {
         TODO("Not yet implemented")
     }
 
-    override fun getDefaultList(num: Int): List<InmuebleSprint2> {
+    override fun getDefaultList(num: Int): List<Inmueble> {
         TODO("Not yet implemented")
     }
 
-    override fun getListByIds(idList: List<Int>): List<InmuebleSprint2> {
+    override fun getListByIds(idList: List<Int>): List<Inmueble> {
         TODO("Not yet implemented")
     }
 
-    override fun postIndividual(newObject: InmuebleSprint2): InmuebleSprint2 {
+    override fun postIndividual(newObject: Inmueble): Inmueble {
         TODO("Not yet implemented")
     }
 
-    override fun put(modifiedObject: InmuebleSprint2): InmuebleSprint2 {
+    override fun put(modifiedObject: Inmueble): Inmueble {
         TODO("Not yet implemented")
     }
 

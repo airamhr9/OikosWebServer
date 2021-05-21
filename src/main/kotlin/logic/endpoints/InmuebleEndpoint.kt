@@ -10,7 +10,7 @@ import persistence.DatabaseConnection
 import java.io.BufferedReader
 import java.net.URL
 
-class InmuebleEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endpoint) {
+class InmuebleEndpoint(endpoint: String) : EndpointHandler<Inmueble>(endpoint) {
 
     override fun handleExchange(exchange: HttpExchange) {
         lateinit var response : String
@@ -105,7 +105,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endp
                             splitted[5]
                         else splitted[0]
                     }.toTypedArray()
-                    putLocal(local)
+                    putInmueble(local)
                 }
                 else if(modelo=="habitacion"){val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     habitacion.imagenes = habitacion.imagenes.map {
@@ -114,7 +114,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endp
                             splitted[5]
                         else splitted[0]
                     }.toTypedArray()
-                    putHabitacion(habitacion)
+                    putInmueble(habitacion)
                 }
                 else if(modelo=="garaje"){val garaje = Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     garaje.imagenes = garaje.imagenes.map {
@@ -123,7 +123,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endp
                             splitted[5]
                         else splitted[0]
                     }.toTypedArray()
-                    putGaraje(garaje)
+                    putInmueble(garaje)
                 }
                 else if(modelo=="piso"){val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
                     piso.imagenes = piso.imagenes.map {
@@ -132,7 +132,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endp
                             splitted[5]
                         else splitted[0]
                     }.toTypedArray()
-                    putPiso(piso)
+                    putInmueble(piso)
                 }
             }
             "DELETE" -> {
@@ -190,13 +190,13 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endp
         return dbConnection.listaDeInmueblesPorDefecto(num)
     }*/
 
-    fun getListWithCoordinates(num:Int, x:Double, y:Double): List<InmuebleSprint2> {
+    fun getListWithCoordinates(num:Int, x:Double, y:Double): List<Inmueble> {
         val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.listaDeInmueblesPorCordenadas(num, x, y)
     }
     fun getListWithFilters(num: Int , precioMin: Double, precioMax: Double?, supMin: Int, supMan: Int?,
                            habitaciones: Int, baños: Int, garaje: Boolean?, ciudad: String?, tipo: String?,modelo:
-                           ModeloInmueble,numComp:Int?, idUsuario: Int): List<InmuebleSprint2> {
+                           ModeloInmueble,numComp:Int?, idUsuario: Int): List<Inmueble> {
         val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.listaDeInmueblesPorFiltrado(num, precioMin, precioMax, supMin, supMan, habitaciones, baños,
             garaje, ciudad, tipo,modelo,numComp, idUsuario)
@@ -223,7 +223,8 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endp
         val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.crearPiso(newObject)
     }
-    fun putLocal(newObject: Local){
+
+    /*fun putLocal(newObject: Local){
         val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.actualizarLocal(newObject)
     }
@@ -238,30 +239,35 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler<InmuebleSprint2>(endp
     fun putPiso(newObject: Piso){
         val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.actualizarPiso(newObject)
+    }*/
+
+    fun putInmueble(inmueble: Inmueble) {
+        val dbConnection = DatabaseConnection.getInstance()
+        dbConnection.actualizarInmueble(inmueble)
     }
 
-    fun getInmueblesDeUsuario(idUsuario: Int): List<InmuebleSprint2> {
+    fun getInmueblesDeUsuario(idUsuario: Int): List<Inmueble> {
         val dbConnection = DatabaseConnection.getInstance()
         return dbConnection.getInmueblesDeUsuario(idUsuario)
     }
 
-    override fun getIndividualById(objectId: Int): InmuebleSprint2 {
+    override fun getIndividualById(objectId: Int): Inmueble {
         TODO("Not yet implemented")
     }
 
-    override fun getDefaultList(num: Int): List<InmuebleSprint2> {
+    override fun getDefaultList(num: Int): List<Inmueble> {
         TODO("Not yet implemented")
     }
 
-    override fun getListByIds(idList: List<Int>): List<InmuebleSprint2> {
+    override fun getListByIds(idList: List<Int>): List<Inmueble> {
         TODO("Not yet implemented")
     }
 
-    override fun postIndividual(newObject : InmuebleSprint2): InmuebleSprint2 {
+    override fun postIndividual(newObject : Inmueble): Inmueble {
         TODO("Not yet implemented")
     }
 
-    override fun put(modifiedObject: InmuebleSprint2): InmuebleSprint2 {
+    override fun put(modifiedObject: Inmueble): Inmueble {
         TODO("Not yet implemented")
     }
 

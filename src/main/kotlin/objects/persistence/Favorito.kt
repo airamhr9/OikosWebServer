@@ -5,7 +5,7 @@ import objects.JsonConvertible
 
 class Favorito(
     var usuario: Usuario,
-    var inmueble: InmuebleSprint2,
+    var inmueble: Inmueble,
     var notas: String,
     var orden: Int
 ) : JsonConvertible {

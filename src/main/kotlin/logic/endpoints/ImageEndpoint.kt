@@ -1,19 +1,16 @@
 package logic.endpoints
 
-import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
 import logic.RequestParser
-import objects.persistence.InmuebleSprint2
-import java.io.BufferedReader
+import objects.persistence.Inmueble
 import java.io.File
-import java.io.InputStream
 import java.lang.Exception
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
-class ImageEndpoint(endpoint: String, private val folderName : String) : EndpointHandler<InmuebleSprint2>(endpoint) {
+class ImageEndpoint(endpoint: String, private val folderName : String) : EndpointHandler<Inmueble>(endpoint) {
     //http://ip:9000/api/image/nombre_de_archivo.jpg
     override fun handleExchange(exchange: HttpExchange) {
         lateinit var response : String
@@ -60,23 +57,23 @@ class ImageEndpoint(endpoint: String, private val folderName : String) : Endpoin
         exchange.close()
     }
 
-    override fun getIndividualById(objectId: Int): InmuebleSprint2 {
+    override fun getIndividualById(objectId: Int): Inmueble {
         TODO("Not yet implemented")
     }
 
-    override fun getDefaultList(num:Int): List<InmuebleSprint2> {
+    override fun getDefaultList(num:Int): List<Inmueble> {
         TODO("Not yet implemented")
     }
 
-    override fun getListByIds(idList: List<Int>): List<InmuebleSprint2> {
+    override fun getListByIds(idList: List<Int>): List<Inmueble> {
         TODO("Not yet implemented")
     }
 
-    override fun postIndividual(newObject : InmuebleSprint2): InmuebleSprint2 {
+    override fun postIndividual(newObject : Inmueble): Inmueble {
         TODO("Not yet implemented")
     }
 
-    override fun put(modifiedObject: InmuebleSprint2): InmuebleSprint2 {
+    override fun put(modifiedObject: Inmueble): Inmueble {
         TODO("Not yet implemented")
     }
 
