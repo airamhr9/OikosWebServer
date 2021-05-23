@@ -17,20 +17,20 @@ class ImageEndpoint(endpoint: String, private val folderName: String) : Endpoint
 
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
         val stringUri = exchange.requestURI.toString()
-        try{
+        try {
             val imageName = stringUri.substring(11, stringUri.length)
-            if(imageName.isEmpty()) throw Exception()
+            if (imageName.isEmpty()) throw Exception()
             val image = File(folderName, imageName)
-            if(!image.exists()) throw Exception()
+            if (!image.exists()) throw Exception()
             exchange.sendResponseHeaders(200, image.length())
             val outputStream = exchange.responseBody;
             Files.copy(image.toPath(), outputStream);
             outputStream.flush()
             exchange.close()
-            return
 
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             respuesta.response = "Not an image"
+            respuesta.codigoRespuesta = 404
         }
     }
 
