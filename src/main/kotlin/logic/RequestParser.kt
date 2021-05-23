@@ -10,8 +10,12 @@ class RequestParser {
     companion object{
 
         fun getQueryParameters(request: URL) : Map<String, Any?>{
-            val initialScan = initialQueryScan(request)
-            return processMap(initialScan)
+            try {
+                val initialScan = initialQueryScan(request)
+                return processMap(initialScan)
+            } catch (e: Exception) {
+                return mutableMapOf<String, Any?>()
+            }
         }
 
         //Devuelve una lista por si hay parámetros repetidos en la url
