@@ -62,18 +62,27 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler(endpoint) {
         val reader = BufferedReader(objectToPut.reader())
         val url = exchange.requestURI.toString()
         val modelo = url.substring(22)
-        when (modelo) {
-            "piso" -> putPiso(reader)
-            "garaje" -> putGaraje(reader)
-            "habitacion" -> putHabitacion(reader)
-            "local" -> putLocal(reader)
+        val inmueble = when (modelo) {
+            "piso" -> Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
+            "habitacion" -> Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
+            "local" -> Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
+            else -> Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
         }
+        inmueble.imagenes = inmueble.imagenes.map {
+            val splitted = it.split("/")
+            if (splitted.size > 1) {
+                splitted[5]
+            } else {
+                splitted[0]
+            }
+        }.toTypedArray()
+        databaseConnection.actualizarInmueble(inmueble)
     }
 
     override fun deleteMethod(exchange: HttpExchange, respuesta: Respuesta) {
         respuesta.response = "DELETE request"
         val url = exchange.requestURI.toString()
-        val id = url.substring(18).toInt();
+        val id = url.substring(18).toInt()
         databaseConnection.borrarInmuebleById(id)
     }
 
@@ -103,49 +112,5 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler(endpoint) {
                 habitaciones, baños, garaje, ciudad, tipo, ModeloInmueble.fromString(modelo), numComp, idUsuario),
             limit
         )
-    }
-
-    private fun putPiso(reader: BufferedReader) {
-        val piso = Piso.fromJson(JsonParser.parseReader(reader).asJsonObject)
-        piso.imagenes = piso.imagenes.map {
-            val splitted = it.split("/")
-            if (splitted.size > 1)
-                splitted[5]
-            else splitted[0]
-        }.toTypedArray()
-        databaseConnection.actualizarInmueble(piso)
-    }
-
-    private fun putGaraje(reader: BufferedReader) {
-        val garaje = Garaje.fromJson(JsonParser.parseReader(reader).asJsonObject)
-        garaje.imagenes = garaje.imagenes.map {
-            val splitted = it.split("/")
-            if (splitted.size > 1)
-                splitted[5]
-            else splitted[0]
-        }.toTypedArray()
-        databaseConnection.actualizarInmueble(garaje)
-    }
-
-    private fun putHabitacion(reader: BufferedReader) {
-        val habitacion = Habitacion.fromJson(JsonParser.parseReader(reader).asJsonObject)
-        habitacion.imagenes = habitacion.imagenes.map {
-            val splitted = it.split("/")
-            if (splitted.size > 1)
-                splitted[5]
-            else splitted[0]
-        }.toTypedArray()
-        databaseConnection.actualizarInmueble(habitacion)
-    }
-
-    private fun putLocal(reader: BufferedReader) {
-        val local = Local.fromJson(JsonParser.parseReader(reader).asJsonObject)
-        local.imagenes = local.imagenes.map {
-            val splitted = it.split("/")
-            if (splitted.size > 1)
-                splitted[5]
-            else splitted[0]
-        }.toTypedArray()
-        databaseConnection.actualizarInmueble(local)
     }
 }
