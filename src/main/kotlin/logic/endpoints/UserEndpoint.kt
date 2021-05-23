@@ -13,10 +13,12 @@ class UserEndpoint(endpoint: String) : EndpointHandler(endpoint) {
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
         respuesta.response = "GET request"
         if ("mail" in params) {
-            print(params["mail"].toString() + " " + params["contraseña"].toString())
-            if (existeUsuario(params["mail"].toString(), params["contraseña"].toString()) != null) {
+            val email = params["mail"].toString()
+            val contraseña = params["contraseña"].toString()
+            println("[email=$email contraseña=$contraseña]")
+            if (existeUsuario(email, contraseña) != null) {
                 respuesta.response = ResponseBuilder.createObjectResponse(
-                    existeUsuario(params["mail"].toString(), params["contraseña"].toString())!!)
+                    existeUsuario(email, contraseña)!!)
             } else {
                 respuesta.codigoRespuesta = 404
                 respuesta.response = "Usuario no encontrado"

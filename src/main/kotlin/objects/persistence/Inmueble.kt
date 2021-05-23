@@ -76,7 +76,6 @@ abstract class Inmueble(
     }
 
     companion object {
-        //var serverPort: Int? = null
         private val urlImagen = "http://${InetAddress.getLocalHost().hostAddress}:9000/api/imagen/"
     }
 }
