@@ -18,7 +18,7 @@ abstract class EndpointHandler(val endpoint: String) {
             "PUT" -> putMethod(exchange, params, respuesta)
             "DELETE" -> deleteMethod(exchange, respuesta)
         }
-        if (endpoint != "/api/image") {
+        if (endpoint != "/api/image" || exchange.requestMethod != "GET") {
             exchange.sendResponseHeaders(respuesta.codigoRespuesta,
                 respuesta.response.toByteArray(Charsets.UTF_8).size.toLong())
             val outputStream = exchange.responseBody

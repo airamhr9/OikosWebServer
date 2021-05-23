@@ -27,10 +27,15 @@ class ImageEndpoint(endpoint: String, private val folderName: String) : Endpoint
             Files.copy(image.toPath(), outputStream);
             outputStream.flush()
             exchange.close()
-
         } catch (e: Exception) {
             respuesta.response = "Not an image"
             respuesta.codigoRespuesta = 404
+            exchange.sendResponseHeaders(respuesta.codigoRespuesta,
+                respuesta.response.toByteArray(Charsets.UTF_8).size.toLong())
+            val outputStream = exchange.responseBody
+            outputStream.write(respuesta.response.toByteArray())
+            outputStream.flush()
+            exchange.close()
         }
     }
 
