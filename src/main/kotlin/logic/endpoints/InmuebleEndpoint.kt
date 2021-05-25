@@ -2,13 +2,13 @@ package logic.endpoints
 
 import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
-import logic.EndpointHandler
 import logic.ResponseBuilder
 import logic.Respuesta
+import logic.RespuestaEndpointHandler
 import objects.persistence.*
 import java.io.BufferedReader
 
-class InmuebleEndpoint(endpoint: String) : EndpointHandler(endpoint) {
+class InmuebleEndpoint(endpoint: String) : RespuestaEndpointHandler(endpoint) {
 
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
         println(params.entries.toString())
@@ -26,7 +26,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler(endpoint) {
         else {
             val idPropietario = params["propietario"].toString().toInt()
             respuesta.response = ResponseBuilder.createListResponse(
-                databaseConnection.getInmueblesDeUsuario(idPropietario), limit)
+                databaseConnection.getInmueblesDeUsuario(idPropietario))
         }
     }
 
@@ -90,7 +90,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler(endpoint) {
         val x = params["x"].toString().toDouble()
         val y = params["y"].toString().toDouble()
         respuesta.response = ResponseBuilder.createListResponse(
-            databaseConnection.listaDeInmueblesPorCordenadas(limit, x, y), limit)
+            databaseConnection.listaDeInmueblesPorCordenadas(limit, x, y))
     }
 
     private fun busquedaFiltrada(params: Map<String, Any?>, respuesta: Respuesta, limit: Int) {
@@ -109,8 +109,7 @@ class InmuebleEndpoint(endpoint: String) : EndpointHandler(endpoint) {
 
         respuesta.response = ResponseBuilder.createListResponse(
             databaseConnection.listaDeInmueblesPorFiltrado(limit, precioMin, precioMax, superficieMin, superficieMax,
-                habitaciones, baños, garaje, ciudad, tipo, ModeloInmueble.fromString(modelo), numComp, idUsuario),
-            limit
+                habitaciones, baños, garaje, ciudad, tipo, ModeloInmueble.fromString(modelo), numComp, idUsuario)
         )
     }
 }

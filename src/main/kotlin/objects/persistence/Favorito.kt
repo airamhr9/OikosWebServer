@@ -2,7 +2,6 @@ package objects.persistence
 
 import com.google.gson.JsonObject
 import objects.ElementoVisitado
-import objects.JsonConvertible
 import objects.Visitante
 
 class Favorito(

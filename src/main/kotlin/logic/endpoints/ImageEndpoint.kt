@@ -5,6 +5,7 @@ import logic.EndpointHandler
 import logic.RequestParser
 import logic.Respuesta
 import java.io.File
+import java.io.OutputStream
 import java.lang.Exception
 import java.lang.UnsupportedOperationException
 import java.net.URL
@@ -15,31 +16,28 @@ class ImageEndpoint(endpoint: String, private val folderName: String) : Endpoint
 
     // http://ip:9000/api/image/nombre_de_archivo.jpg
 
+    private var image : File? = null
+    private var requestMethod = ""
+
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
+        requestMethod = "GET"
         val stringUri = exchange.requestURI.toString()
         try {
             val imageName = stringUri.substring(11, stringUri.length)
             if (imageName.isEmpty()) throw Exception()
-            val image = File(folderName, imageName)
-            if (!image.exists()) throw Exception()
-            exchange.sendResponseHeaders(200, image.length())
-            val outputStream = exchange.responseBody
-            Files.copy(image.toPath(), outputStream)
-            outputStream.flush()
-            exchange.close()
+            image = File(folderName, imageName)
+            if (!image!!.exists()) {
+                image = null
+                throw Exception()
+            }
         } catch (e: Exception) {
             respuesta.response = "Not an image"
             respuesta.codigoRespuesta = 404
-            exchange.sendResponseHeaders(respuesta.codigoRespuesta,
-                respuesta.response.toByteArray(Charsets.UTF_8).size.toLong())
-            val outputStream = exchange.responseBody
-            outputStream.write(respuesta.response.toByteArray())
-            outputStream.flush()
-            exchange.close()
         }
     }
 
     override fun postMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
+        requestMethod = "POST"
         val images = exchange.requestBody
         val file = File(folderName, params["name"].toString())
         Files.copy(images, file.toPath(), StandardCopyOption.REPLACE_EXISTING)
@@ -52,5 +50,22 @@ class ImageEndpoint(endpoint: String, private val folderName: String) : Endpoint
 
     override fun deleteMethod(exchange: HttpExchange, respuesta: Respuesta) {
         throw UnsupportedOperationException()
+    }
+
+    override fun sendResponseHeaders(exchange: HttpExchange, respuesta: Respuesta) {
+        if (exchange.requestMethod == "GET" && image != null) {
+            exchange.sendResponseHeaders(200, image!!.length())
+        } else {
+            exchange.sendResponseHeaders(respuesta.codigoRespuesta,
+                respuesta.response.toByteArray(Charsets.UTF_8).size.toLong())
+        }
+    }
+
+    override fun writeOutputStream(outputStream: OutputStream, respuesta: Respuesta) {
+        if (requestMethod == "GET" && image != null) {
+            Files.copy(image!!.toPath(), outputStream)
+        } else {
+            outputStream.write(respuesta.response.toByteArray())
+        }
     }
 }

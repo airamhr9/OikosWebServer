@@ -1,9 +1,7 @@
 package objects.persistence
 
 import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import objects.ElementoVisitado
-import objects.JsonConvertible
 import objects.SearchableById
 import java.net.InetAddress
 
@@ -31,6 +29,7 @@ abstract class Inmueble(
         imagenes.forEach { listaUrlImagenes.add(urlImagen + it) }
         return listaUrlImagenes
     }
+
     override fun equals(other: Any?): Boolean {
         if (other is Inmueble) {
             return id == other.id

@@ -1,10 +1,10 @@
 package logic.endpoints
 
 import com.sun.net.httpserver.HttpExchange
-import logic.EndpointHandler
 import logic.Respuesta
+import logic.RespuestaEndpointHandler
 
-class VisitasEndpoint(endpoint: String) : EndpointHandler(endpoint) {
+class VisitasEndpoint(endpoint: String) : RespuestaEndpointHandler(endpoint) {
 
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
         throw UnsupportedOperationException()
@@ -25,7 +25,7 @@ class VisitasEndpoint(endpoint: String) : EndpointHandler(endpoint) {
     }
 
     private fun actualizarContador(idInmueble: Int) {
-        var inmueble = databaseConnection.getInmuebleById(idInmueble)
+        val inmueble = databaseConnection.getInmuebleById(idInmueble)
         inmueble.contadorVisitas++
         databaseConnection.actualizarInmueble(inmueble)
     }

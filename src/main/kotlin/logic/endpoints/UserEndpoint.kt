@@ -2,13 +2,13 @@ package logic.endpoints
 
 import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
-import logic.EndpointHandler
 import logic.ResponseBuilder
 import logic.Respuesta
+import logic.RespuestaEndpointHandler
 import objects.persistence.Usuario
 import java.io.BufferedReader
 
-class UserEndpoint(endpoint: String) : EndpointHandler(endpoint) {
+class UserEndpoint(endpoint: String) : RespuestaEndpointHandler(endpoint) {
 
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
         respuesta.response = "GET request"

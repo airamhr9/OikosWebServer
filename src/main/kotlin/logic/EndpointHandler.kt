@@ -2,6 +2,7 @@ package logic
 
 import com.sun.net.httpserver.HttpExchange
 import persistence.DatabaseConnection
+import java.io.OutputStream
 import java.net.URL
 
 abstract class EndpointHandler(val endpoint: String) {
@@ -18,23 +19,19 @@ abstract class EndpointHandler(val endpoint: String) {
             "PUT" -> putMethod(exchange, params, respuesta)
             "DELETE" -> deleteMethod(exchange, respuesta)
         }
-        if (notGetImage(exchange)) {
-            exchange.sendResponseHeaders(respuesta.codigoRespuesta,
-                respuesta.response.toByteArray(Charsets.UTF_8).size.toLong())
-            val outputStream = exchange.responseBody
-            outputStream.write(respuesta.response.toByteArray())
-            outputStream.flush()
-            exchange.close()
-        }
-    }
-
-    private fun notGetImage(exchange: HttpExchange): Boolean {
-        return endpoint != "/api/image" || exchange.requestMethod != "GET"
+        sendResponseHeaders(exchange, respuesta)
+        val outputStream = exchange.responseBody
+        writeOutputStream(outputStream, respuesta)
+        outputStream.flush()
+        exchange.close()
     }
 
     protected abstract fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta)
     protected abstract fun postMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta)
     protected abstract fun putMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta)
     protected abstract fun deleteMethod(exchange: HttpExchange, respuesta: Respuesta)
+
+    protected abstract fun sendResponseHeaders(exchange: HttpExchange, respuesta: Respuesta)
+    protected abstract fun writeOutputStream(outputStream: OutputStream, respuesta: Respuesta)
 
 }

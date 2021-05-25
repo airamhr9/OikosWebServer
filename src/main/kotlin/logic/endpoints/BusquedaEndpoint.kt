@@ -3,12 +3,12 @@ package logic.endpoints
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
-import logic.EndpointHandler
 import logic.Respuesta
+import logic.RespuestaEndpointHandler
 import java.io.BufferedReader
 import java.net.URLDecoder
 
-class BusquedaEndpoint(endpoint: String) : EndpointHandler(endpoint) {
+class BusquedaEndpoint(endpoint: String) : RespuestaEndpointHandler(endpoint) {
 
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
         respuesta.response = "GET request"
@@ -25,7 +25,7 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler(endpoint) {
         var string = reader.readLines().toString()
         string = URLDecoder.decode(string, "UTF-8")
         val url = exchange.requestURI.toString()
-        var usuario = url.substring(18).toInt()
+        val usuario = url.substring(18).toInt()
         val busquedaJson = JsonParser.parseString(string) as JsonArray
         val busqueda = busquedaJson[0].toString()
         databaseConnection.crearBusquedaGuardada(busqueda, usuario)

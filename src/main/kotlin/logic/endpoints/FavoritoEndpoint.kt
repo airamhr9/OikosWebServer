@@ -2,23 +2,18 @@ package logic.endpoints
 
 import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
-import logic.EndpointHandler
 import logic.ResponseBuilder
 import logic.Respuesta
+import logic.RespuestaEndpointHandler
 import objects.persistence.Favorito
 import java.io.BufferedReader
 
-class FavoritoEndpoint(endpoint: String) : EndpointHandler(endpoint) {
+class FavoritoEndpoint(endpoint: String) : RespuestaEndpointHandler(endpoint) {
 
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
-        val limit = if ("limit" in params) {
-            params["limit"].toString().toInt()
-        } else {
-            100
-        }
         val idUsuario = params["usuario"].toString().toInt()
         val favoritos = databaseConnection.getFavoritosDeUsuario(idUsuario)
-        respuesta.response = ResponseBuilder.createListResponse(favoritos, limit)
+        respuesta.response = ResponseBuilder.createListResponse(favoritos)
     }
 
     override fun postMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
