@@ -22,16 +22,6 @@ class Local(id: Int,
 ) : Inmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
             direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas) {
 
-    override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
-        jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Local.value)
-    }
-
-    override fun toJson(): JsonObject {
-        val result = super.toJson()
-        result.addProperty("baños", baños)
-        return result
-    }
-
     companion object {
         fun fromJson(jsonObject: JsonObject): Local {
             val id = jsonObject.get("id").asInt

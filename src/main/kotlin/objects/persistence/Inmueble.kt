@@ -22,53 +22,15 @@ abstract class Inmueble(
     var imagenes: Array<String>,
     var fecha: String,
     var contadorVisitas: Int,
-) : SearchableById, JsonConvertible, ElementoVisitado {
+) : SearchableById, ElementoVisitado {
 
     var esFavorito = false
-
-    private fun generarJsonBasico(): JsonObject {
-        val result = JsonObject()
-        result.addProperty("id", id)
-        result.addProperty("disponible", disponible)
-        result.addProperty("tipo", tipo.value)
-        result.addProperty("precio", precio)
-        result.addProperty("direccion", direccion)
-        result.addProperty("ciudad", ciudad)
-        result.addProperty("latitud", latitud)
-        result.addProperty("longitud", longitud)
-        introducirModeloEnJsonObject(result, "modelo")
-        return result
-    }
-
-    protected abstract fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String)
-
-    override fun toJson(): JsonObject {
-        val result = generarJsonBasico()
-
-        result.addProperty("superficie", superficie)
-        result.add("propietario", propietario.toJson())
-        result.addProperty("descripcion", descripcion)
-        result.add("imagenes", getUrlImagenes())
-        result.addProperty("fecha", fecha)
-        result.addProperty("contadorVisitas", contadorVisitas)
-        result.addProperty("favorito", esFavorito)
-
-        return result
-    }
 
     fun getUrlImagenes(): JsonArray {
         val listaUrlImagenes = JsonArray()
         imagenes.forEach { listaUrlImagenes.add(urlImagen + it) }
         return listaUrlImagenes
     }
-
-    fun toJsonReducido(): JsonObject {
-        val result = generarJsonBasico()
-        result.addProperty("numImagenes", imagenes.size)
-        result.addProperty("imagen", urlImagen + imagenes[0])
-        return result
-    }
-
     override fun equals(other: Any?): Boolean {
         if (other is Inmueble) {
             return id == other.id

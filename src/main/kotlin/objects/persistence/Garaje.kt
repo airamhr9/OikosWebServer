@@ -22,10 +22,6 @@ class Garaje(id: Int,
 ) : Inmueble(id, disponible, tipo, superficie, precio, propietario, descripcion,
             direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas) {
 
-    override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
-        jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Garaje.value)
-    }
-
     companion object {
         fun fromJson(jsonObject: JsonObject): Garaje {
             val id = jsonObject.get("id").asInt

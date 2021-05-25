@@ -25,16 +25,6 @@ class Habitacion(id: Int,
 ) : Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
             direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas, habitaciones, baños, garaje) {
 
-    override fun introducirModeloEnJsonObject(jsonObject: JsonObject, nombrePropiedad: String) {
-        jsonObject.addProperty(nombrePropiedad, ModeloInmueble.Habitacion.value)
-    }
-
-    override fun toJson(): JsonObject {
-        val result = super.toJson()
-        result.addProperty("numCompañeros", numCompañeros)
-        return result
-    }
-
     companion object {
         fun fromJson(jsonObject: JsonObject): Habitacion {
             val id = jsonObject.get("id").asInt

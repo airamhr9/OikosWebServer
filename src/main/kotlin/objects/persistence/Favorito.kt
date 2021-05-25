@@ -10,19 +10,9 @@ class Favorito(
     var inmueble: Inmueble,
     var notas: String,
     var orden: Int
-) : JsonConvertible, ElementoVisitado {
-
-    override fun toJson(): JsonObject {
-        val result = JsonObject()
-        result.add("usuario", usuario.toJson())
-        result.add("inmueble", inmueble.toJson())
-        result.addProperty("notas", notas)
-        result.addProperty("orden", orden)
-        return result
-    }
+) : ElementoVisitado {
 
     companion object {
-
         fun fromJson(jsonObject: JsonObject): Favorito {
             val usuario = Usuario.fromJson(jsonObject.getAsJsonObject("usuario"))
 
@@ -40,7 +30,6 @@ class Favorito(
 
             return Favorito(usuario, inmueble, notas, orden)
         }
-
     }
 
     override fun accept(v: Visitante) {
