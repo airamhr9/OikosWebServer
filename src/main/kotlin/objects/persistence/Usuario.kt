@@ -1,8 +1,10 @@
 package objects.persistence
 
 import com.google.gson.JsonObject
+import objects.ElementoVisitado
 import objects.JsonConvertible
 import objects.SearchableById
+import objects.Visitante
 import java.util.*
 
 class Usuario(
@@ -36,5 +38,6 @@ class Usuario(
             return Usuario(id, nombre, mail, contraseña, imagen)
         }
     }
+
 
 }

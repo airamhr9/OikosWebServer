@@ -1,8 +1,10 @@
 package objects.persistence
 
 import com.google.gson.JsonObject
+import objects.ElementoVisitado
 import objects.JsonConvertible
 import objects.SearchableById
+import objects.Visitante
 
 class Busqueda(override val id: Int,
                var superficie_min: Int?,
@@ -54,4 +56,5 @@ class Busqueda(override val id: Int,
             return Busqueda(id, superficie_min, superficie_max, precio_min, precio_max, habitaciones,baños, garaje,numCompañeros, ciudad, usuario, tipo, modelo)
         }
     }
+
 }

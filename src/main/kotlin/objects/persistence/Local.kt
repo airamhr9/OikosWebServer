@@ -1,6 +1,7 @@
 package objects.persistence
 
 import com.google.gson.JsonObject
+import objects.Visitante
 import persistence.DatabaseConnection
 
 class Local(id: Int,
@@ -56,5 +57,9 @@ class Local(id: Int,
             return Local(id, disponible, tipo, superficie, precio, propietario, descripcion,
                 direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas, baños)
         }
+    }
+
+    override fun accept(v: Visitante) {
+        v.visitLocal(this)
     }
 }

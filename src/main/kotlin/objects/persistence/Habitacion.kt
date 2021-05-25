@@ -1,6 +1,7 @@
 package objects.persistence
 
 import com.google.gson.JsonObject
+import objects.Visitante
 import persistence.DatabaseConnection
 
 class Habitacion(id: Int,
@@ -62,5 +63,9 @@ class Habitacion(id: Int,
             return Habitacion(id, disponible, tipo, superficie, precio, propietario, descripcion,
                 direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas, habitaciones, baños, garaje, numCompañeros)
         }
+    }
+
+    override fun accept(v: Visitante) {
+        v.visitHabitacion(this)
     }
 }

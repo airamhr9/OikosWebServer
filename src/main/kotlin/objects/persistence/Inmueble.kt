@@ -2,6 +2,7 @@ package objects.persistence
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import objects.ElementoVisitado
 import objects.JsonConvertible
 import objects.SearchableById
 import java.net.InetAddress
@@ -21,7 +22,7 @@ abstract class Inmueble(
     var imagenes: Array<String>,
     var fecha: String,
     var contadorVisitas: Int,
-) : SearchableById, JsonConvertible {
+) : SearchableById, JsonConvertible, ElementoVisitado {
 
     var esFavorito = false
 
@@ -55,7 +56,7 @@ abstract class Inmueble(
         return result
     }
 
-    private fun getUrlImagenes(): JsonArray {
+    fun getUrlImagenes(): JsonArray {
         val listaUrlImagenes = JsonArray()
         imagenes.forEach { listaUrlImagenes.add(urlImagen + it) }
         return listaUrlImagenes

@@ -1,14 +1,16 @@
 package objects.persistence
 
 import com.google.gson.JsonObject
+import objects.ElementoVisitado
 import objects.JsonConvertible
+import objects.Visitante
 
 class Favorito(
     var usuario: Usuario,
     var inmueble: Inmueble,
     var notas: String,
     var orden: Int
-) : JsonConvertible {
+) : JsonConvertible, ElementoVisitado {
 
     override fun toJson(): JsonObject {
         val result = JsonObject()
@@ -39,5 +41,9 @@ class Favorito(
             return Favorito(usuario, inmueble, notas, orden)
         }
 
+    }
+
+    override fun accept(v: Visitante) {
+        v.visitFavorito(this)
     }
 }

@@ -1,6 +1,7 @@
 package objects.persistence
 
 import com.google.gson.JsonObject
+import objects.Visitante
 import persistence.DatabaseConnection
 
 open class Piso(id: Int,
@@ -62,5 +63,9 @@ open class Piso(id: Int,
             return Piso(id, disponible, tipo, superficie, precio, propietario, descripcion,
                 direccion, ciudad, latitud, longitud, imagenes, fecha, contadorVisitas, habitaciones, baños, garaje)
         }
+    }
+
+    override fun accept(v: Visitante) {
+        v.visitPiso(this)
     }
 }
