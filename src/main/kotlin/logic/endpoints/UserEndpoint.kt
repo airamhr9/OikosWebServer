@@ -43,11 +43,11 @@ class UserEndpoint(endpoint: String) : EndpointHandler(endpoint) {
     }
 
     override fun putMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
-        TODO("Not yet implemented")
+        TODO("Funcionalidad fuera del alcance del proyecto")
     }
 
     override fun deleteMethod(exchange: HttpExchange, respuesta: Respuesta) {
-        TODO("Not yet implemented")
+        TODO("Funcionalidad fuera del alcance del proyecto")
     }
 
     private fun emailRepetido(newObject: Usuario): Boolean {
