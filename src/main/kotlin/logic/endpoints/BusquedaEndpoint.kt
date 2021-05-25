@@ -8,7 +8,6 @@ import logic.Respuesta
 import java.io.BufferedReader
 import java.net.URLDecoder
 
-
 class BusquedaEndpoint(endpoint: String) : EndpointHandler(endpoint) {
 
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
@@ -33,16 +32,16 @@ class BusquedaEndpoint(endpoint: String) : EndpointHandler(endpoint) {
     }
 
     override fun putMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
-        /*respuesta.response = "PUT request"
+        /* respuesta.response = "PUT request"
         val objectToPost = exchange.requestBody
         val reader = BufferedReader(objectToPost.reader())
         var string: String = reader.readLines().toString()
         string = URLDecoder.decode(string, "UTF-8");
-        string = string.substring(7, string.length - 1)*/
-        TODO("Not yet implemented")
+        string = string.substring(7, string.length - 1) */
+        TODO("Funcionalidad fuera del alcance del proyecto")
     }
 
     override fun deleteMethod(exchange: HttpExchange, respuesta: Respuesta) {
-        TODO("Not yet implemented")
+        TODO("Funcionalidad fuera del alcance del proyecto")
     }
 }

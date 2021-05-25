@@ -23,8 +23,8 @@ class ImageEndpoint(endpoint: String, private val folderName: String) : Endpoint
             val image = File(folderName, imageName)
             if (!image.exists()) throw Exception()
             exchange.sendResponseHeaders(200, image.length())
-            val outputStream = exchange.responseBody;
-            Files.copy(image.toPath(), outputStream);
+            val outputStream = exchange.responseBody
+            Files.copy(image.toPath(), outputStream)
             outputStream.flush()
             exchange.close()
         } catch (e: Exception) {
@@ -40,8 +40,6 @@ class ImageEndpoint(endpoint: String, private val folderName: String) : Endpoint
     }
 
     override fun postMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
-        val params : Map<String, Any?> = RequestParser.getQueryParameters(URL(
-            "http://"+ exchange.requestHeaders.getFirst("Host") + exchange.requestURI))
         val images = exchange.requestBody
         val file = File(folderName, params["name"].toString())
         Files.copy(images, file.toPath(), StandardCopyOption.REPLACE_EXISTING)
