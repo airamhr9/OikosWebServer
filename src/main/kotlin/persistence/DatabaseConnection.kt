@@ -13,9 +13,6 @@ class DatabaseConnection private constructor() {
     private val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
     // private val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
 
-    // private val databaseURL = "jdbc:postgresql://localhost:5432/oikos" // Hector antiguo
-    // private val databaseURL = "jdbc:postgresql://localhost:5432/testdb" // Jaime antiguo
-
     init {
         try {
             Class.forName("org.postgresql.Driver")
