@@ -2,13 +2,11 @@ package logic.endpoints
 
 import com.sun.net.httpserver.HttpExchange
 import logic.EndpointHandler
-import logic.RequestParser
 import logic.Respuesta
 import java.io.File
 import java.io.OutputStream
 import java.lang.Exception
 import java.lang.UnsupportedOperationException
-import java.net.URL
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 
@@ -22,15 +20,11 @@ class ImageEndpoint(endpoint: String, private val folderName: String) : Endpoint
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
         requestMethod = "GET"
         val stringUri = exchange.requestURI.toString()
-        try {
-            val imageName = stringUri.substring(11, stringUri.length)
-            if (imageName.isEmpty()) throw Exception()
-            image = File(folderName, imageName)
-            if (!image!!.exists()) {
-                image = null
-                throw Exception()
-            }
-        } catch (e: Exception) {
+        val imageName = stringUri.substring(11, stringUri.length)
+        if (imageName.isEmpty()) throw Exception()
+        image = File(folderName, imageName)
+        if (!image!!.exists()) {
+            image = null
             respuesta.response = "Not an image"
             respuesta.codigoRespuesta = 404
         }
