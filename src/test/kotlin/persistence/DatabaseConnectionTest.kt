@@ -3,14 +3,16 @@ package persistence
 import objects.persistence.Usuario
 import org.junit.Test
 import org.junit.Assert.*
-import org.junit.Before
+import org.junit.jupiter.api.BeforeAll
 
 class DatabaseConnectionTest {
-    private var databaseConnection: DatabaseConnection? = null
+    private val databaseConnection = DatabaseConnection.getInstance()
 
-    @Before
-    fun setUp(){
-        databaseConnection = DatabaseConnection.getInstance()
+    @BeforeAll
+    fun setUp() {
+        databaseConnection.vaciarTablas()
+        val usuario = Usuario(1,"Antonio Gabinete","antoniogabinete@mail.com","123456789","default_user.png")
+        databaseConnection.crearUsuario(usuario)
     }
 
     @Test

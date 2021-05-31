@@ -542,4 +542,14 @@ class DatabaseConnection private constructor() {
         }
     }
 
+    fun vaciarTablas() {
+        val statementInmuebles = connection.createStatement()
+        statementInmuebles.execute("DELETE FROM inmueble;")
+        statementInmuebles.close()
+        val statementUsuarios = connection.createStatement()
+        statementUsuarios.execute("DELETE FROM usuario;")
+        statementUsuarios.close()
+        connection.commit()
+    }
+
 }
