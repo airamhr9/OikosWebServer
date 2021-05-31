@@ -24,7 +24,6 @@ class Usuario(
         result.addProperty("mail", this.mail)
         result.addProperty("contraseña", this.contraseña)
         result.addProperty("imagen", this.imagen)
-
         return result
     }
 
@@ -33,6 +32,10 @@ class Usuario(
             return id == other.id
         }
         return false
+    }
+
+    override fun toString(): String {
+        return toJson().toString()
     }
 
     companion object {

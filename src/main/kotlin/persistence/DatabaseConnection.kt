@@ -27,7 +27,7 @@ class DatabaseConnection private constructor() {
     }
 
     companion object {
-        // val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
+        //val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
         // val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
         val databaseURL = "jdbc:postgresql://localhost:5432/oikos" // Hector purebas
 
@@ -550,6 +550,14 @@ class DatabaseConnection private constructor() {
         statementUsuarios.execute("DELETE FROM usuario;")
         statementUsuarios.close()
         connection.commit()
+    }
+    fun crearUsuarioConId(usuario: Usuario) {
+        val statement = connection.createStatement()
+        val instruccion = "INSERT INTO usuario (id, nombre, email, contraseña, imagen) " +
+                "VALUES ('${usuario.id}','${usuario.nombre}', '${usuario.mail}','${usuario.contraseña}','${usuario.imagen}');"
+        statement.executeUpdate(instruccion)
+        connection.commit()
+        statement.close()
     }
 
 }
