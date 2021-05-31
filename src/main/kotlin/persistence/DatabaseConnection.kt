@@ -7,11 +7,15 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import kotlin.system.exitProcess
 
+
 class DatabaseConnection private constructor() {
     private val connection: Connection
 
     private val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
-    // private val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
+    //private val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
+
+    // private val databaseURL = "jdbc:postgresql://localhost:5432/oikos" // Hector antiguo
+    // private val databaseURL = "jdbc:postgresql://localhost:5432/testdb" // Jaime antiguo
 
     init {
         try {
@@ -61,7 +65,6 @@ class DatabaseConnection private constructor() {
         val list = mutableListOf<Inmueble>()
         var query = if (modelo == ModeloInmueble.Habitacion) "SELECT * FROM inmueble NATURAL JOIN piso NATURAL JOIN habitacion WHERE "
                     else "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE "
-        query += "disponible = true AND "
         query += "precio >= $precioMin AND "
         if (precioMax != null) query += "precio <= $precioMax AND "
         query += "superficie >= $supMin AND "
@@ -105,7 +108,7 @@ class DatabaseConnection private constructor() {
         val statement = connection.createStatement()
         val list: MutableList<Inmueble> =  mutableListOf()
         val modelo = ModeloInmueble.Piso
-        val resultSet = statement.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE disponible = true AND " +
+        val resultSet = statement.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
                 "(latitud >= $x - 0.2 AND latitud <= $x + 0.2) AND (longitud >= $y - 0.2 AND longitud <= $y + 0.2) " +
                 "AND disponible = true FETCH FIRST $num ROWS ONLY;")
         while (resultSet.next()) {
@@ -121,7 +124,7 @@ class DatabaseConnection private constructor() {
         val statement = connection.createStatement()
         val list: MutableList<Inmueble> =  mutableListOf()
         val modelo = ModeloInmueble.Local
-        val resultSet = statement.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE disponible = true AND " +
+        val resultSet = statement.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
                 "(latitud >= $x - 0.2 AND latitud <= $x + 0.2) AND (longitud >= $y - 0.2 AND longitud <= $y + 0.2) " +
                 "AND disponible = true FETCH FIRST $num ROWS ONLY;")
         while (resultSet.next()) {
@@ -137,7 +140,7 @@ class DatabaseConnection private constructor() {
         val statement = connection.createStatement()
         val list: MutableList<Inmueble> =  mutableListOf()
         val modelo = ModeloInmueble.Garaje
-        val resultSet = statement.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE disponible = true AND " +
+        val resultSet = statement.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${modelo.value} WHERE " +
                 "(latitud >= $x - 0.2 AND latitud <= $x + 0.2) AND (longitud >= $y - 0.2 AND longitud <= $y + 0.2) " +
                 "AND disponible = true FETCH FIRST $num ROWS ONLY;")
         while (resultSet.next()) {
@@ -154,7 +157,7 @@ class DatabaseConnection private constructor() {
         val list: MutableList<Inmueble> =  mutableListOf()
         val modelo = ModeloInmueble.Habitacion
         val resultSet = statement.executeQuery( "SELECT * FROM inmueble NATURAL JOIN ${ModeloInmueble.Piso.value} "
-                + "NATURAL JOIN ${modelo.value} WHERE disponible = true AND " +
+                + "NATURAL JOIN ${modelo.value} WHERE " +
                 "(latitud >= $x - 0.2 AND latitud <= $x + 0.2) AND (longitud >= $y - 0.2 AND longitud <= $y + 0.2) " +
                 "AND disponible = true FETCH FIRST $num ROWS ONLY;")
         while (resultSet.next()) {
@@ -281,7 +284,7 @@ class DatabaseConnection private constructor() {
         statement.close()
     }
 
-    private fun getNuevoIdDeInmueble(): Int {
+    fun getNuevoIdDeInmueble(): Int {
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT max(id) FROM inmueble;")
         resultSet.next()

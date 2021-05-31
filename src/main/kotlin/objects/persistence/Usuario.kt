@@ -28,6 +28,13 @@ class Usuario(
         return result
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (other is Usuario) {
+            return id == other.id
+        }
+        return false
+    }
+
     companion object {
         fun fromJson(jsonObject: JsonObject): Usuario {
             val id = jsonObject.get("id").asInt
