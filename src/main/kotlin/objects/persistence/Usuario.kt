@@ -1,11 +1,8 @@
 package objects.persistence
 
 import com.google.gson.JsonObject
-import objects.ElementoVisitado
 import objects.JsonConvertible
 import objects.SearchableById
-import objects.Visitante
-import java.util.*
 
 class Usuario(
     override val id: Int,
@@ -14,8 +11,6 @@ class Usuario(
     var contraseña:String,
     var imagen:String?
 ) : SearchableById, JsonConvertible {
-
-    //private val token = UUID.randomUUID()
 
     override fun toJson(): JsonObject {
         val result = JsonObject()

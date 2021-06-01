@@ -8,8 +8,10 @@ import objects.JsonExportVisitante
 
 class DatabaseConnectionTest {
     private val databaseConnection = DatabaseConnection.getInstance()
+
     private val usuario = Usuario(1,"Antonio Gabinete","antoniogabinete@mail.com","123456789","default_user.png")
-    val garaje = Garaje(7, true, TipoInmueble.Alquiler, 12, 120.0, usuario,
+
+    private val garaje = Garaje(7, true, TipoInmueble.Alquiler, 12, 120.0, usuario,
             "descripcion", "direccion", "ciudad", 0.0, 0.0,
             mutableListOf("foto").toTypedArray(), "2021-03-05T11:30:00.380", 0)
 
@@ -21,7 +23,7 @@ class DatabaseConnectionTest {
 
     @Test
     fun getUsuarioById() {
-        val result = databaseConnection.getUsuarioById(1)
+        val result = databaseConnection.getUsuarioById(usuario.id)
         assertEquals(usuario.toString(), result.toString())
     }
 
@@ -35,31 +37,31 @@ class DatabaseConnectionTest {
     fun getNuevoIdDeInmuebleSiExisten() {
         databaseConnection.crearGaraje(garaje)
         val result = databaseConnection.getNuevoIdDeInmueble()
-        assertEquals(8, result)
+        assertEquals(garaje.id + 1, result)
     }
 
     @Test
     fun emailRepetidoVerdadero() {
-        var res1 =databaseConnection.revisarEmail(usuario)
-        assertEquals(true,res1)
+        val result =databaseConnection.revisarEmail(usuario)
+        assertEquals(true, result)
     }
     @Test
     fun emailRepetidoFalso() {
-        var usuario1 =Usuario(1,"Antonio Gabinete","a@mail.com","123456789","default_user.png")
-        var res1 =databaseConnection.revisarEmail(usuario1)
-        assertEquals(false, res1)
+        val usuario1 = Usuario(2,"Antonio Gabinete","a@mail.com","123456789","default_user.png")
+        val result = databaseConnection.revisarEmail(usuario1)
+        assertEquals(false, result)
     }
 
     @Test
     fun comprobarUsuarioExiste() {
-        var resUsuario=databaseConnection.comprobarUsuario("antoniogabinete@mail.com","123456789")
-        assertEquals(usuario.toJson().toString(),resUsuario?.toJson().toString())
+        val resUsuario = databaseConnection.comprobarUsuario("antoniogabinete@mail.com","123456789")
+        assertEquals(usuario.toString(), resUsuario?.toString())
     }
     @Test
     fun comprobarUsuarioNoExiste() {
-        var usuario:Usuario? = null
-        var resUsuario=databaseConnection.comprobarUsuario("antoniogabinete@mail.com","12")
-        assertEquals(usuario?.toJson().toString(),resUsuario?.toJson().toString())
+        val user: Usuario? = null
+        val resUsuario = databaseConnection.comprobarUsuario("antoniogabinete@mail.com","12")
+        assertEquals(user?.toString(), resUsuario?.toString())
     }
 
     @Test
@@ -70,12 +72,16 @@ class DatabaseConnectionTest {
         garaje.accept(jsonExportEsperado)
         val resultadoEsperado = jsonExportEsperado.obtenerResultado().toString()
 
-        var resInmueble = databaseConnection.getInmuebleById(7)
+        val resInmueble = databaseConnection.getInmuebleById(garaje.id)
         val jsonExportObtenido = JsonExportVisitante()
         resInmueble.accept(jsonExportObtenido)
         val resultadoObtenido = jsonExportObtenido.obtenerResultado().toString()
 
         assertEquals(resultadoEsperado, resultadoObtenido)
+    }
+
+    @Test
+    fun getModeloInmuebleById() {
     }
 
     @Test

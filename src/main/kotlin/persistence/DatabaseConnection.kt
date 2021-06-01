@@ -29,7 +29,7 @@ class DatabaseConnection private constructor() {
     companion object {
         //val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
         // val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
-        val databaseURL = "jdbc:postgresql://localhost:5432/oikos" // Hector purebas
+        val databaseURL = "jdbc:postgresql://localhost:5432/oikos" // Hector y Javi pruebas
 
         private var databaseConnection: DatabaseConnection? = null
 

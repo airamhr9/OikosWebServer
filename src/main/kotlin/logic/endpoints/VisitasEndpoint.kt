@@ -4,6 +4,11 @@ import com.sun.net.httpserver.HttpExchange
 import logic.Respuesta
 import logic.RespuestaEndpointHandler
 
+/*
+    Este endpoint es innecesario, puesto que su funcionalidad se podria implementar con un PUT de Inmueble.
+    Sin embargo, de este modo se tienen que enviar menos datos (no se envia el inmueble entero, solo su id)
+    y se consume menos ancho de banda
+*/
 class VisitasEndpoint(endpoint: String) : RespuestaEndpointHandler(endpoint) {
 
     override fun getMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {
