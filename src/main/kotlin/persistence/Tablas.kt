@@ -1,36 +1,10 @@
 package persistence
 
 import java.sql.Connection
-import java.sql.DriverManager
-import kotlin.system.exitProcess
 
-class Tablas {
-    private val connection: Connection
+class Tablas(private val connection: Connection) {
 
-    init {
-        try {
-            Class.forName("org.postgresql.Driver")
-            connection = DriverManager.getConnection(DatabaseConnection.databaseURL, "postgres", "mysecretpassword")
-            connection.autoCommit = true
-            println("Opened database successfully")
-        } catch (e: Exception) {
-            e.printStackTrace()
-            System.err.println(e.javaClass.name + ": " + e.message)
-            println("URL de la base de datos: ${DatabaseConnection.databaseURL}")
-            exitProcess(-1)
-        }
-    }
-
-    fun inicializarBaseDeDatos(introducirDatosDePrueba: Boolean) {
-        crearTablas()
-        if (introducirDatosDePrueba) {
-            vaciarTablas()
-            introducirDatosDePrueba()
-        }
-        connection.close()
-    }
-
-    private fun crearTablas() {
+    fun crearTablas() {
         crearTablaUsuario()
         crearTablaInmueble()
         crearTablaImagen()
@@ -40,6 +14,7 @@ class Tablas {
         crearTablaHabitacion()
         crearTablaBusqueda()
         crearTablaFavorito()
+        connection.commit()
     }
 
     private fun crearTablaUsuario() {
@@ -169,20 +144,5 @@ class Tablas {
         statement.execute(instruccion)
         statement.close()
     }
-
-    private fun vaciarTablas() {
-        val statementInmuebles = connection.createStatement()
-        statementInmuebles.execute("DELETE FROM inmueble;")
-        statementInmuebles.close()
-        val statementUsuarios = connection.createStatement()
-        statementUsuarios.execute("DELETE FROM usuario;")
-        statementUsuarios.close()
-    }
-
-    private fun introducirDatosDePrueba() {
-        TODO("Introducir datos")
-    }
-
-
 
 }

@@ -1,4 +1,5 @@
 package persistence
+
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import objects.persistence.*
@@ -7,16 +8,20 @@ import java.sql.DriverManager
 import java.sql.ResultSet
 import kotlin.system.exitProcess
 
-
 class DatabaseConnection private constructor() {
     private val connection: Connection
+
+    // val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
+    // val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
+    val databaseURL = "jdbc:postgresql://localhost:5432/oikos" // Hector y Javi pruebas
 
     init {
         try {
             Class.forName("org.postgresql.Driver")
             connection = DriverManager.getConnection(databaseURL, "postgres", "mysecretpassword")
             connection.autoCommit = false
-            Tablas().inicializarBaseDeDatos(false)
+            val tablas = Tablas(connection)
+            tablas.crearTablas()
             println("Opened database successfully")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -27,10 +32,6 @@ class DatabaseConnection private constructor() {
     }
 
     companion object {
-        // val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
-        // val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
-        val databaseURL = "jdbc:postgresql://localhost:5432/oikos" // Hector y Javi pruebas
-
         private var databaseConnection: DatabaseConnection? = null
 
         fun getInstance(): DatabaseConnection {
@@ -508,7 +509,7 @@ class DatabaseConnection private constructor() {
         val query = "SELECT * FROM favorito WHERE usuario = $idUsuario ORDER BY orden;"
         val resultSet = statement.executeQuery(query)
         val favoritos = mutableListOf<Favorito>()
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             val usuario = getUsuarioById(idUsuario)
             val inmueble = getInmuebleById(resultSet.getInt("inmueble"))
             val notas = resultSet.getString("notas")

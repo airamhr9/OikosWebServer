@@ -1,6 +1,6 @@
-package objects.persistence
+package persistence
 
-import persistence.DatabaseConnection
+import objects.persistence.*
 import java.sql.ResultSet
 
 class FabricaInmueble private constructor() {
