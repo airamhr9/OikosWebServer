@@ -11,9 +11,9 @@ import kotlin.system.exitProcess
 class DatabaseConnection private constructor() {
     private val connection: Connection
 
-    // val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
-    // val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
-    val databaseURL = "jdbc:postgresql://localhost:5432/oikos" // Hector y Javi pruebas
+    // private val databaseURL = "jdbc:postgresql://localhost:5432/postgres" // Hector, Javi, Jaime
+    // private val databaseURL = "jdbc:postgresql://172.17.0.2:5432/Oikos" // Airam
+    private val databaseURL = "jdbc:postgresql://localhost:5432/oikos" // Hector y Javi pruebas
 
     init {
         try {

@@ -9,7 +9,8 @@ import objects.JsonExportVisitante
 class DatabaseConnectionTest {
     private val databaseConnection = DatabaseConnection.getInstance()
 
-    private val usuario = Usuario(1,"Antonio Gabinete","antoniogabinete@mail.com","123456789","default_user.png")
+    private val usuario = Usuario(1,"Antonio Gabinete","antoniogabinete@mail.com","123456789",
+        "default_user.png")
 
     private val garaje = Garaje(7, true, TipoInmueble.Alquiler, 12, 120.0, usuario,
             "descripcion", "direccion", "ciudad", 0.0, 0.0,
