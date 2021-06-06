@@ -438,7 +438,7 @@ class DatabaseConnection private constructor() {
         statement.close()
     }
 
-    private fun getModeloInmuebleById(idInmueble: Int): ModeloInmueble {
+    fun getModeloInmuebleById(idInmueble: Int): ModeloInmueble {
         return when {
             isHabitacion(idInmueble) -> ModeloInmueble.Habitacion
             isPiso(idInmueble) -> ModeloInmueble.Piso
@@ -556,7 +556,7 @@ class DatabaseConnection private constructor() {
     fun crearUsuarioConId(usuario: Usuario) {
         val statement = connection.createStatement()
         val instruccion = "INSERT INTO usuario (id, nombre, email, contraseña, imagen) " +
-                "VALUES ('${usuario.id}','${usuario.nombre}', '${usuario.mail}','${usuario.contraseña}','${usuario.imagen}');"
+                "VALUES ('${usuario.id}', '${usuario.nombre}', '${usuario.mail}', '${usuario.contraseña}', '${usuario.imagen}');"
         statement.executeUpdate(instruccion)
         connection.commit()
         statement.close()
