@@ -429,7 +429,7 @@ class DatabaseConnection private constructor() {
         return list
     }
 
-    fun storeFavorito(favorito: Favorito) {
+    fun crearFavorito(favorito: Favorito) {
         val statement = connection.createStatement()
         val instruccion = "INSERT INTO favorito (usuario, inmueble, notas, orden)" +
                 "VALUES (${favorito.usuario.id}, ${favorito.inmueble.id}, '${favorito.notas}', ${favorito.orden});"
@@ -530,7 +530,7 @@ class DatabaseConnection private constructor() {
 
     fun modificarFavorito(favorito: Favorito) {
         eliminarFavorito(favorito)
-        storeFavorito(favorito)
+        crearFavorito(favorito)
     }
 
     fun actualizarInmueble(inmueble: Inmueble) {

@@ -1,6 +1,5 @@
 package persistence
 
-import objects.JsonExportVisitante
 import objects.persistence.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -13,8 +12,21 @@ class DatabaseConnectionTest {
         "default_user.png")
 
     private val garaje = Garaje(7, true, TipoInmueble.Alquiler, 12, 120.0, usuario,
-            "descripcion", "direccion", "ciudad", 0.0, 0.0,
-            mutableListOf("foto").toTypedArray(), "2021-03-05T11:30:00.380", 0)
+        "descripcion", "direccion", "ciudad", 0.0, 0.0,
+        mutableListOf("garaje.png").toTypedArray(), "2021-03-05T11:30:00.380", 0)
+
+    private val local = Local(9, true, TipoInmueble.Alquiler, 40, 700.0, usuario,
+        "descripcion", "direccion", "ciudad", 0.0, 0.0,
+        mutableListOf("local.png").toTypedArray(), "2021-03-05T11:30:00.380", 0, 1)
+
+    private val piso = Piso(9, true, TipoInmueble.Venta, 90, 120000.0, usuario,
+        "descripcion", "direccion", "ciudad", 0.0, 0.0,
+        mutableListOf("piso.png").toTypedArray(), "2021-03-05T11:30:00.380", 0, 3, 2, true)
+
+    private val habitacion = Habitacion(9, true, TipoInmueble.Alquiler, 90, 250.0, usuario,
+        "descripcion", "direccion", "ciudad", 0.0, 0.0,
+        mutableListOf("habitacion.png").toTypedArray(), "2021-03-05T11:30:00.380", 0, 3, 2,
+        false, 2)
 
     @Before
     fun setUp() {
@@ -37,8 +49,9 @@ class DatabaseConnectionTest {
     @Test
     fun getNuevoIdDeInmuebleSiExisten() {
         databaseConnection.crearGaraje(garaje)
+        databaseConnection.crearLocal(local)
         val result = databaseConnection.getNuevoIdDeInmueble()
-        assertEquals(garaje.id + 1, result)
+        assertEquals(local.id + 1, result)
     }
 
     @Test
@@ -56,30 +69,42 @@ class DatabaseConnectionTest {
 
     @Test
     fun comprobarUsuarioExiste() {
-        val resUsuario = databaseConnection.comprobarUsuario("antoniogabinete@mail.com","123456789")
-        assertEquals(usuario.toString(), resUsuario?.toString())
+        val result = databaseConnection.comprobarUsuario("antoniogabinete@mail.com","123456789")
+        assertEquals(usuario.toString(), result?.toString())
     }
 
     @Test
     fun comprobarUsuarioNoExiste() {
-        val resUsuario = databaseConnection.comprobarUsuario("antoniogabinete@mail.com","12")
-        assertEquals(null, resUsuario?.toString())
+        val result = databaseConnection.comprobarUsuario("antoniogabinete@mail.com","12")
+        assertEquals(null, result?.toString())
     }
 
     @Test
-    fun getInmuebleById() {
+    fun getGarajeById() {
         databaseConnection.crearGaraje(garaje)
+        val result = databaseConnection.getInmuebleById(garaje.id)
+        assertEquals(garaje.toString(), result.toString())
+    }
 
-        val jsonExportEsperado = JsonExportVisitante()
-        garaje.accept(jsonExportEsperado)
-        val resultadoEsperado = jsonExportEsperado.obtenerResultado().toString()
+    @Test
+    fun getLocalById() {
+        databaseConnection.crearLocal(local)
+        val result = databaseConnection.getInmuebleById(local.id)
+        assertEquals(local.toString(), result.toString())
+    }
 
-        val resInmueble = databaseConnection.getInmuebleById(garaje.id)
-        val jsonExportObtenido = JsonExportVisitante()
-        resInmueble.accept(jsonExportObtenido)
-        val resultadoObtenido = jsonExportObtenido.obtenerResultado().toString()
+    @Test
+    fun getPisoById() {
+        databaseConnection.crearPiso(piso)
+        val result = databaseConnection.getInmuebleById(piso.id)
+        assertEquals(piso.toString(), result.toString())
+    }
 
-        assertEquals(resultadoEsperado, resultadoObtenido)
+    @Test
+    fun getHabitacionById() {
+        databaseConnection.crearHabitacion(habitacion)
+        val result = databaseConnection.getInmuebleById(habitacion.id)
+        assertEquals(habitacion.toString(), result.toString())
     }
 
     @Test
@@ -91,9 +116,6 @@ class DatabaseConnectionTest {
 
     @Test
     fun getModeloInmuebleByIdLocal() {
-        val local = Local(7, true, TipoInmueble.Alquiler, 12, 120.0, usuario,
-            "descripcion", "direccion", "ciudad", 0.0, 0.0,
-            mutableListOf("foto").toTypedArray(), "2021-03-05T11:30:00.380", 0, 1)
         databaseConnection.crearLocal(local)
         val result = databaseConnection.getModeloInmuebleById(local.id)
         assertEquals(ModeloInmueble.Local, result)
@@ -101,9 +123,6 @@ class DatabaseConnectionTest {
 
     @Test
     fun getModeloInmuebleByIdPiso() {
-        val piso = Piso(7, true, TipoInmueble.Alquiler, 12, 120.0, usuario,
-            "descripcion", "direccion", "ciudad", 0.0, 0.0,
-            mutableListOf("foto").toTypedArray(), "2021-03-05T11:30:00.380", 0, 2, 1, true)
         databaseConnection.crearPiso(piso)
         val result = databaseConnection.getModeloInmuebleById(piso.id)
         assertEquals(ModeloInmueble.Piso, result)
@@ -111,21 +130,8 @@ class DatabaseConnectionTest {
 
     @Test
     fun getModeloInmuebleByIdHabitacion() {
-        val habitacion = Habitacion(7, true, TipoInmueble.Alquiler, 12, 120.0, usuario,
-            "descripcion", "direccion", "ciudad", 0.0, 0.0,
-            mutableListOf("foto").toTypedArray(), "2021-03-05T11:30:00.380", 0, 3,
-            1, true, 2)
         databaseConnection.crearHabitacion(habitacion)
         val result = databaseConnection.getModeloInmuebleById(habitacion.id)
         assertEquals(ModeloInmueble.Habitacion, result)
     }
-
-    @Test
-    fun getFavoritosDeUsuario() {
-    }
-
-    @Test
-    fun actualizarInmueble() {
-    }
-
 }

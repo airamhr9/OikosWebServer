@@ -21,7 +21,7 @@ class FavoritoEndpoint(endpoint: String) : RespuestaEndpointHandler(endpoint) {
         val objectToPost = exchange.requestBody
         val reader = BufferedReader(objectToPost.reader())
         val favorito = Favorito.fromJson(JsonParser.parseReader(reader).asJsonObject)
-        databaseConnection.storeFavorito(favorito)
+        databaseConnection.crearFavorito(favorito)
     }
 
     override fun putMethod(exchange: HttpExchange, params: Map<String, Any?>, respuesta: Respuesta) {

@@ -37,6 +37,16 @@ abstract class Inmueble(
         return false
     }
 
+    override fun toString(): String {
+        var result = "INMUEBLE: id: $id, disponible: $disponible, tipo: $tipo, superficie: $superficie, precio: $precio, " +
+                "propietario: $propietario, descripcion: $descripcion, ciudad: $ciudad, latitud: $latitud, " +
+                "longitud: $longitud, fecha: $fecha, contadorVisitas: $contadorVisitas"
+        result += ", imagenes: ["
+        imagenes.forEach { result += "$it, " }
+        result += "]"
+        return result
+    }
+
     companion object {
         private val urlImagen = "http://${InetAddress.getLocalHost().hostAddress}:9000/api/imagen/"
     }

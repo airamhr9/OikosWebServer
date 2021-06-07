@@ -52,4 +52,10 @@ class Local(id: Int,
     override fun accept(v: Visitante) {
         v.visitLocal(this)
     }
+
+    override fun toString(): String {
+        var result = super.toString()
+        result += ", baños: $baños"
+        return result
+    }
 }

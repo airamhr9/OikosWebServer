@@ -56,4 +56,10 @@ open class Piso(id: Int,
     override fun accept(v: Visitante) {
         v.visitPiso(this)
     }
+
+    override fun toString(): String {
+        var result = super.toString()
+        result += ", habitaciones: $habitaciones, baños: $baños, garaje: $garaje"
+        return result
+    }
 }

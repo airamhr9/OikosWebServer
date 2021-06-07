@@ -58,4 +58,10 @@ class Habitacion(id: Int,
     override fun accept(v: Visitante) {
         v.visitHabitacion(this)
     }
+
+    override fun toString(): String {
+        var result = super.toString()
+        result += ", numCompañeros: $numCompañeros"
+        return result
+    }
 }
